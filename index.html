@@ -82,26 +82,90 @@
   <!-- ========================================== -->
   <!-- 2. جسم النظام (APP SHELL) -->
   <!-- ========================================== -->
-  <div id="appContainer" class="hidden min-h-screen flex flex-col">
-    <!-- Top Bar -->
-    <header class="bg-[#111827] border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+  <div id="appContainer" class="hidden min-h-screen flex flex-col md:flex-row">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-[#111827] border-b border-slate-800 p-4 flex items-center justify-between sticky top-0 z-40">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-md">
-          <i class="fa-solid fa-trowel-bricks"></i>
+        <button onclick="toggleSidebar()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-200 flex items-center justify-center border border-slate-700">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <span class="font-bold text-sm text-white">شركة الرائد</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <img id="mobileUserAvatar" class="w-8 h-8 rounded-full border border-blue-500 object-cover" src="" alt="Avatar">
+        <button onclick="logout()" class="text-rose-400 text-xs p-1"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden"></div>
+
+    <!-- القائمة الجانبية على اليمين (Sidebar) -->
+    <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-64 bg-[#111827] border-l border-slate-800 flex flex-col shrink-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 md:static">
+      
+      <!-- Top Brand -->
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-md">
+            <i class="fa-solid fa-trowel-bricks"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-sm text-white leading-tight">شركة الرائد</h2>
+            <p class="text-[10px] text-slate-400">توريد مواد البناء</p>
+          </div>
         </div>
-        <div>
-          <h2 class="font-bold text-sm text-white leading-tight">شركة الرائد لتوريد مواد البناء</h2>
-          <p id="userRoleBadge" class="text-[10px] text-blue-400 font-semibold"></p>
+        <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- الملف الشخصي للمستخدم الحالي في القائمة -->
+      <div onclick="openProfileModal()" class="p-3 mx-3 my-3 rounded-2xl bg-[#131d31] border border-slate-700/60 flex items-center gap-3 cursor-pointer hover:border-blue-500 transition">
+        <img id="sidebarUserAvatar" class="w-11 h-11 rounded-xl border border-blue-500/50 object-cover shadow-sm" src="" alt="User">
+        <div class="flex-1 min-w-0">
+          <p id="sidebarUserName" class="text-xs font-bold text-white truncate"></p>
+          <p id="sidebarUserTitle" class="text-[10px] text-blue-400 truncate"></p>
+          <span class="text-[9px] text-slate-400 flex items-center gap-1 mt-0.5"><i class="fa-solid fa-id-badge"></i> عرض الملف الشخصي</span>
         </div>
       </div>
-      <button onclick="logout()" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-        <span>خروج</span>
-      </button>
-    </header>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1 text-xs flex-1 overflow-y-auto custom-scrollbar">
+        <button onclick="switchView('main')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold transition">
+          <i class="fa-solid fa-house w-4 text-center"></i>
+          <span>الرئيسية والعمليات</span>
+        </button>
+
+        <button onclick="openProfileModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
+          <i class="fa-solid fa-user-gear w-4 text-center text-cyan-400"></i>
+          <span>الملف الشخصي</span>
+        </button>
+
+        <button onclick="switchView('orders-history')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
+          <i class="fa-solid fa-clock-rotate-left w-4 text-center text-amber-400"></i>
+          <span>سجل الطلبات والتوريدات</span>
+        </button>
+
+        <div id="accountantNavItems" class="hidden">
+          <button onclick="switchView('clients-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
+            <i class="fa-solid fa-users w-4 text-center text-emerald-400"></i>
+            <span>العملاء والمهندسين</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Logout in Sidebar -->
+      <div class="p-3 border-t border-slate-800">
+        <button onclick="logout()" class="w-full py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>تسجيل الخروج</span>
+        </button>
+      </div>
+    </aside>
 
     <!-- Content Views -->
-    <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto">
+    <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto overflow-y-auto">
 
       <!-- ========================================== -->
       <!-- VIEW A: المهندس / المالك -->
@@ -109,13 +173,16 @@
       <section id="view-engineer" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <span class="px-2.5 py-1 bg-blue-500/20 text-blue-300 rounded-full text-[10px] font-bold border border-blue-500/30">بوابة المشروعات والتوريد</span>
-              <h3 class="text-xl md:text-2xl font-black text-white mt-2">أهلاً بك، <span id="eng-name"></span></h3>
-              <p class="text-xs text-slate-300 mt-1">
-                المشروع: <span id="eng-compound" class="text-white font-bold"></span> | 
-                الوحدة: <span id="eng-unit" class="text-blue-400 font-bold"></span>
-              </p>
+            <div class="flex items-center gap-4">
+              <img id="eng-avatar" class="w-16 h-16 rounded-2xl border-2 border-blue-500 object-cover shadow-lg" src="" alt="Engineer">
+              <div>
+                <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 rounded-full text-[10px] font-bold border border-blue-500/30">بوابة المهندس / المالك</span>
+                <h3 class="text-xl md:text-2xl font-black text-white mt-1">أهلاً بك، <span id="eng-name"></span></h3>
+                <p class="text-xs text-slate-300">
+                  المشروع: <span id="eng-compound" class="text-white font-bold"></span> | 
+                  الوحدة: <span id="eng-unit" class="text-blue-400 font-bold"></span>
+                </p>
+              </div>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto">
               <button onclick="openModal('orderModal')" class="flex-1 md:flex-none px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition">
@@ -153,34 +220,76 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW B: المحاسب (مع قائمة العملاء والمشروعات) -->
+      <!-- VIEW B: المحاسب (قائمة المهندسين وسجل كل مهندس) -->
       <!-- ========================================== -->
       <section id="view-accountant" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-emerald-950/40 to-[#131d31] border border-emerald-500/30 rounded-3xl p-5 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-          <div>
-            <h3 class="text-xl font-black text-white">مرحباً يا بطل! يوم موفق 💼</h3>
-            <p class="text-xs text-slate-300 mt-1">إدارة واعتماد أوامر التوريد ومتابعة تحصيل العملاء في الكمبوندات المسندة إليك.</p>
+          <div class="flex items-center gap-4">
+            <img id="acc-avatar" class="w-14 h-14 rounded-2xl border border-emerald-500 object-cover" src="" alt="Accountant">
+            <div>
+              <h3 class="text-xl font-black text-white">مرحباً يا بطل! 💼</h3>
+              <p class="text-xs text-slate-300 mt-0.5">إدارة ومراجعة أوامر التوريد ومتابعة مهندسي الكمبوندات المسندة إليك.</p>
+            </div>
           </div>
-          <button onclick="openBroadcastChat()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
+          <button onclick="openBroadcastChat()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
             <i class="fa-solid fa-bullhorn"></i> شات جماعي مع التشوينات
           </button>
         </div>
 
-        <!-- قائمة العملاء والمهندسين المسندين للمحاسب -->
+        <!-- قائمة كروت المهندسين بصورهم وبياناتهم -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-users-gear text-emerald-400"></i>
-            قائمة العملاء والمهندسين المسندين إليك بالكمبوندات
-          </h4>
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-users text-emerald-400"></i>
+              قائمة المهندسين والعملاء (اضغط لعرض السجل المرجعي بالتاريخ)
+            </h4>
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="accClientsList">
-            <!-- Dynamically populated clients -->
+            <!-- Dynamically populated engineer cards -->
           </div>
         </div>
 
-        <!-- جدول أوامر التوريد -->
+        <!-- نافذة السجل المرجعي للمهندس المختار -->
+        <div id="engineerHistoryBox" class="hidden bg-[#131d31] border border-blue-500/40 rounded-2xl p-4 space-y-3">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <div>
+              <h4 class="font-bold text-sm text-white flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-blue-400"></i>
+                سجل معاملات المهندس: <span id="selectedEngName" class="text-blue-400"></span>
+              </h4>
+              <p id="selectedEngDetails" class="text-[11px] text-slate-400 mt-0.5"></p>
+            </div>
+            <div class="flex gap-2">
+              <button id="selectedEngChatBtn" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-comment-dots"></i> فتح شات
+              </button>
+              <button onclick="closeEngineerHistory()" class="text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-2.5">رقم الطلب</th>
+                  <th class="p-2.5">التاريخ والوقت</th>
+                  <th class="p-2.5">الأصناف والكميات</th>
+                  <th class="p-2.5">الإجمالي</th>
+                  <th class="p-2.5">الحالة</th>
+                  <th class="p-2.5">توثيق التسليم</th>
+                </tr>
+              </thead>
+              <tbody id="selectedEngOrdersBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- جدول أوامر التوريد العامة -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-          <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
-            <span class="flex items-center gap-2"><i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i> أوامر التوريد للمراجعة والتوجيه</span>
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>
+            جدول متابعة واعتماد أوامر التوريد
           </h4>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
@@ -206,11 +315,14 @@
       <!-- ========================================== -->
       <section id="view-store" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-amber-950/40 to-[#131d31] border border-amber-500/30 rounded-3xl p-5 shadow-xl flex justify-between items-center">
-          <div>
-            <h3 class="text-xl font-black text-white">إدارة تشوينة المواد والمستودع 🏗️</h3>
-            <p class="text-xs text-slate-300 mt-1">تجهيز الخامات، صرف النقلات، وتعيين السائقين للتوصيل.</p>
+          <div class="flex items-center gap-4">
+            <img id="store-avatar" class="w-14 h-14 rounded-2xl border border-amber-500 object-cover" src="" alt="Store">
+            <div>
+              <h3 class="text-xl font-black text-white">إدارة تشوينة المواد والمستودع 🏗️</h3>
+              <p class="text-xs text-slate-300 mt-0.5">تجهيز الخامات، صرف النقلات، وتعيين السائقين للتوصيل.</p>
+            </div>
           </div>
-          <button onclick="openBroadcastChat()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
+          <button onclick="openBroadcastChat()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
             <i class="fa-solid fa-bullhorn"></i> الشات الجماعي للمحاسبين
           </button>
         </div>
@@ -238,12 +350,15 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW D: السائق (كاميرا حية فقط للتصوير) -->
+      <!-- VIEW D: السائق -->
       <!-- ========================================== -->
       <section id="view-driver" class="role-view hidden space-y-5">
-        <div class="bg-gradient-to-r from-cyan-950/40 to-[#131d31] border border-cyan-500/30 rounded-3xl p-5 shadow-xl">
-          <h3 class="text-xl font-black text-white">بوابة كابتن النقل والتعتيق 🚚</h3>
-          <p class="text-xs text-slate-300 mt-1">استلم موقع التوريد وصوّر المون عبر الكاميرا الحية بعد التنزيل مباشرة.</p>
+        <div class="bg-gradient-to-r from-cyan-950/40 to-[#131d31] border border-cyan-500/30 rounded-3xl p-5 shadow-xl flex items-center gap-4">
+          <img id="driver-avatar" class="w-14 h-14 rounded-2xl border border-cyan-500 object-cover" src="" alt="Driver">
+          <div>
+            <h3 class="text-xl font-black text-white">بوابة كابتن النقل والتعتيق 🚚</h3>
+            <p class="text-xs text-slate-300 mt-0.5">استلم موقع التوريد وصوّر المون عبر الكاميرا الحية بعد التنزيل مباشرة.</p>
+          </div>
         </div>
 
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
@@ -256,13 +371,16 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW E: المدير العام (لوحة الرقابة وإدارة الصلاحيات) -->
+      <!-- VIEW E: المدير العام -->
       <!-- ========================================== -->
       <section id="view-admin" class="role-view hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-          <div>
-            <h3 class="text-2xl font-black text-white">لوحة الرقابة المركزية - الإدارة العليا</h3>
-            <p class="text-xs text-slate-400 mt-1">التحكم الكامل بالموظفين، المشروعات، المخازن، والرقابة على الشاتات</p>
+          <div class="flex items-center gap-4">
+            <img id="admin-avatar" class="w-16 h-16 rounded-2xl border-2 border-blue-500 object-cover shadow-lg" src="" alt="Admin">
+            <div>
+              <h3 class="text-2xl font-black text-white">لوحة الرقابة المركزية - الإدارة العليا</h3>
+              <p class="text-xs text-slate-400 mt-1">التحكم الكامل بالموظفين، المشروعات، المخازن، والرقابة على الشاتات</p>
+            </div>
           </div>
           <button onclick="openModal('userManageModal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20">
             <i class="fa-solid fa-user-plus"></i> إضافة مستخدم وتحديد صلاحية
@@ -288,24 +406,24 @@
           </div>
           <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
             <span class="text-xs text-slate-400">نقلات موثقة بالصور</span>
-            <h4 class="text-xl font-bold text-white mt-1" id="adminTotalDeliveries">18 نقلة</h4>
+            <h4 class="text-xl font-bold text-white mt-1">18 نقلة</h4>
             <span class="text-[10px] text-emerald-400 font-semibold">توثيق كاميرا حي</span>
           </div>
         </div>
 
-        <!-- جدول إدارة الموظفين والصلاحيات (سلطة المدير) -->
+        <!-- جدول إدارة الموظفين والصلاحيات -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
-            <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-blue-400"></i> إدارة فريق العمل والصلاحيات (المحاسبين، السائقين، المخازن)</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-blue-400"></i> إدارة فريق العمل والصلاحيات</span>
             <button onclick="openModal('userManageModal')" class="text-xs text-blue-400 hover:underline">+ مستخدم جديد</button>
           </h4>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
                 <tr>
-                  <th class="p-3">الاسم</th>
-                  <th class="p-3">اسم المستخدم (Login)</th>
-                  <th class="p-3">الدور / الوظيفة</th>
+                  <th class="p-3">الصورة والاسم</th>
+                  <th class="p-3">اسم الدخول (Login)</th>
+                  <th class="p-3">المسمى الوظيفي</th>
                   <th class="p-3">البيانات / التخصيص</th>
                   <th class="p-3 text-center">إلغاء / سحب الصلاحية</th>
                 </tr>
@@ -344,10 +462,10 @@
               الرقابة على الشات الداخلي
             </h4>
             <div class="space-y-2 text-xs">
-              <div onclick="openChat('مراقبة: م. أحمد ناصر ↔ محاسب 1')" class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-blue-500">
+              <div onclick="openChat('مراقبة: م. أحمد ناصر ↔ محاسب 1', 'admin')" class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-blue-500">
                 <div>
                   <p class="font-bold text-white">م. أحمد ناصر ↔ محاسب 1</p>
-                  <p class="text-[10px] text-slate-400">محادثة مشروع بادية 6 أكتوبر</p>
+                  <p class="text-[10px] text-slate-400">مشروع كمبوند بادية - 6 أكتوبر</p>
                 </div>
                 <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">فتح المراقبة</span>
               </div>
@@ -361,29 +479,77 @@
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- السجل العام للطلبات -->
-        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-          <h4 class="font-bold text-sm text-white mb-3">السجل العام لكافة التحركات والتوريدات</h4>
+      <!-- ========================================== -->
+      <!-- VIEW F: السجل العام للتوريدات (من القائمة) -->
+      <!-- ========================================== -->
+      <section id="view-orders-history" class="role-view hidden space-y-5">
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
+          <h3 class="text-xl font-black text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-amber-400"></i>
+            سجل كافة التوريدات والطلبات بالتاريخ
+          </h3>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
                 <tr>
                   <th class="p-3">رقم الطلب</th>
-                  <th class="p-3">الكمبوند / المهندس</th>
-                  <th class="p-3">الصنف والكمية</th>
+                  <th class="p-3">التاريخ والوقت</th>
+                  <th class="p-3">المشروع / المهندس</th>
+                  <th class="p-3">الأصناف والكمية</th>
                   <th class="p-3">الإجمالي</th>
                   <th class="p-3">الحالة</th>
-                  <th class="p-3">صورة التوثيق الحي</th>
+                  <th class="p-3">التوثيق بالصورة</th>
                 </tr>
               </thead>
-              <tbody id="adminOrdersTable" class="divide-y divide-slate-800 text-slate-300"></tbody>
+              <tbody id="allOrdersTableBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
             </table>
           </div>
         </div>
       </section>
 
     </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: الملف الشخصي (Profile Card) -->
+  <!-- ========================================== -->
+  <div id="profileModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 text-center">
+      <div class="relative w-24 h-24 mx-auto">
+        <img id="profModalAvatar" class="w-24 h-24 rounded-3xl object-cover border-2 border-blue-500 shadow-xl" src="" alt="Avatar">
+        <label class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center text-xs cursor-pointer shadow-md">
+          <i class="fa-solid fa-camera"></i>
+          <input type="file" accept="image/*" onchange="updateProfileAvatar(event)" class="hidden">
+        </label>
+      </div>
+
+      <div>
+        <h3 id="profModalName" class="text-lg font-bold text-white"></h3>
+        <p id="profModalTitle" class="text-xs text-blue-400 font-semibold mt-0.5"></p>
+        <p id="profModalExtra" class="text-[11px] text-slate-400 mt-1"></p>
+      </div>
+
+      <div class="p-3 bg-slate-900/80 rounded-2xl border border-slate-800 text-right space-y-2 text-xs">
+        <div class="flex justify-between">
+          <span class="text-slate-400">اسم المستخدم:</span>
+          <span id="profModalUsername" class="text-white font-bold"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">رقم الهاتف:</span>
+          <span id="profModalPhone" class="text-emerald-400 font-bold"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">حالة الحساب:</span>
+          <span class="text-blue-400 font-bold">نشط وموثق 🟢</span>
+        </div>
+      </div>
+
+      <button onclick="closeModal('profileModal')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700">
+        إغلاق
+      </button>
+    </div>
   </div>
 
   <!-- ========================================== -->
@@ -429,14 +595,14 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: شات متكامل (كتابة + فويس + ملفات) -->
+  <!-- MODAL: شات متكامل (كتابة + فويس + صور + PDF و Word) -->
   <!-- ========================================== -->
   <div id="chatModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl flex flex-col h-[560px]">
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl flex flex-col h-[580px]">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <div>
           <h3 id="chatTitle" class="text-sm font-bold text-white">غرفة المحادثة</h3>
-          <p class="text-[10px] text-emerald-400">متصل الآن 🟢</p>
+          <p class="text-[10px] text-emerald-400">متصل الآن 🟢 (يدعم مستندات Word و PDF)</p>
         </div>
         <button onclick="closeModal('chatModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
@@ -450,12 +616,12 @@
       </div>
 
       <div class="border-t border-slate-800 pt-3 flex items-center gap-2">
-        <label class="cursor-pointer text-slate-400 hover:text-white p-2">
+        <label class="cursor-pointer text-slate-400 hover:text-white p-2" title="إرسال ملفات PDF أو Word أو صور">
           <i class="fa-solid fa-paperclip text-base"></i>
-          <input type="file" id="chatFile" onchange="sendChatFile(event)" class="hidden">
+          <input type="file" id="chatFile" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*" onchange="sendChatFile(event)" class="hidden">
         </label>
         
-        <button id="voiceBtn" onclick="toggleVoiceRecording()" class="text-slate-400 hover:text-rose-400 p-2 transition">
+        <button id="voiceBtn" onclick="toggleVoiceRecording()" title="تسجيل صوت" class="text-slate-400 hover:text-rose-400 p-2 transition">
           <i class="fa-solid fa-microphone text-base"></i>
         </button>
 
@@ -484,7 +650,6 @@
       <div class="text-center space-y-3 text-xs">
         <p class="text-slate-300">يجب تشغيل الكاميرا وتصوير المون في الموقع مباشرة:</p>
         
-        <!-- Live Video Element -->
         <div class="relative w-full h-56 bg-black rounded-2xl overflow-hidden border border-slate-700 flex items-center justify-center">
           <video id="cameraStream" autoplay playsinline class="w-full h-full object-cover"></video>
           <canvas id="photoCanvas" class="hidden"></canvas>
@@ -504,7 +669,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: إدارة المستخدمين والصلاحيات للمدير العام -->
+  <!-- MODAL: إضافة مستخدم جديد وتحديد الصلاحيات -->
   <!-- ========================================== -->
   <div id="userManageModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
@@ -519,13 +684,13 @@
       <form onsubmit="handleCreateUser(event)" class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الاسم بالكامل</label>
-          <input type="text" id="newUserName" required placeholder="مثال: أحمد عبد الله" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          <input type="text" id="newUserName" required placeholder="مثال: م. مصطفى الشريف" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">اسم المستخدم (Login)</label>
-            <input type="text" id="newUserLogin" required placeholder="acc2 أو driver3" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+            <input type="text" id="newUserLogin" required placeholder="eng3 أو acc3" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
           </div>
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">كلمة المرور</label>
@@ -536,10 +701,10 @@
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الدور / الصلاحية</label>
           <select id="newUserRole" onchange="toggleExtraUserFields()" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
-            <option value="accountant">محاسب (متابعة طلبات وعملاء)</option>
-            <option value="driver">سائق (نقل وتعتيق وتصوير)</option>
-            <option value="store">مسؤول تشوينة / مخزن</option>
-            <option value="engineer">مهندس / مالك (كمبوند)</option>
+            <option value="accountant">محاسب مالي</option>
+            <option value="engineer">مهندس / مالك وحدة</option>
+            <option value="driver">سائق نقل وتعتيق</option>
+            <option value="store">مسؤول تشوينة ومستودع</option>
           </select>
         </div>
 
@@ -566,7 +731,7 @@
   <!-- JAVASCRIPT & APPLICATION LOGIC -->
   <!-- ========================================== -->
   <script>
-    // State
+    // Current User Session
     let currentUser = null;
     let selectedOrderIdForProof = null;
     let mediaStream = null;
@@ -574,25 +739,63 @@
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // Database of Users (مدعوم بـ 7 محاسبين، 6 سواقين، 3 مخازن، و11 كمبوند)
+    // Users Database مع صورهم الشخصية وأسماؤهم الوظيفية
     let users = {
-      'admin': { role: 'admin', name: 'المدير العام', pass: '123' },
-      
-      // المحاسبين
-      'acc1': { role: 'accountant', name: 'أ. محمود كمال (محاسب 1)', pass: '123', assignedCompounds: ['كمبوند بادية 6 أكتوبر', 'بالم هيلز'] },
-      'acc2': { role: 'accountant', name: 'أ. سامح عبد الرازق (محاسب 2)', pass: '123', assignedCompounds: ['بيت الوطن التجمع', 'هايد بارك'] },
-      
-      // مسؤولي المخازن
-      'store1': { role: 'store', name: 'عم ربيع (تشوينة 6 أكتوبر)', pass: '123' },
-      'store2': { role: 'store', name: 'الأسطى جابر (تشوينة التجمع)', pass: '123' },
-      
-      // السائقين
-      'driver1': { role: 'driver', name: 'الكابتن سيد (سيارة 1)', pass: '123' },
-      'driver2': { role: 'driver', name: 'الكابتن عبده (سيارة 2)', pass: '123' },
-
-      // المهندسين / العملاء في الكمبوندات
-      'eng1': { role: 'engineer', name: 'م. أحمد ناصر', compound: 'كمبوند بادية - 6 أكتوبر', unit: 'فيلا 14', phone: '01012345678', assignedAcc: 'acc1', pass: '123' },
-      'eng2': { role: 'engineer', name: 'م. طارق فاروق', compound: 'مشروع بيت الوطن - التجمع', unit: 'عمارة 45', phone: '01234567890', assignedAcc: 'acc2', pass: '123' }
+      'admin': {
+        role: 'admin',
+        name: 'محمد ناصر (المدير العام)',
+        jobTitle: 'الرئيس التنفيذي - مالك الشركة',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        phone: '01000000001',
+        pass: '123'
+      },
+      'acc1': {
+        role: 'accountant',
+        name: 'أ. محمود كمال',
+        jobTitle: 'محاسب مالي أول - قطاع أكتوبر',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+        phone: '01198765432',
+        pass: '123',
+        assignedCompounds: ['كمبوند بادية - 6 أكتوبر', 'بالم هيلز']
+      },
+      'store1': {
+        role: 'store',
+        name: 'عم ربيع',
+        jobTitle: 'أمين التشوينة والمستودع الرئيسي',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+        phone: '01222222222',
+        pass: '123'
+      },
+      'driver1': {
+        role: 'driver',
+        name: 'الكابتن سيد عبد العال',
+        jobTitle: 'كابتن نقل ثقيل وتعتيق مون',
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+        phone: '01555555555',
+        pass: '123'
+      },
+      'eng1': {
+        role: 'engineer',
+        name: 'م. أحمد ناصر',
+        jobTitle: 'مهندس تنفيذي / مالك الوحدة',
+        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
+        compound: 'كمبوند بادية - 6 أكتوبر',
+        unit: 'فيلا 14',
+        phone: '01012345678',
+        assignedAcc: 'acc1',
+        pass: '123'
+      },
+      'eng2': {
+        role: 'engineer',
+        name: 'م. طارق فاروق',
+        jobTitle: 'مهندس تشطيبات / عميل',
+        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80',
+        compound: 'مشروع بيت الوطن - التجمع',
+        unit: 'عمارة 45',
+        phone: '01234567890',
+        assignedAcc: 'acc1',
+        pass: '123'
+      }
     };
 
     // Orders Database
@@ -607,9 +810,9 @@
         qty: '3,000 طوبة',
         total: 6300,
         status: 'جاري الشحن',
-        driver: 'الكابتن سيد (سيارة 1)',
+        driver: 'الكابتن سيد عبد العال',
         proofImg: null,
-        date: '2026-10-04'
+        date: '2026-10-04 02:30 م'
       },
       {
         id: 'ORD-500',
@@ -621,9 +824,23 @@
         qty: '5 طن',
         total: 11250,
         status: 'تم التسليم للعميل',
-        driver: 'الكابتن سيد (سيارة 1)',
+        driver: 'الكابتن سيد عبد العال',
         proofImg: 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=500&auto=format&fit=crop&q=60',
-        date: '2026-10-03'
+        date: '2026-10-03 11:15 ص'
+      },
+      {
+        id: 'ORD-499',
+        engineer: 'م. أحمد ناصر',
+        compound: 'كمبوند بادية - 6 أكتوبر',
+        unit: 'فيلا 14',
+        phone: '01012345678',
+        item: 'رمل مباني ناعم',
+        qty: '20 متر³',
+        total: 3400,
+        status: 'تم التسليم للعميل',
+        driver: 'الكابتن سيد عبد العال',
+        proofImg: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=500&auto=format&fit=crop&q=60',
+        date: '2026-09-28 09:00 ص'
       }
     ];
 
@@ -641,6 +858,7 @@
         currentUser = { ...users[u], username: u };
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('appContainer').classList.remove('hidden');
+        updateHeaderAndSidebar();
         renderAppByRole();
       } else {
         alert('بيانات الدخول غير صحيحة! تأكد من اسم المستخدم وكلمة المرور.');
@@ -655,37 +873,104 @@
       document.getElementById('loginPass').value = '';
     }
 
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const ov = document.getElementById('sidebarOverlay');
+      if (sb.classList.contains('translate-x-full')) {
+        sb.classList.remove('translate-x-full');
+        sb.classList.add('translate-x-0');
+        ov.classList.remove('hidden');
+      } else {
+        sb.classList.add('translate-x-full');
+        sb.classList.remove('translate-x-0');
+        ov.classList.add('hidden');
+      }
+    }
+
+    function updateHeaderAndSidebar() {
+      document.getElementById('sidebarUserName').innerText = currentUser.name;
+      document.getElementById('sidebarUserTitle').innerText = currentUser.jobTitle;
+      document.getElementById('sidebarUserAvatar').src = currentUser.avatar;
+      document.getElementById('mobileUserAvatar').src = currentUser.avatar;
+
+      // Show/Hide accountant special nav
+      if (currentUser.role === 'accountant') {
+        document.getElementById('accountantNavItems').classList.remove('hidden');
+      } else {
+        document.getElementById('accountantNavItems').classList.add('hidden');
+      }
+    }
+
+    function switchView(viewName) {
+      if (window.innerWidth < 768) toggleSidebar();
+
+      if (viewName === 'main') {
+        renderAppByRole();
+      } else if (viewName === 'orders-history') {
+        document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-orders-history').classList.remove('hidden');
+        renderAllOrdersTable();
+      } else if (viewName === 'clients-section') {
+        renderAppByRole();
+      }
+    }
+
     function renderAppByRole() {
       document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
-      const roleBadge = document.getElementById('userRoleBadge');
 
       if (currentUser.role === 'engineer') {
-        roleBadge.innerText = `حساب المهندس / المالك: ${currentUser.name}`;
         document.getElementById('view-engineer').classList.remove('hidden');
         document.getElementById('eng-name').innerText = currentUser.name;
         document.getElementById('eng-compound').innerText = currentUser.compound;
         document.getElementById('eng-unit').innerText = currentUser.unit;
+        document.getElementById('eng-avatar').src = currentUser.avatar;
         renderEngineerTable();
       }
       else if (currentUser.role === 'accountant') {
-        roleBadge.innerText = `الإدارة المالية والمبيعات: ${currentUser.name}`;
         document.getElementById('view-accountant').classList.remove('hidden');
+        document.getElementById('acc-avatar').src = currentUser.avatar;
         renderAccountantView();
       }
       else if (currentUser.role === 'store') {
-        roleBadge.innerText = `مسؤول المستودع والتشوينة: ${currentUser.name}`;
         document.getElementById('view-store').classList.remove('hidden');
+        document.getElementById('store-avatar').src = currentUser.avatar;
         renderStoreTable();
       }
       else if (currentUser.role === 'driver') {
-        roleBadge.innerText = `كابتن النقل والتعتيق: ${currentUser.name}`;
         document.getElementById('view-driver').classList.remove('hidden');
+        document.getElementById('driver-avatar').src = currentUser.avatar;
         renderDriverCards();
       }
       else if (currentUser.role === 'admin') {
-        roleBadge.innerText = `المدير العام (تحكم كامل)`;
         document.getElementById('view-admin').classList.remove('hidden');
+        document.getElementById('admin-avatar').src = currentUser.avatar;
         renderAdminDashboard();
+      }
+    }
+
+    // --- Profile Modal Handling ---
+    function openProfileModal() {
+      document.getElementById('profModalAvatar').src = currentUser.avatar;
+      document.getElementById('profModalName').innerText = currentUser.name;
+      document.getElementById('profModalTitle').innerText = currentUser.jobTitle;
+      document.getElementById('profModalUsername').innerText = currentUser.username;
+      document.getElementById('profModalPhone').innerText = currentUser.phone;
+      document.getElementById('profModalExtra').innerText = currentUser.compound ? `${currentUser.compound} - (${currentUser.unit})` : 'المقر الإداري والمخازن';
+      openModal('profileModal');
+    }
+
+    function updateProfileAvatar(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          currentUser.avatar = evt.target.result;
+          users[currentUser.username].avatar = evt.target.result;
+          updateHeaderAndSidebar();
+          openProfileModal();
+          renderAppByRole();
+        };
+        reader.readAsDataURL(file);
       }
     }
 
@@ -718,6 +1003,8 @@
       const qty = parseFloat(document.getElementById('modalQty').value);
       const notes = document.getElementById('modalNotes').value;
 
+      const dateStr = new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' });
+
       const newOrder = {
         id: 'ORD-' + (orders.length + 501),
         engineer: currentUser.name,
@@ -725,12 +1012,12 @@
         unit: currentUser.unit,
         phone: currentUser.phone,
         item: item,
-        qty: `${qty} وحدة (${notes || 'بدون ملاحظات'})`,
+        qty: `${qty} وحدة (${notes || 'تنزيل عادي'})`,
         total: price * qty,
         status: 'طلب جديد (قيد مراجعة المحاسب)',
         driver: 'لم يحدد بعد',
         proofImg: null,
-        date: new Date().toISOString().split('T')[0]
+        date: dateStr
       };
 
       orders.unshift(newOrder);
@@ -739,9 +1026,9 @@
       alert('تم إرسال طلب التوريد إلى المحاسب المسؤول!');
     }
 
-    // --- Accountant View & Clients ---
+    // --- Accountant View & Clients Dossier ---
     function renderAccountantView() {
-      // 1. Clients List
+      // 1. Clients List with photo, unit, compound, phone
       const clientsBox = document.getElementById('accClientsList');
       clientsBox.innerHTML = '';
       
@@ -749,17 +1036,18 @@
       engineerKeys.forEach(k => {
         const u = users[k];
         clientsBox.innerHTML += `
-          <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
-            <div>
-              <p class="font-bold text-white text-xs">${u.name}</p>
-              <p class="text-[11px] text-blue-400">${u.compound} - (${u.unit})</p>
-              <p class="text-[10px] text-slate-400 mt-1"><i class="fa-solid fa-phone"></i> ${u.phone}</p>
-            </div>
-            <div class="mt-3 flex gap-2">
-              <button onclick="openChat('شات مع: ${u.name}', 'eng')" class="flex-1 py-1.5 bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg text-[10px] font-bold hover:bg-blue-600 hover:text-white transition">
-                <i class="fa-solid fa-comment-dots"></i> فتح محادثة
-              </button>
-              <a href="tel:${u.phone}" class="px-2.5 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-[10px] border border-slate-700">اتصال</a>
+          <div onclick="showEngineerOrdersHistory('${k}')" class="bg-slate-900/80 border border-slate-800 hover:border-blue-500/80 p-3.5 rounded-2xl flex items-center gap-3.5 cursor-pointer transition shadow-md">
+            <img src="${u.avatar}" class="w-13 h-13 rounded-2xl object-cover border border-slate-700 shadow" alt="${u.name}">
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-start">
+                <p class="font-bold text-white text-xs truncate">${u.name}</p>
+                <span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-bold">عرض السجل</span>
+              </div>
+              <p class="text-[11px] text-blue-400 font-semibold mt-0.5 truncate">${u.compound}</p>
+              <p class="text-[10px] text-slate-300 font-medium">الوحدة: <b class="text-white">${u.unit}</b></p>
+              <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-phone text-emerald-400"></i> ${u.phone}
+              </p>
             </div>
           </div>
         `;
@@ -784,6 +1072,50 @@
           </tr>
         `;
       });
+    }
+
+    // Show specific engineer's history when accountant clicks on their card
+    function showEngineerOrdersHistory(userKey) {
+      const u = users[userKey];
+      const box = document.getElementById('engineerHistoryBox');
+      box.classList.remove('hidden');
+      
+      document.getElementById('selectedEngName').innerText = u.name;
+      document.getElementById('selectedEngDetails').innerText = `${u.compound} | الوحدة: ${u.unit} | الهاتف: ${u.phone}`;
+      
+      const chatBtn = document.getElementById('selectedEngChatBtn');
+      chatBtn.onclick = function() {
+        openChat(`محادثة مع المهندس: ${u.name}`, 'eng');
+      };
+
+      const tbody = document.getElementById('selectedEngOrdersBody');
+      tbody.innerHTML = '';
+      const engOrders = orders.filter(o => o.engineer.includes(u.name));
+
+      if (engOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد طلبات سابقة مسجلة لهذا المهندس حتى الآن</td></tr>`;
+      } else {
+        engOrders.forEach(o => {
+          tbody.innerHTML += `
+            <tr>
+              <td class="p-2.5 font-bold text-white">#${o.id}</td>
+              <td class="p-2.5 text-slate-400">${o.date}</td>
+              <td class="p-2.5 font-semibold text-slate-200">${o.item} (${o.qty})</td>
+              <td class="p-2.5 font-bold text-emerald-400">${o.total.toLocaleString()} ج.م</td>
+              <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700 text-blue-400">${o.status}</span></td>
+              <td class="p-2.5">
+                ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline flex items-center gap-1"><i class="fa-solid fa-camera"></i> صورة التعتيق</a>` : '<span class="text-slate-500 text-[10px]">لا يوجد</span>'}
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeEngineerHistory() {
+      document.getElementById('engineerHistoryBox').classList.add('hidden');
     }
 
     // --- Store Yard ---
@@ -839,9 +1171,8 @@
       });
     }
 
-    // --- Admin Dashboard & User Management ---
+    // --- Admin Dashboard ---
     function renderAdminDashboard() {
-      // 1. Users Table
       const userTbody = document.getElementById('adminUsersTable');
       userTbody.innerHTML = '';
       const userKeys = Object.keys(users);
@@ -849,17 +1180,16 @@
 
       userKeys.forEach(k => {
         const u = users[k];
-        let roleName = 'محاسب';
-        if (u.role === 'admin') roleName = 'المدير العام';
-        if (u.role === 'driver') roleName = 'سائق نقل';
-        if (u.role === 'store') roleName = 'مسؤول مخزن وتشوينة';
-        if (u.role === 'engineer') roleName = 'مهندس / عميل';
-
         userTbody.innerHTML += `
           <tr>
-            <td class="p-3 font-bold text-white">${u.name}</td>
+            <td class="p-3">
+              <div class="flex items-center gap-2.5">
+                <img src="${u.avatar}" class="w-8 h-8 rounded-full object-cover border border-slate-700">
+                <span class="font-bold text-white">${u.name}</span>
+              </div>
+            </td>
             <td class="p-3 text-slate-400">${k}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold">${roleName}</span></td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold">${u.jobTitle}</span></td>
             <td class="p-3 text-[11px] text-slate-300">${u.compound ? `${u.compound} (${u.unit})` : 'مقر الشركة الرئيسي'}</td>
             <td class="p-3 text-center">
               ${u.role !== 'admin' ? `
@@ -871,20 +1201,22 @@
           </tr>
         `;
       });
+    }
 
-      // 2. Orders Table
-      const tbody = document.getElementById('adminOrdersTable');
+    function renderAllOrdersTable() {
+      const tbody = document.getElementById('allOrdersTableBody');
       tbody.innerHTML = '';
       orders.forEach(o => {
         tbody.innerHTML += `
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
-            <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer}</span></td>
+            <td class="p-3 text-slate-400">${o.date}</td>
+            <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer} (${o.unit})</span></td>
             <td class="p-3">${o.item} - ${o.qty}</td>
             <td class="p-3 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700">${o.status}</span></td>
             <td class="p-3">
-              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline font-semibold"><i class="fa-solid fa-camera"></i> عرض التوثيق الحي</a>` : '<span class="text-slate-500 text-[10px]">قيد التنفيذ</span>'}
+              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline font-semibold"><i class="fa-solid fa-camera"></i> عرض التوثيق</a>` : '<span class="text-slate-500 text-[10px]">قيد التنفيذ</span>'}
             </td>
           </tr>
         `;
@@ -907,9 +1239,16 @@
       const compound = document.getElementById('newUserCompound').value;
       const unit = document.getElementById('newUserUnit').value;
 
+      let jTitle = 'محاسب مالي';
+      if (role === 'engineer') jTitle = 'مهندس / مالك وحدة';
+      if (role === 'driver') jTitle = 'كابتن نقل وتعتيق';
+      if (role === 'store') jTitle = 'أمين تشوينة ومستودع';
+
       users[login] = {
         role: role,
         name: name,
+        jobTitle: jTitle,
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
         pass: pass,
         compound: compound || '',
         unit: unit || '',
@@ -941,7 +1280,7 @@
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    // --- Strict Camera Execution (ممنوع الألبوم نهائياً) ---
+    // --- Strict Camera Execution (ممنوع الألبوم) ---
     async function openLiveCameraModal(orderId) {
       selectedOrderIdForProof = orderId;
       openModal('proofModal');
@@ -1000,7 +1339,7 @@
       closeModal('proofModal');
     }
 
-    // --- Advanced Chat (Text + Voice Notes + File Attachment) ---
+    // --- Advanced Chat (Text + Voice + Word/PDF Documents) ---
     function openChat(title, targetRole) {
       document.getElementById('chatTitle').innerText = title;
       openModal('chatModal');
@@ -1025,7 +1364,12 @@
 
       const reader = new FileReader();
       reader.onload = function(evt) {
-        appendChatMessage(currentUser.name, evt.target.result, file.type.startsWith('image') ? 'image' : 'file', file.name);
+        let type = 'file';
+        if (file.type.startsWith('image/')) type = 'image';
+        else if (file.type.includes('pdf')) type = 'pdf';
+        else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) type = 'word';
+
+        appendChatMessage(currentUser.name, evt.target.result, type, file.name);
       };
       reader.readAsDataURL(file);
     }
@@ -1046,7 +1390,7 @@
           isRecordingVoice = true;
           document.getElementById('recordingIndicator').classList.remove('hidden');
         } catch (err) {
-          alert('يرجى السماح بصلاحية الميكروفون لتسجيل الفويس!');
+          alert('يرجى تفعيل صلاحية الميكروفون لتسجيل الفويس!');
         }
       }
     }
@@ -1070,8 +1414,28 @@
         bodyHtml = `<img src="${content}" class="max-w-[200px] rounded-lg mt-1 border border-slate-700">`;
       } else if (type === 'audio') {
         bodyHtml = `<audio controls src="${content}" class="w-48 mt-1"></audio>`;
+      } else if (type === 'pdf') {
+        bodyHtml = `
+          <div class="flex items-center gap-2 p-2 bg-slate-900/80 rounded-xl border border-rose-500/40 mt-1">
+            <i class="fa-solid fa-file-pdf text-rose-500 text-xl"></i>
+            <div class="flex-1 truncate">
+              <p class="font-bold text-[11px] text-white truncate">${filename}</p>
+              <a href="${content}" download="${filename}" class="text-[10px] text-blue-400 hover:underline">تحميل مستند PDF</a>
+            </div>
+          </div>
+        `;
+      } else if (type === 'word') {
+        bodyHtml = `
+          <div class="flex items-center gap-2 p-2 bg-slate-900/80 rounded-xl border border-blue-500/40 mt-1">
+            <i class="fa-solid fa-file-word text-blue-500 text-xl"></i>
+            <div class="flex-1 truncate">
+              <p class="font-bold text-[11px] text-white truncate">${filename}</p>
+              <a href="${content}" download="${filename}" class="text-[10px] text-blue-400 hover:underline">تحميل مستند Word</a>
+            </div>
+          </div>
+        `;
       } else if (type === 'file') {
-        bodyHtml = `<a href="${content}" download="${filename}" class="text-blue-400 underline flex items-center gap-1"><i class="fa-solid fa-file"></i> ${filename}</a>`;
+        bodyHtml = `<a href="${content}" download="${filename}" class="text-blue-400 underline flex items-center gap-1 mt-1"><i class="fa-solid fa-paperclip"></i> ${filename}</a>`;
       }
 
       chatBox.innerHTML += `
