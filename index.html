@@ -101,7 +101,7 @@
     <!-- Sidebar Overlay -->
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden"></div>
 
-    <!-- القائمة الجانبية على اليمين (Sidebar) -->
+    <!-- القائمة الجانبية (Sidebar) -->
     <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-64 bg-[#111827] border-l border-slate-800 flex flex-col shrink-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 md:static">
       
       <!-- Top Brand -->
@@ -122,11 +122,27 @@
 
       <!-- الملف الشخصي للمستخدم الحالي في القائمة -->
       <div onclick="openProfileModal()" class="p-3 mx-3 my-3 rounded-2xl bg-[#131d31] border border-slate-700/60 flex items-center gap-3 cursor-pointer hover:border-blue-500 transition">
-        <img id="sidebarUserAvatar" class="w-11 h-11 rounded-xl border border-blue-500/50 object-cover shadow-sm" src="" alt="User">
+        <div class="relative">
+          <img id="sidebarUserAvatar" class="w-11 h-11 rounded-xl border border-blue-500/50 object-cover shadow-sm" src="" alt="User">
+          <span id="sidebarStatusDot" class="w-3 h-3 rounded-full border-2 border-[#131d31] absolute -bottom-1 -left-1 bg-rose-500"></span>
+        </div>
         <div class="flex-1 min-w-0">
           <p id="sidebarUserName" class="text-xs font-bold text-white truncate"></p>
           <p id="sidebarUserTitle" class="text-[10px] text-blue-400 truncate"></p>
-          <span class="text-[9px] text-slate-400 flex items-center gap-1 mt-0.5"><i class="fa-solid fa-id-badge"></i> عرض الملف الشخصي</span>
+          <span class="text-[9px] text-slate-400 flex items-center gap-1 mt-0.5"><i class="fa-solid fa-id-badge"></i> عرض / تعديل الملف</span>
+        </div>
+      </div>
+
+      <!-- زر الحضور والانصراف السريع (للموظفين) -->
+      <div id="attendanceSidebarBox" class="px-3 mb-2 hidden">
+        <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span id="quickStatusDot" class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <span id="quickStatusText" class="text-[11px] font-semibold text-slate-300">لم يبدأ العمل</span>
+          </div>
+          <button id="quickAttendanceBtn" onclick="toggleAttendance()" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition">
+            بدء العمل
+          </button>
         </div>
       </div>
 
@@ -147,10 +163,19 @@
           <span>سجل الطلبات والتوريدات</span>
         </button>
 
+        <!-- للمحاسب -->
         <div id="accountantNavItems" class="hidden">
           <button onclick="switchView('clients-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
             <i class="fa-solid fa-users w-4 text-center text-emerald-400"></i>
             <span>العملاء والمهندسين</span>
+          </button>
+        </div>
+
+        <!-- لمسؤول المخزن والمدير (سجل الحضور والانصراف) -->
+        <div id="attendanceNavItems" class="hidden">
+          <button onclick="switchView('attendance-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
+            <i class="fa-solid fa-user-clock w-4 text-center text-indigo-400"></i>
+            <span>سجل الحضور والانصراف</span>
           </button>
         </div>
       </nav>
@@ -174,7 +199,12 @@
         <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="flex items-center gap-4">
-              <img id="eng-avatar" class="w-16 h-16 rounded-2xl border-2 border-blue-500 object-cover shadow-lg" src="" alt="Engineer">
+              <div class="relative">
+                <img id="eng-avatar" class="w-16 h-16 rounded-2xl border-2 border-blue-500 object-cover shadow-lg" src="" alt="Engineer">
+                <button onclick="openProfileModal()" class="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] shadow" title="تعديل الصورة والبيانات">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+              </div>
               <div>
                 <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 rounded-full text-[10px] font-bold border border-blue-500/30">بوابة المهندس / المالك</span>
                 <h3 class="text-xl md:text-2xl font-black text-white mt-1">أهلاً بك، <span id="eng-name"></span></h3>
@@ -191,7 +221,7 @@
               </button>
               <button onclick="openChat('المحاسب المسؤول عن مشروعك', 'acc')" class="flex-1 md:flex-none px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
                 <i class="fa-solid fa-comments"></i>
-                <span>تواصل مع المحاسب المسؤول</span>
+                <span>تواصل مع المحاسب</span>
               </button>
             </div>
           </div>
@@ -220,7 +250,7 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW B: المحاسب (قائمة المهندسين وسجل كل مهندس) -->
+      <!-- VIEW B: المحاسب -->
       <!-- ========================================== -->
       <section id="view-accountant" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-emerald-950/40 to-[#131d31] border border-emerald-500/30 rounded-3xl p-5 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
@@ -236,17 +266,13 @@
           </button>
         </div>
 
-        <!-- قائمة كروت المهندسين بصورهم وبياناتهم -->
+        <!-- قائمة كروت المهندسين بصورهم وبياناتهم المحدثة -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-          <div class="flex justify-between items-center mb-3">
-            <h4 class="font-bold text-sm text-white flex items-center gap-2">
-              <i class="fa-solid fa-users text-emerald-400"></i>
-              قائمة المهندسين والعملاء (اضغط لعرض السجل المرجعي بالتاريخ)
-            </h4>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="accClientsList">
-            <!-- Dynamically populated engineer cards -->
-          </div>
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-users text-emerald-400"></i>
+            قائمة المهندسين والعملاء (اضغط لعرض السجل المرجعي بالتاريخ)
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="accClientsList"></div>
         </div>
 
         <!-- نافذة السجل المرجعي للمهندس المختار -->
@@ -319,12 +345,37 @@
             <img id="store-avatar" class="w-14 h-14 rounded-2xl border border-amber-500 object-cover" src="" alt="Store">
             <div>
               <h3 class="text-xl font-black text-white">إدارة تشوينة المواد والمستودع 🏗️</h3>
-              <p class="text-xs text-slate-300 mt-0.5">تجهيز الخامات، صرف النقلات، وتعيين السائقين للتوصيل.</p>
+              <p class="text-xs text-slate-300 mt-0.5">تجهيز الخامات، صرف النقلات، ومتابعة حضور الموظفين والسائقين.</p>
             </div>
           </div>
           <button onclick="openBroadcastChat()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
             <i class="fa-solid fa-bullhorn"></i> الشات الجماعي للمحاسبين
           </button>
+        </div>
+
+        <!-- جدول الحضور والانصراف المباشر في واجهة مسؤول المخزن -->
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-user-clock text-amber-400"></i>
+              متابعة حضور وانصراف الموظفين والسائقين اليوم
+            </h4>
+            <span class="text-[10px] text-slate-400">النقطة الخضراء = بالعمل | النقطة الحمراء = لم يبدأ</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-2.5">الموظف</th>
+                  <th class="p-2.5">الوظيفة</th>
+                  <th class="p-2.5">الحالة اليومية</th>
+                  <th class="p-2.5">وقت بدء العمل</th>
+                  <th class="p-2.5">وقت الانتهاء</th>
+                </tr>
+              </thead>
+              <tbody id="storeAttendanceBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
@@ -379,7 +430,7 @@
             <img id="admin-avatar" class="w-16 h-16 rounded-2xl border-2 border-blue-500 object-cover shadow-lg" src="" alt="Admin">
             <div>
               <h3 class="text-2xl font-black text-white">لوحة الرقابة المركزية - الإدارة العليا</h3>
-              <p class="text-xs text-slate-400 mt-1">التحكم الكامل بالموظفين، المشروعات، المخازن، والرقابة على الشاتات</p>
+              <p class="text-xs text-slate-400 mt-1">التحكم الكامل بالموظفين، المشروعات، الحضور والانصراف، والمخازن</p>
             </div>
           </div>
           <button onclick="openModal('userManageModal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20">
@@ -395,9 +446,9 @@
             <span class="text-[10px] text-emerald-400 font-semibold">محدث لحظياً</span>
           </div>
           <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <span class="text-xs text-slate-400">فريق العمل والعملاء</span>
-            <h4 class="text-xl font-bold text-white mt-1" id="stat-total-users">28 مستخدم</h4>
-            <span class="text-[10px] text-blue-400 font-semibold">7 محاسبين • 6 سواقين</span>
+            <span class="text-xs text-slate-400">الحضور اليومي للفريق</span>
+            <h4 class="text-xl font-bold text-white mt-1" id="stat-attendance-count">0 حاضر</h4>
+            <span class="text-[10px] text-emerald-400 font-semibold">متابعة دقيقة</span>
           </div>
           <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
             <span class="text-xs text-slate-400">المشروعات والكمبوندات</span>
@@ -405,9 +456,34 @@
             <span class="text-[10px] text-amber-400 font-semibold">تغطية أكتوبر والتجمع</span>
           </div>
           <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <span class="text-xs text-slate-400">نقلات موثقة بالصور</span>
-            <h4 class="text-xl font-bold text-white mt-1">18 نقلة</h4>
-            <span class="text-[10px] text-emerald-400 font-semibold">توثيق كاميرا حي</span>
+            <span class="text-xs text-slate-400">فريق العمل والعملاء</span>
+            <h4 class="text-xl font-bold text-white mt-1" id="stat-total-users">28 مستخدم</h4>
+            <span class="text-[10px] text-blue-400 font-semibold">صلاحيات محددة</span>
+          </div>
+        </div>
+
+        <!-- جدول الحضور والانصراف المباشر عند المدير -->
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-clock text-blue-400"></i>
+              سجل حضور وانصراف فريق العمل اليوم
+            </h4>
+            <span class="text-[10px] text-slate-400">محدث لحظياً فور بدء العمل</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-2.5">الموظف</th>
+                  <th class="p-2.5">المسمى الوظيفي</th>
+                  <th class="p-2.5">حالة التواجد</th>
+                  <th class="p-2.5">بدء العمل</th>
+                  <th class="p-2.5">انتهاء العمل</th>
+                </tr>
+              </thead>
+              <tbody id="adminAttendanceBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
+            </table>
           </div>
         </div>
 
@@ -430,53 +506,6 @@
               </thead>
               <tbody id="adminUsersTable" class="divide-y divide-slate-800 text-slate-300"></tbody>
             </table>
-          </div>
-        </div>
-
-        <!-- حركة المخازن والرقابة على الشاتات -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-boxes-stacked text-amber-400"></i>
-              حركة المخازن (3 تشوينات رئيسية)
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between">
-                <span>طوب أحمر عادي</span>
-                <span class="text-slate-400">رصيد: <b class="text-white">45,000 طوبة</b></span>
-              </div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between">
-                <span>أسمنت مسلح ممتاز</span>
-                <span class="text-slate-400">رصيد: <b class="text-rose-400">18 طن (يلزم توريد)</b></span>
-              </div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between">
-                <span>رمل مباني ناعم</span>
-                <span class="text-slate-400">رصيد: <b class="text-white">120 متر³</b></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-blue-400"></i>
-              الرقابة على الشات الداخلي
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div onclick="openChat('مراقبة: م. أحمد ناصر ↔ محاسب 1', 'admin')" class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-blue-500">
-                <div>
-                  <p class="font-bold text-white">م. أحمد ناصر ↔ محاسب 1</p>
-                  <p class="text-[10px] text-slate-400">مشروع كمبوند بادية - 6 أكتوبر</p>
-                </div>
-                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">فتح المراقبة</span>
-              </div>
-              <div onclick="openBroadcastChat()" class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-blue-500">
-                <div>
-                  <p class="font-bold text-white">الشات الجماعي (التشوينات والمحاسبين)</p>
-                  <p class="text-[10px] text-slate-400">تنبيهات نقص الخامات والتحميل</p>
-                </div>
-                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">فتح المراقبة</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -509,46 +538,91 @@
         </div>
       </section>
 
+      <!-- ========================================== -->
+      <!-- VIEW G: شاشة الحضور والانصراف المنفصلة (من القائمة) -->
+      <!-- ========================================== -->
+      <section id="view-attendance-section" class="role-view hidden space-y-5">
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
+          <h3 class="text-xl font-black text-white mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-user-clock text-indigo-400"></i>
+            منظومة حضور وانصراف العاملين والموظفين
+          </h3>
+          <p class="text-xs text-slate-400 mb-4">متابعة حية لتسجيل بدء العمل وانتهاء اليوم لكل موظف وسائق</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-3">الموظف</th>
+                  <th class="p-3">المسمى الوظيفي</th>
+                  <th class="p-3">الحالة الآن</th>
+                  <th class="p-3">وقت بدء العمل</th>
+                  <th class="p-3">وقت انتهاء العمل</th>
+                </tr>
+              </thead>
+              <tbody id="sharedAttendanceTableBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: الملف الشخصي (Profile Card) -->
+  <!-- MODAL: الملف الشخصي وتعديل البيانات (لكل الحسابات بما فيها المهندس) -->
   <!-- ========================================== -->
   <div id="profileModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-[#131d31] border border-slate-700 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 text-center">
-      <div class="relative w-24 h-24 mx-auto">
-        <img id="profModalAvatar" class="w-24 h-24 rounded-3xl object-cover border-2 border-blue-500 shadow-xl" src="" alt="Avatar">
-        <label class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center text-xs cursor-pointer shadow-md">
-          <i class="fa-solid fa-camera"></i>
-          <input type="file" accept="image/*" onchange="updateProfileAvatar(event)" class="hidden">
-        </label>
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-pen text-blue-400"></i>
+          الملف الشخصي وتعديل البيانات
+        </h3>
+        <button onclick="closeModal('profileModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <div>
-        <h3 id="profModalName" class="text-lg font-bold text-white"></h3>
-        <p id="profModalTitle" class="text-xs text-blue-400 font-semibold mt-0.5"></p>
-        <p id="profModalExtra" class="text-[11px] text-slate-400 mt-1"></p>
+      <div class="text-center space-y-3">
+        <div class="relative w-24 h-24 mx-auto">
+          <img id="profModalAvatar" class="w-24 h-24 rounded-3xl object-cover border-2 border-blue-500 shadow-xl" src="" alt="Avatar">
+          <label class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center text-xs cursor-pointer shadow-md" title="تغيير الصورة">
+            <i class="fa-solid fa-camera"></i>
+            <input type="file" accept="image/*" onchange="updateProfileAvatar(event)" class="hidden">
+          </label>
+        </div>
+        <p class="text-[11px] text-blue-400 font-semibold" id="profModalTitle"></p>
       </div>
 
-      <div class="p-3 bg-slate-900/80 rounded-2xl border border-slate-800 text-right space-y-2 text-xs">
-        <div class="flex justify-between">
-          <span class="text-slate-400">اسم المستخدم:</span>
-          <span id="profModalUsername" class="text-white font-bold"></span>
+      <form onsubmit="handleSaveProfile(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">الاسم بالكامل</label>
+          <input type="text" id="profEditName" required class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
         </div>
-        <div class="flex justify-between">
-          <span class="text-slate-400">رقم الهاتف:</span>
-          <span id="profModalPhone" class="text-emerald-400 font-bold"></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-slate-400">حالة الحساب:</span>
-          <span class="text-blue-400 font-bold">نشط وموثق 🟢</span>
-        </div>
-      </div>
 
-      <button onclick="closeModal('profileModal')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700">
-        إغلاق
-      </button>
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">رقم الهاتف</label>
+          <input type="text" id="profEditPhone" required class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+        </div>
+
+        <div id="profEngineerFields" class="hidden space-y-2">
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">اسم الكمبوند / المشروع</label>
+            <input type="text" id="profEditCompound" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">رقم الوحدة (فيلا / عمارة)</label>
+            <input type="text" id="profEditUnit" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          </div>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-blue-600/30">
+            حفظ التعديلات
+          </button>
+          <button type="button" onclick="closeModal('profileModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">
+            إلغاء
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -595,7 +669,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: شات متكامل (كتابة + فويس + صور + PDF و Word) -->
+  <!-- MODAL: شات متكامل -->
   <!-- ========================================== -->
   <div id="chatModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl flex flex-col h-[580px]">
@@ -609,7 +683,6 @@
 
       <div id="chatBox" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar text-xs my-2"></div>
 
-      <!-- مؤشر تسجيل الصوت -->
       <div id="recordingIndicator" class="hidden p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl text-xs flex items-center justify-between animate-pulse">
         <span class="flex items-center gap-2"><i class="fa-solid fa-microphone"></i> جاري تسجيل رسالة صوتية...</span>
         <button onclick="stopVoiceRecording()" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold">إيقاف وإرسال</button>
@@ -669,7 +742,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: إضافة مستخدم جديد وتحديد الصلاحيات -->
+  <!-- MODAL: إضافة مستخدم جديد للمدير العام -->
   <!-- ========================================== -->
   <div id="userManageModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
@@ -739,7 +812,7 @@
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // Users Database مع صورهم الشخصية وأسماؤهم الوظيفية
+    // Users Database مع صورهم وحالة الحضور والانصراف
     let users = {
       'admin': {
         role: 'admin',
@@ -747,7 +820,8 @@
         jobTitle: 'الرئيس التنفيذي - مالك الشركة',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
         phone: '01000000001',
-        pass: '123'
+        pass: '123',
+        attendance: { isWorking: true, startTime: '08:00 ص', endTime: '--' }
       },
       'acc1': {
         role: 'accountant',
@@ -756,7 +830,7 @@
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
         phone: '01198765432',
         pass: '123',
-        assignedCompounds: ['كمبوند بادية - 6 أكتوبر', 'بالم هيلز']
+        attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
       'store1': {
         role: 'store',
@@ -764,7 +838,8 @@
         jobTitle: 'أمين التشوينة والمستودع الرئيسي',
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
         phone: '01222222222',
-        pass: '123'
+        pass: '123',
+        attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
       'driver1': {
         role: 'driver',
@@ -772,7 +847,8 @@
         jobTitle: 'كابتن نقل ثقيل وتعتيق مون',
         avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
         phone: '01555555555',
-        pass: '123'
+        pass: '123',
+        attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
       'eng1': {
         role: 'engineer',
@@ -827,20 +903,6 @@
         driver: 'الكابتن سيد عبد العال',
         proofImg: 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=500&auto=format&fit=crop&q=60',
         date: '2026-10-03 11:15 ص'
-      },
-      {
-        id: 'ORD-499',
-        engineer: 'م. أحمد ناصر',
-        compound: 'كمبوند بادية - 6 أكتوبر',
-        unit: 'فيلا 14',
-        phone: '01012345678',
-        item: 'رمل مباني ناعم',
-        qty: '20 متر³',
-        total: 3400,
-        status: 'تم التسليم للعميل',
-        driver: 'الكابتن سيد عبد العال',
-        proofImg: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=500&auto=format&fit=crop&q=60',
-        date: '2026-09-28 09:00 ص'
       }
     ];
 
@@ -893,25 +955,81 @@
       document.getElementById('sidebarUserAvatar').src = currentUser.avatar;
       document.getElementById('mobileUserAvatar').src = currentUser.avatar;
 
-      // Show/Hide accountant special nav
-      if (currentUser.role === 'accountant') {
-        document.getElementById('accountantNavItems').classList.remove('hidden');
-      } else {
-        document.getElementById('accountantNavItems').classList.add('hidden');
+      // Status indicator in sidebar
+      const isWorking = currentUser.attendance ? currentUser.attendance.isWorking : false;
+      const statusDot = document.getElementById('sidebarStatusDot');
+      if (statusDot) {
+        statusDot.className = `w-3 h-3 rounded-full border-2 border-[#131d31] absolute -bottom-1 -left-1 ${isWorking ? 'bg-emerald-500' : 'bg-rose-500'}`;
       }
+
+      // Quick Attendance Button for Staff
+      const attBox = document.getElementById('attendanceSidebarBox');
+      if (currentUser.role !== 'engineer') {
+        attBox.classList.remove('hidden');
+        updateAttendanceButtonUI();
+      } else {
+        attBox.classList.add('hidden');
+      }
+
+      // Accountant and Store/Admin Nav items
+      document.getElementById('accountantNavItems').classList.toggle('hidden', currentUser.role !== 'accountant');
+      document.getElementById('attendanceNavItems').classList.toggle('hidden', currentUser.role !== 'store' && currentUser.role !== 'admin');
+    }
+
+    function updateAttendanceButtonUI() {
+      if (!currentUser.attendance) return;
+      const isWorking = currentUser.attendance.isWorking;
+      const qDot = document.getElementById('quickStatusDot');
+      const qText = document.getElementById('quickStatusText');
+      const qBtn = document.getElementById('quickAttendanceBtn');
+
+      if (isWorking) {
+        qDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse';
+        qText.innerText = 'بالعمل الآن 🟢';
+        qBtn.innerText = 'انتهاء العمل';
+        qBtn.className = 'px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold transition';
+      } else {
+        qDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+        qText.innerText = 'لم يبدأ العمل 🔴';
+        qBtn.innerText = 'بدء العمل';
+        qBtn.className = 'px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition';
+      }
+    }
+
+    function toggleAttendance() {
+      if (!currentUser.attendance) return;
+      const now = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+
+      if (!currentUser.attendance.isWorking) {
+        currentUser.attendance.isWorking = true;
+        currentUser.attendance.startTime = now;
+        alert(`تم تسجيل بدء العمل اليومي الساعة: ${now} 🟢 بالتوفيق!`);
+      } else {
+        currentUser.attendance.isWorking = false;
+        currentUser.attendance.endTime = now;
+        alert(`تم تسجيل انتهاء العمل اليومي الساعة: ${now} 🔴 يعطيك العافية!`);
+      }
+
+      users[currentUser.username].attendance = currentUser.attendance;
+      updateHeaderAndSidebar();
+      renderAttendanceTables();
     }
 
     function switchView(viewName) {
       if (window.innerWidth < 768) toggleSidebar();
 
+      document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
+
       if (viewName === 'main') {
         renderAppByRole();
       } else if (viewName === 'orders-history') {
-        document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-orders-history').classList.remove('hidden');
         renderAllOrdersTable();
       } else if (viewName === 'clients-section') {
         renderAppByRole();
+      } else if (viewName === 'attendance-section') {
+        document.getElementById('view-attendance-section').classList.remove('hidden');
+        renderAttendanceTables();
       }
     }
 
@@ -935,6 +1053,7 @@
         document.getElementById('view-store').classList.remove('hidden');
         document.getElementById('store-avatar').src = currentUser.avatar;
         renderStoreTable();
+        renderAttendanceTables();
       }
       else if (currentUser.role === 'driver') {
         document.getElementById('view-driver').classList.remove('hidden');
@@ -945,17 +1064,26 @@
         document.getElementById('view-admin').classList.remove('hidden');
         document.getElementById('admin-avatar').src = currentUser.avatar;
         renderAdminDashboard();
+        renderAttendanceTables();
       }
     }
 
-    // --- Profile Modal Handling ---
+    // --- Profile Modal Handling (للمهندس ولكل الحسابات) ---
     function openProfileModal() {
       document.getElementById('profModalAvatar').src = currentUser.avatar;
-      document.getElementById('profModalName').innerText = currentUser.name;
       document.getElementById('profModalTitle').innerText = currentUser.jobTitle;
-      document.getElementById('profModalUsername').innerText = currentUser.username;
-      document.getElementById('profModalPhone').innerText = currentUser.phone;
-      document.getElementById('profModalExtra').innerText = currentUser.compound ? `${currentUser.compound} - (${currentUser.unit})` : 'المقر الإداري والمخازن';
+      document.getElementById('profEditName').value = currentUser.name;
+      document.getElementById('profEditPhone').value = currentUser.phone;
+
+      const engBox = document.getElementById('profEngineerFields');
+      if (currentUser.role === 'engineer') {
+        engBox.classList.remove('hidden');
+        document.getElementById('profEditCompound').value = currentUser.compound || '';
+        document.getElementById('profEditUnit').value = currentUser.unit || '';
+      } else {
+        engBox.classList.add('hidden');
+      }
+
       openModal('profileModal');
     }
 
@@ -966,12 +1094,74 @@
         reader.onload = function(evt) {
           currentUser.avatar = evt.target.result;
           users[currentUser.username].avatar = evt.target.result;
+          document.getElementById('profModalAvatar').src = evt.target.result;
           updateHeaderAndSidebar();
-          openProfileModal();
           renderAppByRole();
         };
         reader.readAsDataURL(file);
       }
+    }
+
+    function handleSaveProfile(e) {
+      e.preventDefault();
+      currentUser.name = document.getElementById('profEditName').value.trim();
+      currentUser.phone = document.getElementById('profEditPhone').value.trim();
+
+      if (currentUser.role === 'engineer') {
+        currentUser.compound = document.getElementById('profEditCompound').value.trim();
+        currentUser.unit = document.getElementById('profEditUnit').value.trim();
+      }
+
+      users[currentUser.username] = { ...users[currentUser.username], ...currentUser };
+      updateHeaderAndSidebar();
+      renderAppByRole();
+      closeModal('profileModal');
+      alert('تم حفظ وتحديث بيانات الملف الشخصي والصورة بنجاح!');
+    }
+
+    // --- الحضور والانصراف (الجداول المشتركة عند المخزن والمدير) ---
+    function renderAttendanceTables() {
+      const storeTbody = document.getElementById('storeAttendanceBody');
+      const adminTbody = document.getElementById('adminAttendanceBody');
+      const sharedTbody = document.getElementById('sharedAttendanceTableBody');
+
+      let html = '';
+      let activeCount = 0;
+
+      // جمع الموظفين غير المهندسين
+      const staffKeys = Object.keys(users).filter(k => users[k].role !== 'engineer');
+
+      staffKeys.forEach(k => {
+        const u = users[k];
+        const isWorking = u.attendance ? u.attendance.isWorking : false;
+        if (isWorking) activeCount++;
+
+        const dotColor = isWorking ? 'bg-emerald-500' : 'bg-rose-500';
+        const statusText = isWorking ? 'متواجد بالعمل 🟢' : 'لم يبدأ العمل 🔴';
+
+        html += `
+          <tr>
+            <td class="p-2.5">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full ${dotColor} ${isWorking ? 'animate-pulse' : ''}"></span>
+                <img src="${u.avatar}" class="w-7 h-7 rounded-full object-cover border border-slate-700">
+                <span class="font-bold text-white">${u.name}</span>
+              </div>
+            </td>
+            <td class="p-2.5 text-slate-400">${u.jobTitle}</td>
+            <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] ${isWorking ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'} font-bold">${statusText}</span></td>
+            <td class="p-2.5 text-slate-300 font-semibold">${u.attendance ? u.attendance.startTime : '--'}</td>
+            <td class="p-2.5 text-slate-400">${u.attendance ? u.attendance.endTime : '--'}</td>
+          </tr>
+        `;
+      });
+
+      if (storeTbody) storeTbody.innerHTML = html;
+      if (adminTbody) adminTbody.innerHTML = html;
+      if (sharedTbody) sharedTbody.innerHTML = html;
+
+      const statAtt = document.getElementById('stat-attendance-count');
+      if (statAtt) statAtt.innerText = `${activeCount} من ${staffKeys.length} حاضر`;
     }
 
     // --- Engineer Methods ---
@@ -1026,9 +1216,8 @@
       alert('تم إرسال طلب التوريد إلى المحاسب المسؤول!');
     }
 
-    // --- Accountant View & Clients Dossier ---
+    // --- Accountant View & Clients ---
     function renderAccountantView() {
-      // 1. Clients List with photo, unit, compound, phone
       const clientsBox = document.getElementById('accClientsList');
       clientsBox.innerHTML = '';
       
@@ -1053,7 +1242,6 @@
         `;
       });
 
-      // 2. Orders Table
       const tbody = document.getElementById('accOrdersTable');
       tbody.innerHTML = '';
       orders.forEach(o => {
@@ -1074,7 +1262,6 @@
       });
     }
 
-    // Show specific engineer's history when accountant clicks on their card
     function showEngineerOrdersHistory(userKey) {
       const u = users[userKey];
       const box = document.getElementById('engineerHistoryBox');
@@ -1093,7 +1280,7 @@
       const engOrders = orders.filter(o => o.engineer.includes(u.name));
 
       if (engOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد طلبات سابقة مسجلة لهذا المهندس حتى الآن</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد طلبات سابقة مسجلة لهذا المهندس</td></tr>`;
       } else {
         engOrders.forEach(o => {
           tbody.innerHTML += `
@@ -1252,11 +1439,13 @@
         pass: pass,
         compound: compound || '',
         unit: unit || '',
-        phone: '01000000000'
+        phone: '01000000000',
+        attendance: role !== 'engineer' ? { isWorking: false, startTime: '--', endTime: '--' } : null
       };
 
       closeModal('userManageModal');
       renderAdminDashboard();
+      renderAttendanceTables();
       alert(`تم إضافة وتفعيل الحساب بنجاح باسم مستخدم: ${login}`);
     }
 
@@ -1264,6 +1453,7 @@
       if (confirm(`هل أنت متأكد من سحب صلاحية وحذف حساب: ${users[k].name}؟`)) {
         delete users[k];
         renderAdminDashboard();
+        renderAttendanceTables();
       }
     }
 
@@ -1280,7 +1470,7 @@
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    // --- Strict Camera Execution (ممنوع الألبوم) ---
+    // --- Strict Live Camera (ممنوع الألبوم) ---
     async function openLiveCameraModal(orderId) {
       selectedOrderIdForProof = orderId;
       openModal('proofModal');
@@ -1296,7 +1486,7 @@
         });
         document.getElementById('cameraStream').srcObject = mediaStream;
       } catch (err) {
-        alert('يرجى السماح بصلاحية فتح الكاميرا في المتصفح لتصوير وتوثيق المون!');
+        alert('يرجى السماح بصلاحية فتح الكاميرا لتصوير وتوثيق المون!');
         closeProofCamera();
       }
     }
@@ -1339,7 +1529,7 @@
       closeModal('proofModal');
     }
 
-    // --- Advanced Chat (Text + Voice + Word/PDF Documents) ---
+    // --- Advanced Chat ---
     function openChat(title, targetRole) {
       document.getElementById('chatTitle').innerText = title;
       openModal('chatModal');
