@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شركة الرائد لتوريد مواد البناء</title>
-  <!-- Tailwind CSS CDN -->
+  <title>شركة الرائد لتوريد مواد البناء - منظومة ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -17,8 +15,8 @@
           colors: {
             brand: '#2563eb',
             darkBg: '#0b1120',
-            darkCard: '#161f30',
-            darkBorder: '#334155'
+            darkCard: '#131d31',
+            darkBorder: '#1e293b'
           }
         }
       }
@@ -26,493 +24,788 @@
   </script>
   <style>
     body { font-family: 'Cairo', sans-serif; }
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-[#0b1120] text-slate-100 min-h-screen flex flex-col md:flex-row">
+<body class="bg-[#0b1120] text-slate-100 min-h-screen">
 
-  <!-- Mobile Top Bar -->
-  <div class="md:hidden bg-[#111827] border-b border-slate-800 p-4 flex items-center justify-between sticky top-0 z-50">
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-md">
-        <i class="fa-solid fa-trowel-bricks"></i>
+  <!-- ========================================== -->
+  <!-- 1. شاشة تسجيل الدخول (LOGIN SCREEN) -->
+  <!-- ========================================== -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#131d31] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 rounded-2xl bg-blue-600/20 text-blue-500 mx-auto flex items-center justify-center text-3xl mb-3 border border-blue-500/30 shadow-lg shadow-blue-500/10">
+          <i class="fa-solid fa-trowel-bricks"></i>
+        </div>
+        <h1 class="text-2xl font-black text-white">شركة الرائد</h1>
+        <p class="text-xs text-slate-400 mt-1">لتوريد مواد البناء والمشروعات</p>
       </div>
-      <div>
-        <h1 class="font-bold text-sm text-white">شركة الرائد</h1>
-        <p class="text-[10px] text-slate-400">لتوريد مواد البناء</p>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1.5">اسم المستخدم</label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute right-3.5 top-3.5 text-slate-500"></i>
+            <input type="text" id="loginUser" required placeholder="اسم المستخدم" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1.5">كلمة المرور</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute right-3.5 top-3.5 text-slate-500"></i>
+            <input type="password" id="loginPass" required placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/30 text-sm transition mt-2">
+          تسجيل الدخول للنظام
+        </button>
+      </form>
+
+      <!-- Quick demo accounts hints -->
+      <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
+        <p class="font-bold text-slate-300 mb-2">الحسابات التجريبية السريعة (باسورد: 123):</p>
+        <div class="grid grid-cols-3 gap-1.5 text-center">
+          <span onclick="setQuickLogin('eng')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس: eng</span>
+          <span onclick="setQuickLogin('acc')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">محاسب: acc</span>
+          <span onclick="setQuickLogin('store')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مخزن: store</span>
+          <span onclick="setQuickLogin('driver')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">سائق: driver</span>
+          <span onclick="setQuickLogin('admin')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 col-span-2">المدير العام: admin</span>
+        </div>
       </div>
     </div>
-    <button onclick="toggleSidebar()" class="w-10 h-10 rounded-lg bg-slate-800 text-slate-200 flex items-center justify-center border border-slate-700">
-      <i class="fa-solid fa-bars text-lg"></i>
-    </button>
   </div>
 
-  <!-- Sidebar Overlay for Mobile -->
-  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden"></div>
-
-  <!-- Sidebar (القائمة الجانبية) -->
-  <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-64 bg-[#111827] border-l border-slate-800 flex flex-col shrink-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 md:static">
-    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+  <!-- ========================================== -->
+  <!-- 2. منطقة النظام بعد الدخول (APP SHELL) -->
+  <!-- ========================================== -->
+  <div id="appContainer" class="hidden min-h-screen flex flex-col">
+    
+    <!-- Top Bar -->
+    <header class="bg-[#111827] border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-blue-500/30">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-md">
           <i class="fa-solid fa-trowel-bricks"></i>
         </div>
         <div>
-          <h1 class="font-bold text-base text-white leading-tight">شركة الرائد</h1>
-          <p class="text-xs text-slate-400">لتوريد مواد البناء</p>
+          <h2 class="font-bold text-sm text-white leading-tight">شركة الرائد لتوريد مواد البناء</h2>
+          <p id="userRoleBadge" class="text-[10px] text-blue-400 font-semibold"></p>
         </div>
       </div>
-      <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-    </div>
-
-    <!-- User Profile Bar -->
-    <div class="p-3 mx-3 my-2 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-center gap-3">
-      <div class="w-9 h-9 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-        <i class="fa-solid fa-user-tie"></i>
+      <div class="flex items-center gap-2">
+        <button onclick="logout()" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>خروج</span>
+        </button>
       </div>
-      <div class="flex-1 min-w-0">
-        <p class="text-xs font-semibold text-slate-200 truncate">مرحباً، المدير العام</p>
-        <p class="text-[10px] text-blue-400">صلاحيات كاملة (Admin)</p>
-      </div>
-    </div>
+    </header>
 
-    <!-- Navigation Menu -->
-    <nav class="p-3 space-y-1 text-sm flex-1 overflow-y-auto custom-scrollbar">
-      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-semibold transition">
-        <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-        <span>لوحة التحكم</span>
-      </button>
-      <button onclick="switchTab('sales')" id="nav-sales" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 transition">
-        <i class="fa-solid fa-cart-shopping w-5 text-center text-blue-400"></i>
-        <span>المبيعات والطلبات</span>
-      </button>
-      <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 transition">
-        <i class="fa-solid fa-boxes-stacked w-5 text-center text-amber-400"></i>
-        <span>المنتجات والمخزون</span>
-      </button>
-      <button onclick="switchTab('projects')" id="nav-projects" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 transition">
-        <i class="fa-solid fa-building-user w-5 text-center text-cyan-400"></i>
-        <span>المشروعات والوحدات</span>
-      </button>
-      <button onclick="switchTab('treasury')" id="nav-treasury" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 transition">
-        <i class="fa-solid fa-vault w-5 text-center text-emerald-400"></i>
-        <span>الخزينة والمدفوعات</span>
-      </button>
-    </nav>
+    <!-- VIEWS CONTAINER -->
+    <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto">
 
-    <div class="p-3 border-t border-slate-800 text-[11px] text-slate-500 text-center">
-      الرائد ERP • إصدار 1.1
-    </div>
-  </aside>
-
-  <!-- Main Content Area -->
-  <main class="flex-1 p-4 md:p-6 overflow-y-auto">
-
-    <!-- 1. TAB: Dashboard -->
-    <section id="tab-dashboard" class="tab-content space-y-6">
-      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 class="text-2xl font-bold text-white tracking-wide">لوحة التحكم</h2>
-          <p class="text-xs text-slate-400 mt-1">متابعة لحظية للتوريدات، الخزينة، والمخازن</p>
+      <!-- ========================================== -->
+      <!-- VIEW A: واجهة المهندس أو المالك -->
+      <!-- ========================================== -->
+      <section id="view-engineer" class="role-view hidden space-y-5">
+        <!-- Welcome Card -->
+        <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl relative overflow-hidden">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <span class="px-2.5 py-1 bg-blue-500/20 text-blue-300 rounded-full text-[10px] font-bold border border-blue-500/30">بوابة المشروعات والتوريد</span>
+              <h3 class="text-xl md:text-2xl font-black text-white mt-2">أهلاً بك، <span id="eng-name">م. أحمد ناصر</span></h3>
+              <p class="text-xs text-slate-300 mt-1">
+                المشروع: <span id="eng-compound" class="text-white font-bold">كمبوند بادية - 6 أكتوبر</span> | 
+                الوحدة: <span id="eng-unit" class="text-blue-400 font-bold">فيلا 14</span>
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2 w-full md:w-auto">
+              <button onclick="openModal('orderModal')" class="flex-1 md:flex-none px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition">
+                <i class="fa-solid fa-cart-flatbed"></i>
+                <span>للطلب اضغط هنا</span>
+              </button>
+              <button onclick="openChat('المحاسب المسؤول')" class="flex-1 md:flex-none px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
+                <i class="fa-solid fa-comments"></i>
+                <span>للتواصل مع الإدارة</span>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="openOrderModal()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 transition">
-            <i class="fa-solid fa-plus"></i>
-            <span>طلب توريد جديد</span>
+
+        <!-- Orders Status Table -->
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-blue-400"></i>
+            متابعة حالة طلباتي الجارية
+          </h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-3">رقم الطلب</th>
+                  <th class="p-3">الأصناف المطلوبة</th>
+                  <th class="p-3">تاريخ الطلب</th>
+                  <th class="p-3">الحالة والمسار</th>
+                  <th class="p-3">الإثبات والتسليم</th>
+                </tr>
+              </thead>
+              <tbody id="engOrdersTable" class="divide-y divide-slate-800 text-slate-300">
+                <!-- Data populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW B: واجهة المحاسب -->
+      <!-- ========================================== -->
+      <section id="view-accountant" class="role-view hidden space-y-5">
+        <div class="bg-gradient-to-r from-emerald-950/40 to-[#131d31] border border-emerald-500/30 rounded-3xl p-5 shadow-xl">
+          <h3 class="text-xl font-black text-white">مرحباً يا بطل! يوم موفق ومليء بالإنجاز 💼</h3>
+          <p class="text-xs text-slate-300 mt-1">باشر تحركات المون وتأكيد الطلبات وإرسالها للمخازن لحظياً.</p>
+        </div>
+
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i> جدول متابعة واعتماد أوامر التوريد</span>
+            <button onclick="openChat('شات المخزن الداخلي')" class="text-xs text-blue-400 hover:underline flex items-center gap-1">
+              <i class="fa-solid fa-message"></i> شات أمين المخزن
+            </button>
+          </h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-3">رقم الطلب</th>
+                  <th class="p-3">المهندس / المشروع</th>
+                  <th class="p-3">الهاتف والوحدة</th>
+                  <th class="p-3">الأصناف</th>
+                  <th class="p-3">الإجمالي</th>
+                  <th class="p-3">المرحلة الحالية</th>
+                  <th class="p-3 text-center">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="accOrdersTable" class="divide-y divide-slate-800 text-slate-300">
+                <!-- Data populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW C: واجهة التشوينة والمخازن -->
+      <!-- ========================================== -->
+      <section id="view-store" class="role-view hidden space-y-5">
+        <div class="bg-gradient-to-r from-amber-950/40 to-[#131d31] border border-amber-500/30 rounded-3xl p-5 shadow-xl flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-white">إدارة تشوينة المواد والمستودع 🏗️</h3>
+            <p class="text-xs text-slate-300 mt-1">تجهيز النقلات، صرف الخامات، وتحميل سيارات النقل.</p>
+          </div>
+          <button onclick="openBroadcastChat()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-600/20">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span>شات جماعي مع المحاسبين</span>
           </button>
         </div>
-      </header>
 
-      <!-- KPI Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">إجمالي المبيعات</span>
-            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm"><i class="fa-solid fa-bag-shopping"></i></div>
-          </div>
-          <div class="mt-3">
-            <h3 class="text-xl font-bold text-white" id="stat-sales">48,750 <span class="text-xs font-normal text-slate-400">ج.م</span></h3>
-            <p class="text-[11px] text-emerald-400 mt-1 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> نشط ومحدث</p>
-          </div>
-        </div>
-
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">رصيد الخزينة</span>
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm"><i class="fa-solid fa-wallet"></i></div>
-          </div>
-          <div class="mt-3">
-            <h3 class="text-xl font-bold text-white">125,400 <span class="text-xs font-normal text-slate-400">ج.م</span></h3>
-            <p class="text-[11px] text-slate-400 mt-1">سيولة متوفرة</p>
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-dolly text-amber-400"></i>
+            الطلبات المحولة للتجهيز والشحن
+          </h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-3">رقم الطلب</th>
+                  <th class="p-3">المشروع / الموقع</th>
+                  <th class="p-3">الأصناف المطلوبة للتحميل</th>
+                  <th class="p-3">حالة التجهيز</th>
+                  <th class="p-3 text-center">أزرار الشحن والتجهيز</th>
+                </tr>
+              </thead>
+              <tbody id="storeOrdersTable" class="divide-y divide-slate-800 text-slate-300">
+                <!-- Data populated via JS -->
+              </tbody>
+            </table>
           </div>
         </div>
+      </section>
 
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">مستحقات عند العملاء</span>
-            <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-          </div>
-          <div class="mt-3">
-            <h3 class="text-xl font-bold text-white">32,200 <span class="text-xs font-normal text-slate-400">ج.م</span></h3>
-            <p class="text-[11px] text-amber-400 mt-1">3 فواتير آجلة</p>
-          </div>
+      <!-- ========================================== -->
+      <!-- VIEW D: واجهة السائق -->
+      <!-- ========================================== -->
+      <section id="view-driver" class="role-view hidden space-y-5">
+        <div class="bg-gradient-to-r from-cyan-950/40 to-[#131d31] border border-cyan-500/30 rounded-3xl p-5 shadow-xl">
+          <h3 class="text-xl font-black text-white">بوابة كابتن النقل والتعتيق 🚚</h3>
+          <p class="text-xs text-slate-300 mt-1">استلم عنوان التشوين وصوّر المون بعد إنزالها لإثبات التسليم.</p>
         </div>
 
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">عدد الطلبات اليوم</span>
-            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm"><i class="fa-solid fa-file-invoice"></i></div>
-          </div>
-          <div class="mt-3">
-            <h3 class="text-xl font-bold text-white" id="stat-orders-count">3 طلبات</h3>
-            <p class="text-[11px] text-cyan-400 mt-1">تمت جدولتها للتوريد</p>
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-truck-ramp-box text-cyan-400"></i>
+            النقلات المسندة إليك اليوم
+          </h4>
+          <div id="driverCardsList" class="space-y-4">
+            <!-- Driver active orders -->
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Dashboard Table -->
-      <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-bold text-sm text-white flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left text-blue-400"></i>
-            آخر طلبات التوريد المسجلة
-          </h3>
-          <button onclick="switchTab('sales')" class="text-xs text-blue-400 hover:underline">عرض كل المبيعات</button>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-right text-xs">
-            <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
-              <tr>
-                <th class="p-2.5">رقم الطلب</th>
-                <th class="p-2.5">العميل / المشروع</th>
-                <th class="p-2.5">الأصناف والكميات</th>
-                <th class="p-2.5">الإجمالي</th>
-                <th class="p-2.5">الحالة</th>
-              </tr>
-            </thead>
-            <tbody id="ordersTableBody" class="divide-y divide-slate-800 text-slate-300">
-              <!-- Dynamically Populated -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. TAB: Sales & Orders -->
-    <section id="tab-sales" class="tab-content hidden space-y-6">
-      <header class="flex justify-between items-center">
-        <div>
-          <h2 class="text-2xl font-bold text-white">المبيعات وأوامر التوريد</h2>
-          <p class="text-xs text-slate-400 mt-1">سجل فواتير وأوامر الشغل للمهندسين والمقاولين</p>
-        </div>
-        <button onclick="openOrderModal()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20">
-          <i class="fa-solid fa-plus"></i>
-          <span>إنشاء طلب جديد</span>
-        </button>
-      </header>
-
-      <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-        <div class="overflow-x-auto">
-          <table class="w-full text-right text-xs">
-            <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
-              <tr>
-                <th class="p-3">رقم الطلب</th>
-                <th class="p-3">المشروع / العميل</th>
-                <th class="p-3">المهندس المسؤول</th>
-                <th class="p-3">الأصناف</th>
-                <th class="p-3">الإجمالي النهائي</th>
-                <th class="p-3">الحالة</th>
-              </tr>
-            </thead>
-            <tbody id="fullOrdersTableBody" class="divide-y divide-slate-800 text-slate-300">
-              <!-- Full orders list -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. TAB: Inventory -->
-    <section id="tab-inventory" class="tab-content hidden space-y-6">
-      <header>
-        <h2 class="text-2xl font-bold text-white">المنتجات والمخزون</h2>
-        <p class="text-xs text-slate-400 mt-1">متابعة أرصدة مواد البناء في المخازن الرئيسية والمشاريع</p>
-      </header>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl"><i class="fa-solid fa-cubes"></i></div>
+      <!-- ========================================== -->
+      <!-- VIEW E: واجهة المدير العام (لوحة الرقابة الشاملة) -->
+      <!-- ========================================== -->
+      <section id="view-admin" class="role-view hidden space-y-6">
+        <header class="flex justify-between items-center">
           <div>
-            <h4 class="font-bold text-white text-sm">طوب أحمر عادي</h4>
-            <p class="text-xs text-slate-400 mt-0.5">الرصيد: <span class="text-white font-bold">18,000 طوبة</span></p>
-            <p class="text-[11px] text-blue-400 mt-1">سعر الألف: 2,100 ج.م</p>
+            <h3 class="text-2xl font-black text-white">لوحة الرقابة المركزية - الإدارة العليا</h3>
+            <p class="text-xs text-slate-400 mt-1">متابعة لحظية وشاملة لكافة الأقسام، الشاتات، والمخازن</p>
+          </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400">إجمالي المبيعات</span>
+            <h4 class="text-xl font-bold text-white mt-2">64,550 <span class="text-xs font-normal">ج.م</span></h4>
+            <span class="text-[10px] text-emerald-400 font-semibold">محدث لحظياً</span>
+          </div>
+          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400">الرصيد في الخزينة</span>
+            <h4 class="text-xl font-bold text-white mt-2">125,400 <span class="text-xs font-normal">ج.م</span></h4>
+            <span class="text-[10px] text-blue-400 font-semibold">سيولة جاهزة</span>
+          </div>
+          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400">فواتير موردين مستحقة</span>
+            <h4 class="text-xl font-bold text-white mt-2">18,300 <span class="text-xs font-normal">ج.م</span></h4>
+            <span class="text-[10px] text-amber-400 font-semibold">تستحق هذا الأسبوع</span>
+          </div>
+          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400">إجمالي النقلات الناجحة</span>
+            <h4 class="text-xl font-bold text-white mt-2" id="adminTotalDeliveries">12 نقلة</h4>
+            <span class="text-[10px] text-emerald-400 font-semibold">مسجلة بالصور</span>
           </div>
         </div>
 
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl"><i class="fa-solid fa-mountain"></i></div>
-          <div>
-            <h4 class="font-bold text-white text-sm">رمل مباني ناعم</h4>
-            <p class="text-xs text-slate-400 mt-0.5">الرصيد: <span class="text-white font-bold">45 متر³</span></p>
-            <p class="text-[11px] text-amber-400 mt-1">سعر المتر: 170 ج.م</p>
-          </div>
-        </div>
-
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-xl"><i class="fa-solid fa-sack-xmark"></i></div>
-          <div>
-            <h4 class="font-bold text-white text-sm">أسمنت مسلح ممتاز</h4>
-            <p class="text-xs text-slate-400 mt-0.5">الرصيد: <span class="text-rose-400 font-bold">12 طن (منخفض)</span></p>
-            <p class="text-[11px] text-rose-400 mt-1">سعر الطن: 2,250 ج.م</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. TAB: Projects -->
-    <section id="tab-projects" class="tab-content hidden space-y-6">
-      <header>
-        <h2 class="text-2xl font-bold text-white">المشروعات والوحدات</h2>
-        <p class="text-xs text-slate-400 mt-1">مواقع التوريد الجارية والمشاريع المسجلة</p>
-      </header>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-2">
-            <h3 class="font-bold text-white text-base">كمبوند بادية - 6 أكتوبر</h3>
-            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">جاري التوريد</span>
-          </div>
-          <p class="text-xs text-slate-400">المهندس المسؤول: م. أحمد ناصر</p>
-          <p class="text-xs text-slate-300 mt-2">الوحدات: فيلا 12، فيلا 14، عمارة B3</p>
-        </div>
-        <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-2">
-            <h3 class="font-bold text-white text-base">مشروع التجمع الخامس - بيت الوطن</h3>
-            <span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20">نشط</span>
-          </div>
-          <p class="text-xs text-slate-400">المهندس المسؤول: م. طارق</p>
-          <p class="text-xs text-slate-300 mt-2">الوحدات: ميني كمبوند النخيل - قطعة 45</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. TAB: Treasury -->
-    <section id="tab-treasury" class="tab-content hidden space-y-6">
-      <header>
-        <h2 class="text-2xl font-bold text-white">الخزينة والمدفوعات</h2>
-        <p class="text-xs text-slate-400 mt-1">حركة السيولة والتحصيلات اليومية</p>
-      </header>
-      <div class="bg-[#161f30] border border-slate-800 rounded-xl p-4">
-        <h3 class="font-bold text-sm text-white mb-3">سجل المقبوضات الأخير</h3>
-        <div class="space-y-3 text-xs">
-          <div class="flex justify-between items-center p-2.5 bg-slate-800/40 rounded-lg border border-slate-700/50">
-            <div>
-              <p class="font-bold text-white">تحصيل نقدي - كمبوند بادية</p>
-              <p class="text-[10px] text-slate-400 mt-0.5">دفعة تحت حساب توريد طوب</p>
+        <!-- Inventory Watch & Suppliers -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Inventory status -->
+          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+            <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-boxes-stacked text-amber-400"></i>
+              حركة المخازن (المنصرف والمتبقي)
+            </h4>
+            <div class="space-y-2.5 text-xs">
+              <div class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
+                <span class="text-white font-bold">طوب أحمر عادي</span>
+                <span class="text-slate-400">منصرف: 12,000 | متبقي: <b class="text-white">18,000 طوبة</b></span>
+              </div>
+              <div class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
+                <span class="text-white font-bold">رمل مباني ناعم</span>
+                <span class="text-slate-400">منصرف: 30 متر | متبقي: <b class="text-white">45 متر³</b></span>
+              </div>
+              <div class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
+                <span class="text-white font-bold">أسمنت مسلح</span>
+                <span class="text-slate-400">منصرف: 18 طن | متبقي: <b class="text-rose-400">12 طن (منخفض)</b></span>
+              </div>
             </div>
-            <span class="text-emerald-400 font-bold text-sm">+ 6,300 ج.م</span>
           </div>
-          <div class="flex justify-between items-center p-2.5 bg-slate-800/40 rounded-lg border border-slate-700/50">
-            <div>
-              <p class="font-bold text-white">تحويل بنكي - مشروع التجمع</p>
-              <p class="text-[10px] text-slate-400 mt-0.5">تحصيل فاتورة أسمنت</p>
+
+          <!-- Chat Auditing & Overview -->
+          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+            <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-blue-400"></i>
+              الرقابة على المحادثات والشات الداخلي
+            </h4>
+            <div class="space-y-2 text-xs">
+              <div onclick="openChat('محادثة: م. أحمد ناصر والمحاسب')" class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-blue-500 transition">
+                <div>
+                  <p class="font-bold text-white">م. أحمد ناصر ↔ المحاسب</p>
+                  <p class="text-[10px] text-slate-400">آخر رسالة: هل العربية اتحركت بالأسمنت؟</p>
+                </div>
+                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">مراقبة</span>
+              </div>
+              <div onclick="openBroadcastChat()" class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-blue-500 transition">
+                <div>
+                  <p class="font-bold text-white">الشات الجماعي (التشوينة ↔ المحاسبين)</p>
+                  <p class="text-[10px] text-slate-400">آخر رسالة: كمية الأسمنت الباقية قاربت على النفاد</p>
+                </div>
+                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">مراقبة</span>
+              </div>
             </div>
-            <span class="text-emerald-400 font-bold text-sm">+ 11,250 ج.م</span>
           </div>
         </div>
-      </div>
-    </section>
 
-  </main>
+        <!-- Full Master Orders -->
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3">سجل جميع التحركات والتوريدات السابقة</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
+                <tr>
+                  <th class="p-3">رقم الطلب</th>
+                  <th class="p-3">المشروع / العميل</th>
+                  <th class="p-3">الوحدة والمهندس</th>
+                  <th class="p-3">الأصناف والكمية</th>
+                  <th class="p-3">الإجمالي</th>
+                  <th class="p-3">الحالة الفعلية</th>
+                  <th class="p-3">الصورة المسجلة</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTable" class="divide-y divide-slate-800 text-slate-300">
+                <!-- Data populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-  <!-- Modal: Add New Order (نافذة إنشاء طلب جديد) -->
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: طلب توريد جديد للمهندس -->
+  <!-- ========================================== -->
   <div id="orderModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-[#161f30] border border-slate-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-4">
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
           <i class="fa-solid fa-cart-plus text-blue-400"></i>
-          إنشاء طلب توريد جديد
+          إنشاء طلب توريد خامات
         </h3>
-        <button onclick="closeOrderModal()" class="text-slate-400 hover:text-white">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
+        <button onclick="closeModal('orderModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <form id="orderForm" onsubmit="handleCreateOrder(event)" class="space-y-3 text-xs">
+      <form onsubmit="handleEngineerOrder(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-300 mb-1 font-semibold">المشروع / العميل</label>
-          <input type="text" id="orderProject" required placeholder="مثال: كمبوند بادية - فيلا 22" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
+          <label class="block text-slate-300 mb-1 font-semibold">الصنف المطلوب</label>
+          <select id="modalItem" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
+            <option value="طوب أحمر عادي" data-price="2.1">طوب أحمر عادي (2.1 ج/طوبة)</option>
+            <option value="أسمنت مسلح" data-price="2250">أسمنت مسلح ممتاز (2,250 ج/طن)</option>
+            <option value="رمل مباني ناعم" data-price="170">رمل مباني ناعم (170 ج/متر)</option>
+            <option value="سن 1 للخرسانة" data-price="290">سن 1 مخصوص (290 ج/متر)</option>
+          </select>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-slate-300 mb-1 font-semibold">اسم المهندس</label>
-            <input type="text" id="orderEngineer" required placeholder="م. محمد" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
-          </div>
-          <div>
-            <label class="block text-slate-300 mb-1 font-semibold">رقم الوحدة</label>
-            <input type="text" id="orderUnit" placeholder="Unit-105" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
-          </div>
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">الكمية المطلوبة</label>
+          <input type="number" id="modalQty" value="1000" min="1" required class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-slate-300 mb-1 font-semibold">الصنف</label>
-            <select id="orderItem" onchange="calculateTotal()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
-              <option value="طوب أحمر عادي" data-price="2.1">طوب أحمر عادي (2.1 ج/طوبة)</option>
-              <option value="أسمنت مسلح" data-price="2250">أسمنت مسلح (2,250 ج/طن)</option>
-              <option value="رمل ناعم" data-price="170">رمل مباني (170 ج/متر)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-slate-300 mb-1 font-semibold">الكمية</label>
-            <input type="number" id="orderQty" value="1000" min="1" oninput="calculateTotal()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
-          </div>
-        </div>
-
-        <!-- Live Price Calculation -->
-        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 flex justify-between items-center">
-          <span class="text-slate-400 font-semibold">الإجمالي المتوقع:</span>
-          <span class="text-emerald-400 text-base font-bold" id="calculatedTotal">2,100 ج.م</span>
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">مكان التعتيق / ملاحظات التشوين</label>
+          <input type="text" id="modalNotes" placeholder="مثال: تنزيل أمام بوابة الجراج - دور أرضي" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
         </div>
 
         <div class="flex gap-2 pt-2">
-          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow-lg shadow-blue-600/30 transition">حفظ وتأكيد الطلب</button>
-          <button type="button" onclick="closeOrderModal()" class="px-4 bg-slate-800 text-slate-300 rounded-lg border border-slate-700">إلغاء</button>
+          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-600/30 transition">إرسال الطلب للإدارة المالية</button>
+          <button type="button" onclick="closeModal('orderModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">إلغاء</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- ========================================== -->
+  <!-- MODAL: شات داخلي وتواصل -->
+  <!-- ========================================== -->
+  <div id="chatModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl flex flex-col h-[520px]">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div>
+          <h3 id="chatTitle" class="text-sm font-bold text-white">غرفة المحادثة</h3>
+          <p class="text-[10px] text-emerald-400">متصل الآن 🟢</p>
+        </div>
+        <button onclick="closeModal('chatModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div id="chatBox" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar text-xs my-2">
+        <div class="bg-slate-800/80 p-3 rounded-2xl max-w-[80%] text-slate-200">
+          <p class="text-[10px] text-blue-400 font-bold mb-1">الإدارة المالية (المحاسب):</p>
+          أهلاً بحضرتك يا فندم، طلبك قيد المتابعة وجاهزون لأي تعديل أو توريد إضافي.
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800 pt-3 flex items-center gap-2">
+        <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." class="flex-1 bg-[#0b1120] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
+        <button onclick="sendChatMessage()" class="w-10 h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: تصوير المون من السائق (Proof of Delivery) -->
+  <!-- ========================================== -->
+  <div id="proofModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-camera text-cyan-400"></i>
+          إثبات تسليم وتعتيق المون
+        </h3>
+        <button onclick="closeModal('proofModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="text-center space-y-3 text-xs">
+        <p class="text-slate-300">التقط صورة للمون بعد تنزيلها وتشوينها أمام الوحدة:</p>
+        
+        <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-700 hover:border-cyan-500 rounded-2xl p-6 cursor-pointer bg-slate-900/60 transition">
+          <i class="fa-solid fa-camera-retro text-3xl text-cyan-400 mb-2"></i>
+          <span class="text-slate-300 font-semibold" id="uploadLabel">اضغط لفتح الكاميرا والتقاط الصورة</span>
+          <input type="file" accept="image/*" capture="environment" onchange="previewDriverPhoto(event)" class="hidden">
+        </label>
+
+        <div id="photoPreviewBox" class="hidden rounded-xl overflow-hidden border border-slate-700">
+          <img id="photoPreviewImg" class="w-full h-44 object-cover" src="" alt="Proof">
+        </div>
+
+        <button onclick="confirmDriverDelivery()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/20 text-xs transition">
+          تأكيد التسليم وإنهاء النقلة
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIC & STATE -->
+  <!-- ========================================== -->
   <script>
-    // State Data
+    // State of Current User
+    let currentUser = null;
+    let selectedOrderIdForProof = null;
+
+    // Database of Users
+    const users = {
+      'eng': { role: 'engineer', name: 'م. أحمد ناصر', compound: 'كمبوند بادية - 6 أكتوبر', unit: 'فيلا 14', phone: '01012345678' },
+      'acc': { role: 'accountant', name: 'أ. محمود كمال (المحاسب)', phone: '01198765432' },
+      'store': { role: 'store', name: 'عم ربيع (أمين التشوينة)' },
+      'driver': { role: 'driver', name: 'الكابتن سيد (سائق النقل)' },
+      'admin': { role: 'admin', name: 'المدير العام' }
+    };
+
+    // Global Orders Array
     let orders = [
-      { id: 'ORD-104', project: 'كمبوند بادية - فيلا 14', engineer: 'م. أحمد', item: 'طوب أحمر عادي (3,000)', total: 6300, status: 'تم التوريد' },
-      { id: 'ORD-103', project: 'عمارة المهندس - التجمع', engineer: 'م. طارق', item: 'أسمنت مسلح (5 طن)', total: 11250, status: 'جاري الشحن' },
-      { id: 'ORD-102', project: 'مشروع الكرمة 4', engineer: 'م. حسام', item: 'رمل ناعم (2 قلاب)', total: 3400, status: 'تم التوريد' }
+      {
+        id: 'ORD-201',
+        engineer: 'م. أحمد ناصر',
+        compound: 'كمبوند بادية - 6 أكتوبر',
+        unit: 'فيلا 14',
+        phone: '01012345678',
+        item: 'طوب أحمر عادي',
+        qty: '3,000 طوبة',
+        total: 6300,
+        status: 'جاري الشحن', // Stages: طلب جديد | تم الاعتماد والتوجيه للمخزن | جاري التجهيز | جاري الشحن | تم التسليم للعميل
+        driver: 'الكابتن سيد',
+        proofImg: null,
+        date: '2026-10-04'
+      },
+      {
+        id: 'ORD-200',
+        engineer: 'م. طارق',
+        compound: 'مشروع بيت الوطن - التجمع',
+        unit: 'عمارة 45',
+        phone: '01234567890',
+        item: 'أسمنت مسلح',
+        qty: '5 طن',
+        total: 11250,
+        status: 'تم التسليم للعميل',
+        driver: 'الكابتن سيد',
+        proofImg: 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=500&auto=format&fit=crop&q=60',
+        date: '2026-10-03'
+      }
     ];
 
-    function renderOrders() {
-      const dashBody = document.getElementById('ordersTableBody');
-      const fullBody = document.getElementById('fullOrdersTableBody');
-      
-      let htmlDash = '';
-      let htmlFull = '';
+    function setQuickLogin(u) {
+      document.getElementById('loginUser').value = u;
+      document.getElementById('loginPass').value = '123';
+    }
 
-      orders.forEach(o => {
-        const badgeColor = o.status === 'تم التوريد' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-        
-        htmlDash += `
-          <tr>
-            <td class="p-2.5 font-bold text-white">#${o.id}</td>
-            <td class="p-2.5">${o.project}</td>
-            <td class="p-2.5">${o.item}</td>
-            <td class="p-2.5 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
-            <td class="p-2.5"><span class="px-2 py-0.5 rounded ${badgeColor} border text-[10px]">${o.status}</span></td>
-          </tr>
-        `;
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value.trim();
 
-        htmlFull += `
+      if (users[u] && p === '123') {
+        currentUser = users[u];
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('appContainer').classList.remove('hidden');
+        renderAppByRole();
+      } else {
+        alert('بيانات الدخول غير صحيحة! جرب الحسابات التجريبية الموضحة بالأسفل (الباسورد: 123)');
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('appContainer').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPass').value = '';
+    }
+
+    function renderAppByRole() {
+      // Hide all role views
+      document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
+
+      const roleBadge = document.getElementById('userRoleBadge');
+
+      if (currentUser.role === 'engineer') {
+        roleBadge.innerText = `حساب مهندس / مالك: ${currentUser.name}`;
+        document.getElementById('view-engineer').classList.remove('hidden');
+        document.getElementById('eng-name').innerText = currentUser.name;
+        document.getElementById('eng-compound').innerText = currentUser.compound;
+        document.getElementById('eng-unit').innerText = currentUser.unit;
+        renderEngineerTable();
+      } 
+      else if (currentUser.role === 'accountant') {
+        roleBadge.innerText = `الإدارة المالية: ${currentUser.name}`;
+        document.getElementById('view-accountant').classList.remove('hidden');
+        renderAccountantTable();
+      } 
+      else if (currentUser.role === 'store') {
+        roleBadge.innerText = `مسؤول التشوينة والمخزن: ${currentUser.name}`;
+        document.getElementById('view-store').classList.remove('hidden');
+        renderStoreTable();
+      } 
+      else if (currentUser.role === 'driver') {
+        roleBadge.innerText = `كابتن النقل والتعتيق: ${currentUser.name}`;
+        document.getElementById('view-driver').classList.remove('hidden');
+        renderDriverCards();
+      } 
+      else if (currentUser.role === 'admin') {
+        roleBadge.innerText = `المدير العام (صلاحيات كاملة)`;
+        document.getElementById('view-admin').classList.remove('hidden');
+        renderAdminDashboard();
+      }
+    }
+
+    // --- Engineer Actions ---
+    function renderEngineerTable() {
+      const tbody = document.getElementById('engOrdersTable');
+      tbody.innerHTML = '';
+      const myOrders = orders.filter(o => o.engineer.includes(currentUser.name) || currentUser.role === 'engineer');
+
+      myOrders.forEach(o => {
+        let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        if (o.status === 'تم التسليم للعميل') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+        if (o.status === 'جاري التجهيز') badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+
+        tbody.innerHTML += `
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
-            <td class="p-3">${o.project}</td>
-            <td class="p-3 text-slate-400">${o.engineer}</td>
-            <td class="p-3">${o.item}</td>
-            <td class="p-3 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded ${badgeColor} border text-[10px]">${o.status}</span></td>
+            <td class="p-3">${o.item} (${o.qty})</td>
+            <td class="p-3 text-slate-400">${o.date}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px] border ${badgeColor}">${o.status}</span></td>
+            <td class="p-3">
+              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-blue-400 underline flex items-center gap-1"><i class="fa-solid fa-image"></i> عرض صورة المون</a>` : '<span class="text-slate-500 text-[10px]">قيد النقل</span>'}
+            </td>
           </tr>
         `;
       });
-
-      dashBody.innerHTML = htmlDash;
-      fullBody.innerHTML = htmlFull;
-      document.getElementById('stat-orders-count').innerText = `${orders.length} طلبات`;
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
-
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-600', 'text-white');
-        btn.classList.add('text-slate-400');
-      });
-
-      const activeBtn = document.getElementById('nav-' + tabId);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-blue-600', 'text-white');
-        activeBtn.classList.remove('text-slate-400');
-      }
-
-      // Close mobile sidebar on select
-      if (window.innerWidth < 768) {
-        toggleSidebar(false);
-      }
-    }
-
-    function toggleSidebar(force) {
-      const sb = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      const isOpen = force !== undefined ? !force : sb.classList.contains('translate-x-0');
-      
-      if (isOpen) {
-        sb.classList.remove('translate-x-0');
-        sb.classList.add('translate-x-full');
-        overlay.classList.add('hidden');
-      } else {
-        sb.classList.add('translate-x-0');
-        sb.classList.remove('translate-x-full');
-        overlay.classList.remove('hidden');
-      }
-    }
-
-    function openOrderModal() {
-      document.getElementById('orderModal').classList.remove('hidden');
-      calculateTotal();
-    }
-
-    function closeOrderModal() {
-      document.getElementById('orderModal').classList.add('hidden');
-    }
-
-    function calculateTotal() {
-      const select = document.getElementById('orderItem');
-      const price = parseFloat(select.options[select.selectedIndex].getAttribute('data-price')) || 0;
-      const qty = parseFloat(document.getElementById('orderQty').value) || 0;
-      const total = price * qty;
-      document.getElementById('calculatedTotal').innerText = `${total.toLocaleString()} ج.م`;
-      return total;
-    }
-
-    function handleCreateOrder(e) {
+    function handleEngineerOrder(e) {
       e.preventDefault();
-      const project = document.getElementById('orderProject').value;
-      const engineer = document.getElementById('orderEngineer').value;
-      const select = document.getElementById('orderItem');
-      const itemName = select.value;
-      const qty = document.getElementById('orderQty').value;
-      const total = calculateTotal();
+      const sel = document.getElementById('modalItem');
+      const item = sel.value;
+      const price = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-price'));
+      const qty = parseFloat(document.getElementById('modalQty').value);
+      const total = price * qty;
 
       const newOrder = {
-        id: 'ORD-' + (orders.length + 102),
-        project: project,
-        engineer: engineer,
-        item: `${itemName} (${Number(qty).toLocaleString()})`,
+        id: 'ORD-' + (orders.length + 201),
+        engineer: currentUser.name,
+        compound: currentUser.compound,
+        unit: currentUser.unit,
+        phone: currentUser.phone,
+        item: item,
+        qty: `${qty} وحدة`,
         total: total,
-        status: 'جاري الشحن'
+        status: 'طلب جديد (قيد مراجعة المحاسب)',
+        driver: 'لم يحدد بعد',
+        proofImg: null,
+        date: new Date().toISOString().split('T')[0]
       };
 
       orders.unshift(newOrder);
-      renderOrders();
-      closeOrderModal();
-      document.getElementById('orderForm').reset();
-      alert('تم إنشاء أمر التوريد بنجاح!');
+      closeModal('orderModal');
+      renderEngineerTable();
+      alert('تم إرسال طلب التوريد بنجاح إلى الإدارة المالية للمراجعة والاعتماد!');
     }
 
-    // Initialize
-    renderOrders();
+    // --- Accountant Actions ---
+    function renderAccountantTable() {
+      const tbody = document.getElementById('accOrdersTable');
+      tbody.innerHTML = '';
+
+      orders.forEach(o => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-3 font-bold text-white">#${o.id}</td>
+            <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer}</span></td>
+            <td class="p-3 font-semibold text-blue-400">${o.unit}<br><span class="text-[10px] text-slate-400">${o.phone}</span></td>
+            <td class="p-3">${o.item} (${o.qty})</td>
+            <td class="p-3 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700 text-slate-300">${o.status}</span></td>
+            <td class="p-3 text-center space-x-1 space-x-reverse">
+              <button onclick="updateOrderStatus('${o.id}', 'تم التوجيه للمخزن للتجهيز')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[10px] font-bold">إرسال للمخزن</button>
+              <button onclick="updateOrderStatus('${o.id}', 'تم التسليم للعميل')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">تم التسليم</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // --- Store Yard Actions ---
+    function renderStoreTable() {
+      const tbody = document.getElementById('storeOrdersTable');
+      tbody.innerHTML = '';
+
+      orders.forEach(o => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-3 font-bold text-white">#${o.id}</td>
+            <td class="p-3">${o.compound} - ${o.unit}</td>
+            <td class="p-3 font-bold text-amber-400">${o.item} (${o.qty})</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700">${o.status}</span></td>
+            <td class="p-3 text-center space-x-1 space-x-reverse">
+              <button onclick="updateOrderStatus('${o.id}', 'جاري التجهيز بالتشوينة')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">جاري التجهيز</button>
+              <button onclick="updateOrderStatus('${o.id}', 'جاري الشحن')" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-[10px] font-bold">تم الشحن مع السائق</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // --- Driver Actions ---
+    function renderDriverCards() {
+      const container = document.getElementById('driverCardsList');
+      container.innerHTML = '';
+
+      orders.filter(o => o.status === 'جاري الشحن' || o.status === 'تم التسليم للعميل').forEach(o => {
+        const isDelivered = o.status === 'تم التسليم للعميل';
+        container.innerHTML += `
+          <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white text-base">#${o.id}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] ${isDelivered ? 'bg-emerald-500/20 text-emerald-400' : 'bg-cyan-500/20 text-cyan-400'}">${o.status}</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">الموقع: <b class="text-white">${o.compound}</b> (الوحدة: ${o.unit})</p>
+              <p class="text-xs text-slate-400">المهندس المستلم: ${o.engineer} - هاتف: <a href="tel:${o.phone}" class="text-blue-400 underline">${o.phone}</a></p>
+              <p class="text-xs text-amber-400 mt-1 font-semibold">الحمولة: ${o.item} (${o.qty})</p>
+            </div>
+            <div>
+              ${isDelivered ? `
+                <span class="text-emerald-400 text-xs font-bold flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> تم إثبات التسليم بالصورة</span>
+              ` : `
+                <button onclick="openProofModal('${o.id}')" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-600/30">
+                  <i class="fa-solid fa-camera"></i>
+                  <span>تصوير المون وتأكيد التسليم</span>
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // --- Admin Dashboard ---
+    function renderAdminDashboard() {
+      const tbody = document.getElementById('adminOrdersTable');
+      tbody.innerHTML = '';
+
+      orders.forEach(o => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-3 font-bold text-white">#${o.id}</td>
+            <td class="p-3">${o.compound}</td>
+            <td class="p-3">${o.engineer} (${o.unit})</td>
+            <td class="p-3">${o.item} - ${o.qty}</td>
+            <td class="p-3 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700">${o.status}</span></td>
+            <td class="p-3">
+              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-blue-400 underline">عرض الإثبات</a>` : '<span class="text-slate-500 text-[10px]">لا يوجد</span>'}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Helper updates
+    function updateOrderStatus(id, newStatus) {
+      const o = orders.find(x => x.id === id);
+      if (o) {
+        o.status = newStatus;
+        renderAppByRole();
+        alert(`تم تحديث حالة الطلب #${id} إلى: (${newStatus})`);
+      }
+    }
+
+    // Modal Helpers
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // Chat Helpers
+    function openChat(title) {
+      document.getElementById('chatTitle').innerText = title;
+      openModal('chatModal');
+    }
+
+    function openBroadcastChat() {
+      openChat('شات البث المباشر (التشوينة ↔ جميع المحاسبين)');
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML += `
+        <div class="bg-blue-600/30 border border-blue-500/30 p-3 rounded-2xl max-w-[80%] text-slate-200 mr-auto text-left">
+          <p class="text-[10px] text-blue-300 font-bold mb-1">${currentUser.name}:</p>
+          ${val}
+        </div>
+      `;
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Driver Proof Modal
+    function openProofModal(id) {
+      selectedOrderIdForProof = id;
+      openModal('proofModal');
+    }
+
+    function previewDriverPhoto(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('photoPreviewImg').src = evt.target.result;
+          document.getElementById('photoPreviewBox').classList.remove('hidden');
+          document.getElementById('uploadLabel').innerText = 'تم التقاط الصورة بنجاح!';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function confirmDriverDelivery() {
+      if (!selectedOrderIdForProof) return;
+      const o = orders.find(x => x.id === selectedOrderIdForProof);
+      if (o) {
+        o.status = 'تم التسليم للعميل';
+        o.proofImg = document.getElementById('photoPreviewImg').src || 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=500&auto=format&fit=crop&q=60';
+        closeModal('proofModal');
+        renderAppByRole();
+        alert('تم رفع صورة المون وتأكيد إتمام التعتيق والتسليم للعميل بنجاح!');
+      }
+    }
   </script>
 </body>
 </html>
