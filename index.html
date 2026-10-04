@@ -31,7 +31,7 @@
 <body class="bg-[#0b1120] text-slate-100 min-h-screen">
 
   <!-- ========================================== -->
-  <!-- 1. شاشة تسجيل الدخول وإنشاء الحساب -->
+  <!-- 1. شاشة تسجيل الدخول وإنشاء الحساب للمهندس -->
   <!-- ========================================== -->
   <div id="authScreen" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#131d31] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative">
@@ -43,19 +43,19 @@
         <p class="text-xs text-slate-400 mt-1">منظومة توريد مواد البناء وإدارة المشروعات</p>
       </div>
 
-      <!-- تبويبات الدخول / إنشاء الحساب -->
+      <!-- تبويبات التبديل بين الدخول وإنشاء حساب -->
       <div class="flex border-b border-slate-800 mb-5">
         <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 pb-2.5 text-xs font-bold text-blue-400 border-b-2 border-blue-500 transition">تسجيل الدخول</button>
-        <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition">مهندس جديد (تسجيل)</button>
+        <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition">مهندس جديد (إنشاء حساب)</button>
       </div>
 
       <!-- نموذج تسجيل الدخول -->
       <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1.5">اسم المستخدم أو البريد</label>
+          <label class="block text-slate-300 font-semibold mb-1.5">اسم المستخدم أو البريد الإلكتروني</label>
           <div class="relative">
             <i class="fa-solid fa-user absolute right-3.5 top-3.5 text-slate-500"></i>
-            <input type="text" id="loginUser" required placeholder="اسم المستخدم" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
+            <input type="text" id="loginUser" required placeholder="اسم المستخدم أو الإيميل" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
           </div>
         </div>
 
@@ -72,7 +72,7 @@
         </button>
       </form>
 
-      <!-- نموذج تسجيل مهندس جديد -->
+      <!-- نموذج إنشاء حساب مهندس جديد بنفسه -->
       <form id="formRegister" onsubmit="handleEngineerRegister(event)" class="space-y-3 text-xs hidden">
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الاسم بالكامل</label>
@@ -124,13 +124,13 @@
         </div>
 
         <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 text-sm transition mt-2">
-          إنشاء حساب وتأكيد التسجيل
+          تأكيد التسجيل وإنشاء الحساب
         </button>
       </form>
 
-      <!-- حسابات سريعة -->
+      <!-- الدخول التجريبي السريع -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-        <p class="font-bold text-slate-300 mb-2">دخول سريع للتجربة (الباسورد: 123):</p>
+        <p class="font-bold text-slate-300 mb-2">حسابات سريعة للتجربة (الباسورد: 123):</p>
         <div class="grid grid-cols-3 gap-1.5 text-center">
           <span onclick="setQuickLogin('eng1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس: eng1</span>
           <span onclick="setQuickLogin('acc1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">محاسب: acc1</span>
@@ -181,7 +181,7 @@
         </button>
       </div>
 
-      <!-- الملف الشخصي بالقائمة -->
+      <!-- كارت المستخدم في القائمة -->
       <div onclick="openProfileModal()" class="p-3 mx-3 my-3 rounded-2xl bg-[#131d31] border border-slate-700/60 flex items-center gap-3 cursor-pointer hover:border-blue-500 transition">
         <div class="relative">
           <img id="sidebarUserAvatar" class="w-11 h-11 rounded-xl border border-blue-500/50 object-cover shadow-sm" src="" alt="User">
@@ -194,7 +194,7 @@
         </div>
       </div>
 
-      <!-- الحضور السريع -->
+      <!-- الحضور السريع في القائمة -->
       <div id="attendanceSidebarBox" class="px-3 mb-2 hidden">
         <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -207,7 +207,7 @@
         </div>
       </div>
 
-      <!-- الروابط -->
+      <!-- روابط القائمة -->
       <nav class="p-3 space-y-1 text-xs flex-1 overflow-y-auto custom-scrollbar">
         <button onclick="switchView('main')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold transition">
           <i class="fa-solid fa-house w-4 text-center"></i>
@@ -250,7 +250,7 @@
     <!-- المحتوى الرئيسي -->
     <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto overflow-y-auto">
 
-      <!-- VIEW A: المهندس -->
+      <!-- VIEW A: واجهة المهندس -->
       <section id="view-engineer" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -275,7 +275,7 @@
                 <i class="fa-solid fa-cart-flatbed"></i>
                 <span>للطلب اضغط هنا</span>
               </button>
-              <button onclick="openChat('المحاسب المسؤول عن مشروعك', 'acc')" class="flex-1 md:flex-none px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
+              <button onclick="openChat('المحاسب المسؤول عن مشروعك')" class="flex-1 md:flex-none px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
                 <i class="fa-solid fa-comments"></i>
                 <span>تواصل مع المحاسب</span>
               </button>
@@ -305,7 +305,7 @@
         </div>
       </section>
 
-      <!-- VIEW B: المحاسب -->
+      <!-- VIEW B: واجهة المحاسب -->
       <section id="view-accountant" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-emerald-950/40 to-[#131d31] border border-emerald-500/30 rounded-3xl p-5 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div class="flex items-center gap-4">
@@ -387,7 +387,7 @@
         </div>
       </section>
 
-      <!-- VIEW C: التشوينة والمخازن -->
+      <!-- VIEW C: واجهة التشوينة والمخزن -->
       <section id="view-store" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-amber-950/40 to-[#131d31] border border-amber-500/30 rounded-3xl p-5 shadow-xl flex justify-between items-center">
           <div class="flex items-center gap-4">
@@ -447,7 +447,7 @@
         </div>
       </section>
 
-      <!-- VIEW D: السائق -->
+      <!-- VIEW D: واجهة السائق -->
       <section id="view-driver" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-cyan-950/40 to-[#131d31] border border-cyan-500/30 rounded-3xl p-5 shadow-xl flex items-center gap-4">
           <img id="driver-avatar" class="w-14 h-14 rounded-2xl border border-cyan-500 object-cover" src="" alt="Driver">
@@ -466,7 +466,7 @@
         </div>
       </section>
 
-      <!-- VIEW E: المدير العام (مع قوائم الكمبوندات المخصصة) -->
+      <!-- VIEW E: واجهة المدير العام وقوائم الكمبوندات -->
       <section id="view-admin" class="role-view hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div class="flex items-center gap-4">
@@ -481,18 +481,14 @@
           </button>
         </div>
 
-        <!-- فلتر وقائمة المشروعات والكمبوندات الخاصة بالمدير -->
+        <!-- دليل وفلتر الكمبوندات والمشروعات -->
         <div class="bg-[#131d31] border border-blue-500/30 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
             <span class="flex items-center gap-2"><i class="fa-solid fa-city text-blue-400"></i> دليل المشروعات والمهندسين المسجلين بكل كمبوند</span>
-            <span class="text-xs text-slate-400" id="adminTotalCompoundsCount">11 مشروع رسمي</span>
+            <span class="text-xs text-slate-400">11 موقع رسمي</span>
           </h4>
-          <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar" id="compoundFilterTabs">
-            <!-- أزرار الفلترة للكمبوندات -->
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3" id="compoundEngineersList">
-            <!-- كروت المهندسين التابعين للكمبوند المختار -->
-          </div>
+          <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar" id="compoundFilterTabs"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3" id="compoundEngineersList"></div>
         </div>
 
         <!-- جدول الحضور والانصراف عند المدير -->
@@ -566,7 +562,7 @@
         </div>
       </section>
 
-      <!-- VIEW G: شاشة الحضور المنفصلة -->
+      <!-- VIEW G: شاشة الحضور والانصراف -->
       <section id="view-attendance-section" class="role-view hidden space-y-5">
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
           <h3 class="text-xl font-black text-white mb-2 flex items-center gap-2">
@@ -593,8 +589,7 @@
     </main>
   </div>
 
-  <!-- المودالات الأساسية (الملف الشخصي، الطلب، الشات، الكاميرا، إضافة مستخدم) -->
-  <!-- MODAL: الملف الشخصي -->
+  <!-- مودال تعديل الملف الشخصي -->
   <div id="profileModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -662,7 +657,7 @@
     </div>
   </div>
 
-  <!-- MODAL: طلب توريد خامات -->
+  <!-- مودال طلب توريد -->
   <div id="orderModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -702,7 +697,7 @@
     </div>
   </div>
 
-  <!-- MODAL: شات متكامل -->
+  <!-- مودال الشات -->
   <div id="chatModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl flex flex-col h-[580px]">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -739,7 +734,7 @@
     </div>
   </div>
 
-  <!-- MODAL: توثيق الكاميرا الحية للسائق -->
+  <!-- مودال كاميرا السائق الحية -->
   <div id="proofModal" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -771,7 +766,7 @@
     </div>
   </div>
 
-  <!-- MODAL: إضافة مستخدم جديد وتحديد الصلاحيات -->
+  <!-- مودال إضافة مستخدم جديد من الإدارة -->
   <div id="userManageModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -840,26 +835,24 @@
     </div>
   </div>
   <!-- ========================================== -->
-  <!-- JAVASCRIPT: المنطق البرمجي والمزامنة الفورية -->
+  <!-- 3. المنطق البرمجي (JAVASCRIPT) وتخزين البيانات -->
   <!-- ========================================== -->
   <script>
-    // State variables
+    const COMPOUNDS_LIST = [
+      'باتيو كازا', 'المعادي 1', 'المعادي 2', 'فيلات كازا',
+      'فيلات الباتيو', 'المقاولون العرب', 'ليك فيو', 'جراند',
+      'كليوباترا', 'الحلواني', 'عملاء المخزن'
+    ];
+
     let currentUser = null;
     let selectedOrderIdForProof = null;
-    let selectedCompoundFilter = 'باتيو كازا';
+    let selectedCompoundFilter = 'الكل';
     let mediaStream = null;
     let mediaRecorder = null;
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // قائمة المشروعات الرسمية
-    const officialCompounds = [
-      'باتيو كازا', 'المعادي 1', 'المعادي 2', 'فيلات كازا', 'فيلات الباتيو',
-      'المقاولون العرب', 'ليك فيو', 'جراند', 'كليوباترا', 'الحلواني', 'عملاء المخزن'
-    ];
-
-    // البيانات الافتراضية
-    const defaultUsers = {
+    const initialUsers = {
       'admin': {
         role: 'admin',
         name: 'محمد ناصر (المدير العام)',
@@ -890,7 +883,7 @@
       'driver1': {
         role: 'driver',
         name: 'الكابتن سيد عبد العال',
-        jobTitle: 'كابتن نقل وتعتيق مون',
+        jobTitle: 'كابتن نقل وتعتيق',
         avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
         phone: '01555555555',
         pass: '123',
@@ -899,261 +892,8 @@
       'eng1': {
         role: 'engineer',
         name: 'م. أحمد ناصر',
-        jobTitle: 'مهندس تنفيذي / عميل',
-        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
-        compound: 'باتيو كازا',
-        unit: 'فيلا 14',
-        phone: '01012345678',
-        email: 'ahmed@patio.com',
-        pass: '123'
-      },
-      'eng2': {
-        role: 'engineer',
-        name: 'م. طارق فاروق',
-        jobTitle: 'مهندس تشطيبات / عميل',
-        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80',
-        compound: 'المعادي 1',
-        unit: 'عمارة 45',
-        phone: '01234567890',
-        email: 'tarek@maadi.com',
-        pass: '123'
-      }
-    };
-
-    const defaultOrders = [
-      {
-        id: 'ORD-501',
-        engineer: 'م. أحمد ناصر',
-        compound: 'باتيو كازا',
-        unit: 'فيلا 14',
-        phone: '01012345678',
-        item: 'طوب أحمر عادي',
-        qty: '3,000 طوبة',
-        total: 6300,
-        status: 'جاري الشحن',
-        driver: 'الكابتن سيد عبد العال',
-        proofImg: null,
-        date: '2026-10-04 02:30 م'
-      },
-      {
-        id: 'ORD-500',
-        engineer: 'م. طارق فاروق',
-        compound: 'المعادي 1',
-        unit: 'عمارة 45',
-        phone: '01234567890',
-        item: 'أسمنت مسلح ممتاز',
-        qty: '5 طن',
-        total: 11250,
-        status: 'تم التسليم للعميل',
-        driver: 'الكابتن سيد عبد العال',
-        proofImg: 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=500&auto=format&fit=crop&q=60',
-        date: '2026-10-03 11:15 ص'
-      }
-    ];
-
-    // دوال المزامنة والتحميل
-    function loadUsers() {
-      try {
-        const stored = localStorage.getItem('alraed_erp_users_v2');
-        return stored ? JSON.parse(stored) : defaultUsers;
-      } catch (e) {
-        return defaultUsers;
-      }
-    }
-
-    function saveUsers(u) {
-      try {
-        localStorage.setItem('alraed_erp_users_v2', JSON.stringify(u));
-      } catch (e) {
-        console.error('Save error', e);
-      }
-    }
-
-    function loadOrders() {
-      try {
-        const stored = localStorage.getItem('alraed_erp_orders_v2');
-        return stored ? JSON.parse(stored) : defaultOrders;
-      } catch (e) {
-        return defaultOrders;
-      }
-    }
-
-    function saveOrders(o) {
-      try {
-        localStorage.setItem('alraed_erp_orders_v2', JSON.stringify(o));
-      } catch (e) {
-        console.error('Save error', e);
-      }
-    }
-
-    let users = loadUsers();
-    let orders = loadOrders();
-
-    // تبديل تبويب الدخول والتسجيل
-    function switchAuthTab(tab) {
-      const isLogin = tab === 'login';
-      document.getElementById('formLogin').classList.toggle('hidden', !isLogin);
-      document.getElementById('formRegister').classList.toggle('hidden', isLogin);
-      
-      const tLog = document.getElementById('tabLogin');
-      const tReg = document.getElementById('tabRegister');
-      if (isLogin) {
-        tLog.className = 'flex-1 pb-2.5 text-xs font-bold text-blue-400 border-b-2 border-blue-500 transition';
-        tReg.className = 'flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition';
-      } else {
-        tReg.className = 'flex-1 pb-2.5 text-xs font-bold text-emerald-400 border-b-2 border-emerald-500 transition';
-        tLog.className = 'flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition';
-      }
-    }
-
-    function setQuickLogin(u) {
-      switchAuthTab('login');
-      document.getElementById('loginUser').value = u;
-      document.getElementById('loginPass').value = '123';
-    }
-
-    // تسجيل الدخول
-    function handleLogin(e) {
-      e.preventDefault();
-      users = loadUsers();
-      const inputVal = document.getElementById('loginUser').value.trim();
-      const p = document.getElementById('loginPass').value.trim();
-
-      // البحث باسم المستخدم أو البريد
-      let foundKey = Object.keys(users).find(k => k === inputVal || (users[k].email && users[k].email.toLowerCase() === inputVal.toLowerCase()));
-
-      if (foundKey && users[foundKey].pass === p) {
-        currentUser = { ...users[foundKey], username: foundKey };
-        document.getElementById('authScreen').classList.add('hidden');
-        document.getElementById('appContainer').classList.remove('hidden');
-        updateHeaderAndSidebar();
-        renderAppByRole();
-      } else {
-        alert('بيانات الدخول غير صحيحة! تأكد من اسم المستخدم/البريد وكلمة المرور.');
-      }
-    }
-
-    // تسجيل حساب مهندس جديد بنفسه
-    function handleEngineerRegister(e) {
-      e.preventDefault();
-      users = loadUsers();
-
-      const name = document.getElementById('regName').value.trim();
-      const login = document.getElementById('regUser').value.trim();
-      const pass = document.getElementById('regPass').value.trim();
-      const phone = document.getElementById('regPhone').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const compound = document.getElementById('regCompound').value;
-      const unit = document.getElementById('regUnit').value.trim();
-
-      if (users[login]) {
-        alert('اسم المستخدم هذا مسجل بالفعل، يرجى اختيار اسم آخر.');
-        return;
-      }
-
-      users[login] = {
-        role: 'engineer',
-        name: name,
-        jobTitle: `مهندس موقع / ${compound}`,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
-        phone: phone,
-        email: email,
-        compound: compound,
-        unit: unit,
-        pass: pass
-      };
-
-      saveUsers(users);
-      alert(`أهلاً بك يا هندسة! تم إنشاء حسابك بنجاح في مشروع (${compound})، جاري تحويلك لحسابك فوراً.`);
-
-      currentUser = { ...users[login], username: login };
-      document.getElementById('authScreen').classList.add('hidden');
-      document.getElementById('appContainer').classList.remove('hidden');
-      updateHeaderAndSidebar();
-      renderAppByRole();
-    }
-
-    function logout() {
-      currentUser = null;
-      document.getElementById('appContainer').classList.add('hidden');
-      document.getElementById('authScreen').classList.remove('hidden');
-      document.getElementById('loginUser').value = '';
-      document.getElementById('loginPass').value = '';
-      switchAuthTab('login');
-    }
-
-    function toggleSidebar() {
-      const sb = document.getElementById('sidebar');
-      const ov = document.getElementById('sidebarOverlay');
-      if (sb.classList.contains('translate-x-full')) {
-        sb.classList.remove('translate-x-full');
-        sb.classList.add('translate-x-0');
-        ov.classList.remove('hidden');
-      } else {
-        sb.classList.add('translate-x-full');
-        sb.classList.remove('إليك الجزء الثاني والأخير (كود الـ JavaScript وإغلاق الصفحة). ضعه مباشرةً أسفل الجزء الأول داخل ملف `index.html`:
-
-```html
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT & DATA MANAGEMENT -->
-  <!-- ========================================== -->
-  <script>
-    const COMPOUNDS_LIST = [
-      'باتيو كازا', 'المعادي 1', 'المعادي 2', 'فيلات كازا',
-      'فيلات الباتيو', 'المقاولون العرب', 'ليك فيو', 'جراند',
-      'كليوباترا', 'الحلواني', 'عملاء المخزن'
-    ];
-
-    let currentUser = null;
-    let selectedOrderIdForProof = null;
-    let selectedCompoundFilter = 'الكل';
-    let mediaStream = null;
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let isRecordingVoice = false;
-
-    const initialUsers = {
-      'admin': {
-        role: 'admin',
-        name: 'محمد ناصر (المدير العام)',
-        jobTitle: 'الرئيس التنفيذي - مالك الشركة',
-        avatar: '[https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80)',
-        phone: '01000000001',
-        pass: '123',
-        attendance: { isWorking: true, startTime: '08:00 ص', endTime: '--' }
-      },
-      'acc1': {
-        role: 'accountant',
-        name: 'أ. محمود كمال',
-        jobTitle: 'محاسب مالي أول',
-        avatar: '[https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80)',
-        phone: '01198765432',
-        pass: '123',
-        attendance: { isWorking: false, startTime: '--', endTime: '--' }
-      },
-      'store1': {
-        role: 'store',
-        name: 'عم ربيع',
-        jobTitle: 'أمين التشوينة والمستودع الرئيسي',
-        avatar: '[https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80)',
-        phone: '01222222222',
-        pass: '123',
-        attendance: { isWorking: false, startTime: '--', endTime: '--' }
-      },
-      'driver1': {
-        role: 'driver',
-        name: 'الكابتن سيد عبد العال',
-        jobTitle: 'كابتن نقل وتعتيق',
-        avatar: '[https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80)',
-        phone: '01555555555',
-        pass: '123',
-        attendance: { isWorking: false, startTime: '--', endTime: '--' }
-      },
-      'eng1': {
-        role: 'engineer',
-        name: 'م. أحمد ناصر',
         jobTitle: 'مهندس تنفيذي / مالك الوحدة',
-        avatar: '[https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80)',
+        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
         compound: 'باتيو كازا',
         unit: 'فيلا 14',
         phone: '01012345678',
@@ -1254,7 +994,7 @@
         role: 'engineer',
         name: document.getElementById('regName').value.trim(),
         jobTitle: 'مهندس موقع / مالك الوحدة',
-        avatar: '[https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80)',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
         phone: document.getElementById('regPhone').value.trim(),
         email: document.getElementById('regEmail').value.trim(),
         compound: document.getElementById('regCompound').value,
@@ -1833,7 +1573,7 @@
         role,
         name,
         jobTitle: jTitle,
-        avatar: '[https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80)',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
         pass,
         compound: role === 'engineer' ? compound : '',
         unit: role === 'engineer' ? unit : '',
