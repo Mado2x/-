@@ -31,9 +31,9 @@
 <body class="bg-[#0b1120] text-slate-100 min-h-screen">
 
   <!-- ========================================== -->
-  <!-- 1. شاشة تسجيل الدخول الموحدة -->
+  <!-- 1. شاشة تسجيل الدخول وإنشاء الحساب -->
   <!-- ========================================== -->
-  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+  <div id="authScreen" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#131d31] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative">
       <div class="text-center mb-6">
         <div class="w-16 h-16 rounded-2xl bg-blue-600/20 text-blue-500 mx-auto flex items-center justify-center text-3xl mb-3 border border-blue-500/30 shadow-lg shadow-blue-500/10">
@@ -43,9 +43,16 @@
         <p class="text-xs text-slate-400 mt-1">منظومة توريد مواد البناء وإدارة المشروعات</p>
       </div>
 
-      <form onsubmit="handleLogin(event)" class="space-y-4 text-xs">
+      <!-- تبويبات الدخول / إنشاء الحساب -->
+      <div class="flex border-b border-slate-800 mb-5">
+        <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 pb-2.5 text-xs font-bold text-blue-400 border-b-2 border-blue-500 transition">تسجيل الدخول</button>
+        <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition">مهندس جديد (تسجيل)</button>
+      </div>
+
+      <!-- نموذج تسجيل الدخول -->
+      <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1.5">اسم المستخدم</label>
+          <label class="block text-slate-300 font-semibold mb-1.5">اسم المستخدم أو البريد</label>
           <div class="relative">
             <i class="fa-solid fa-user absolute right-3.5 top-3.5 text-slate-500"></i>
             <input type="text" id="loginUser" required placeholder="اسم المستخدم" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
@@ -65,15 +72,71 @@
         </button>
       </form>
 
-      <!-- Quick demo accounts -->
+      <!-- نموذج تسجيل مهندس جديد -->
+      <form id="formRegister" onsubmit="handleEngineerRegister(event)" class="space-y-3 text-xs hidden">
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">الاسم بالكامل</label>
+          <input type="text" id="regName" required placeholder="مثال: م. أحمد ناصر" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">اسم المستخدم</label>
+            <input type="text" id="regUser" required placeholder="eng_ahmed" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">كلمة المرور</label>
+            <input type="password" id="regPass" required placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">رقم التليفون</label>
+            <input type="tel" id="regPhone" required placeholder="010xxxxxxxx" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">البريد الإلكتروني</label>
+            <input type="email" id="regEmail" required placeholder="eng@example.com" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">اسم الكومبوند / المشروع</label>
+          <select id="regCompound" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white focus:border-blue-500">
+            <option value="باتيو كازا">باتيو كازا</option>
+            <option value="المعادي 1">المعادي 1</option>
+            <option value="المعادي 2">المعادي 2</option>
+            <option value="فيلات كازا">فيلات كازا</option>
+            <option value="فيلات الباتيو">فيلات الباتيو</option>
+            <option value="المقاولون العرب">المقاولون العرب</option>
+            <option value="ليك فيو">ليك فيو</option>
+            <option value="جراند">جراند</option>
+            <option value="كليوباترا">كليوباترا</option>
+            <option value="الحلواني">الحلواني</option>
+            <option value="عملاء المخزن">عملاء المخزن</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">رقم الوحدة (فيلا / عمارة / شقة)</label>
+          <input type="text" id="regUnit" required placeholder="مثال: فيلا 14 أو عمارة 5B" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 text-sm transition mt-2">
+          إنشاء حساب وتأكيد التسجيل
+        </button>
+      </form>
+
+      <!-- حسابات سريعة -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-        <p class="font-bold text-slate-300 mb-2">حسابات تجريبية سريعة (الباسورد: 123):</p>
+        <p class="font-bold text-slate-300 mb-2">دخول سريع للتجربة (الباسورد: 123):</p>
         <div class="grid grid-cols-3 gap-1.5 text-center">
           <span onclick="setQuickLogin('eng1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس: eng1</span>
           <span onclick="setQuickLogin('acc1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">محاسب: acc1</span>
           <span onclick="setQuickLogin('store1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">تشوينة: store1</span>
           <span onclick="setQuickLogin('driver1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">سائق: driver1</span>
-          <span onclick="setQuickLogin('admin')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 col-span-2 text-blue-400 font-bold">المدير العام: admin</span>
+          <span onclick="setQuickLogin('admin')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 col-span-2 text-blue-400 font-bold">المدير: admin</span>
         </div>
       </div>
     </div>
@@ -103,8 +166,6 @@
 
     <!-- القائمة الجانبية (Sidebar) -->
     <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-64 bg-[#111827] border-l border-slate-800 flex flex-col shrink-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 md:static">
-      
-      <!-- Top Brand -->
       <div class="p-4 border-b border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-md">
@@ -120,7 +181,7 @@
         </button>
       </div>
 
-      <!-- الملف الشخصي للمستخدم الحالي في القائمة -->
+      <!-- الملف الشخصي بالقائمة -->
       <div onclick="openProfileModal()" class="p-3 mx-3 my-3 rounded-2xl bg-[#131d31] border border-slate-700/60 flex items-center gap-3 cursor-pointer hover:border-blue-500 transition">
         <div class="relative">
           <img id="sidebarUserAvatar" class="w-11 h-11 rounded-xl border border-blue-500/50 object-cover shadow-sm" src="" alt="User">
@@ -133,7 +194,7 @@
         </div>
       </div>
 
-      <!-- زر الحضور والانصراف السريع (للموظفين) -->
+      <!-- الحضور السريع -->
       <div id="attendanceSidebarBox" class="px-3 mb-2 hidden">
         <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -146,7 +207,7 @@
         </div>
       </div>
 
-      <!-- Navigation Links -->
+      <!-- الروابط -->
       <nav class="p-3 space-y-1 text-xs flex-1 overflow-y-auto custom-scrollbar">
         <button onclick="switchView('main')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold transition">
           <i class="fa-solid fa-house w-4 text-center"></i>
@@ -163,15 +224,13 @@
           <span>سجل الطلبات والتوريدات</span>
         </button>
 
-        <!-- للمحاسب -->
         <div id="accountantNavItems" class="hidden">
           <button onclick="switchView('clients-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
             <i class="fa-solid fa-users w-4 text-center text-emerald-400"></i>
-            <span>العملاء والمهندسين</span>
+            <span>المهندسين والمشاريع</span>
           </button>
         </div>
 
-        <!-- لمسؤول المخزن والمدير (سجل الحضور والانصراف) -->
         <div id="attendanceNavItems" class="hidden">
           <button onclick="switchView('attendance-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
             <i class="fa-solid fa-user-clock w-4 text-center text-indigo-400"></i>
@@ -180,7 +239,6 @@
         </div>
       </nav>
 
-      <!-- Logout in Sidebar -->
       <div class="p-3 border-t border-slate-800">
         <button onclick="logout()" class="w-full py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -189,19 +247,17 @@
       </div>
     </aside>
 
-    <!-- Content Views -->
+    <!-- المحتوى الرئيسي -->
     <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto overflow-y-auto">
 
-      <!-- ========================================== -->
-      <!-- VIEW A: المهندس / المالك -->
-      <!-- ========================================== -->
+      <!-- VIEW A: المهندس -->
       <section id="view-engineer" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="flex items-center gap-4">
               <div class="relative">
                 <img id="eng-avatar" class="w-16 h-16 rounded-2xl border-2 border-blue-500 object-cover shadow-lg" src="" alt="Engineer">
-                <button onclick="openProfileModal()" class="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] shadow" title="تعديل الصورة والبيانات">
+                <button onclick="openProfileModal()" class="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] shadow">
                   <i class="fa-solid fa-pen"></i>
                 </button>
               </div>
@@ -249,9 +305,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW B: المحاسب -->
-      <!-- ========================================== -->
       <section id="view-accountant" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-emerald-950/40 to-[#131d31] border border-emerald-500/30 rounded-3xl p-5 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div class="flex items-center gap-4">
@@ -266,7 +320,6 @@
           </button>
         </div>
 
-        <!-- قائمة كروت المهندسين بصورهم وبياناتهم المحدثة -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
             <i class="fa-solid fa-users text-emerald-400"></i>
@@ -275,7 +328,6 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="accClientsList"></div>
         </div>
 
-        <!-- نافذة السجل المرجعي للمهندس المختار -->
         <div id="engineerHistoryBox" class="hidden bg-[#131d31] border border-blue-500/40 rounded-2xl p-4 space-y-3">
           <div class="flex justify-between items-center border-b border-slate-800 pb-2">
             <div>
@@ -311,7 +363,6 @@
           </div>
         </div>
 
-        <!-- جدول أوامر التوريد العامة -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
             <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>
@@ -336,9 +387,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW C: التشوينة والمخازن -->
-      <!-- ========================================== -->
       <section id="view-store" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-amber-950/40 to-[#131d31] border border-amber-500/30 rounded-3xl p-5 shadow-xl flex justify-between items-center">
           <div class="flex items-center gap-4">
@@ -353,14 +402,12 @@
           </button>
         </div>
 
-        <!-- جدول الحضور والانصراف المباشر في واجهة مسؤول المخزن -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <div class="flex justify-between items-center mb-3">
             <h4 class="font-bold text-sm text-white flex items-center gap-2">
               <i class="fa-solid fa-user-clock text-amber-400"></i>
               متابعة حضور وانصراف الموظفين والسائقين اليوم
             </h4>
-            <span class="text-[10px] text-slate-400">النقطة الخضراء = بالعمل | النقطة الحمراء = لم يبدأ</span>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
@@ -400,9 +447,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW D: السائق -->
-      <!-- ========================================== -->
       <section id="view-driver" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-cyan-950/40 to-[#131d31] border border-cyan-500/30 rounded-3xl p-5 shadow-xl flex items-center gap-4">
           <img id="driver-avatar" class="w-14 h-14 rounded-2xl border border-cyan-500 object-cover" src="" alt="Driver">
@@ -421,9 +466,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- VIEW E: المدير العام -->
-      <!-- ========================================== -->
+      <!-- VIEW E: المدير العام (مع قوائم الكمبوندات المخصصة) -->
       <section id="view-admin" class="role-view hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div class="flex items-center gap-4">
@@ -438,39 +481,26 @@
           </button>
         </div>
 
-        <!-- إحصائيات سريعة -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <span class="text-xs text-slate-400">إجمالي المبيعات</span>
-            <h4 class="text-xl font-bold text-white mt-1">148,650 <span class="text-xs font-normal">ج.م</span></h4>
-            <span class="text-[10px] text-emerald-400 font-semibold">محدث لحظياً</span>
+        <!-- فلتر وقائمة المشروعات والكمبوندات الخاصة بالمدير -->
+        <div class="bg-[#131d31] border border-blue-500/30 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-city text-blue-400"></i> دليل المشروعات والمهندسين المسجلين بكل كمبوند</span>
+            <span class="text-xs text-slate-400" id="adminTotalCompoundsCount">11 مشروع رسمي</span>
+          </h4>
+          <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar" id="compoundFilterTabs">
+            <!-- أزرار الفلترة للكمبوندات -->
           </div>
-          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <span class="text-xs text-slate-400">الحضور اليومي للفريق</span>
-            <h4 class="text-xl font-bold text-white mt-1" id="stat-attendance-count">0 حاضر</h4>
-            <span class="text-[10px] text-emerald-400 font-semibold">متابعة دقيقة</span>
-          </div>
-          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <span class="text-xs text-slate-400">المشروعات والكمبوندات</span>
-            <h4 class="text-xl font-bold text-white mt-1">11 كمبوند نشط</h4>
-            <span class="text-[10px] text-amber-400 font-semibold">تغطية أكتوبر والتجمع</span>
-          </div>
-          <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-            <span class="text-xs text-slate-400">فريق العمل والعملاء</span>
-            <h4 class="text-xl font-bold text-white mt-1" id="stat-total-users">28 مستخدم</h4>
-            <span class="text-[10px] text-blue-400 font-semibold">صلاحيات محددة</span>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3" id="compoundEngineersList">
+            <!-- كروت المهندسين التابعين للكمبوند المختار -->
           </div>
         </div>
 
-        <!-- جدول الحضور والانصراف المباشر عند المدير -->
+        <!-- جدول الحضور والانصراف عند المدير -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
-          <div class="flex justify-between items-center mb-3">
-            <h4 class="font-bold text-sm text-white flex items-center gap-2">
-              <i class="fa-solid fa-clock text-blue-400"></i>
-              سجل حضور وانصراف فريق العمل اليوم
-            </h4>
-            <span class="text-[10px] text-slate-400">محدث لحظياً فور بدء العمل</span>
-          </div>
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-clock text-blue-400"></i>
+            سجل حضور وانصراف فريق العمل اليوم
+          </h4>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
@@ -487,7 +517,7 @@
           </div>
         </div>
 
-        <!-- جدول إدارة الموظفين والصلاحيات -->
+        <!-- إدارة الصلاحيات -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
             <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-blue-400"></i> إدارة فريق العمل والصلاحيات</span>
@@ -500,7 +530,7 @@
                   <th class="p-3">الصورة والاسم</th>
                   <th class="p-3">اسم الدخول (Login)</th>
                   <th class="p-3">المسمى الوظيفي</th>
-                  <th class="p-3">البيانات / التخصيص</th>
+                  <th class="p-3">المشروع / الهاتف</th>
                   <th class="p-3 text-center">إلغاء / سحب الصلاحية</th>
                 </tr>
               </thead>
@@ -510,9 +540,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- VIEW F: السجل العام للتوريدات (من القائمة) -->
-      <!-- ========================================== -->
+      <!-- VIEW F: السجل العام للتوريدات -->
       <section id="view-orders-history" class="role-view hidden space-y-5">
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
           <h3 class="text-xl font-black text-white mb-3 flex items-center gap-2">
@@ -538,16 +566,13 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- VIEW G: شاشة الحضور والانصراف المنفصلة (من القائمة) -->
-      <!-- ========================================== -->
+      <!-- VIEW G: شاشة الحضور المنفصلة -->
       <section id="view-attendance-section" class="role-view hidden space-y-5">
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
           <h3 class="text-xl font-black text-white mb-2 flex items-center gap-2">
             <i class="fa-solid fa-user-clock text-indigo-400"></i>
             منظومة حضور وانصراف العاملين والموظفين
           </h3>
-          <p class="text-xs text-slate-400 mb-4">متابعة حية لتسجيل بدء العمل وانتهاء اليوم لكل موظف وسائق</p>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
@@ -568,9 +593,8 @@
     </main>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL: الملف الشخصي وتعديل البيانات (لكل الحسابات بما فيها المهندس) -->
-  <!-- ========================================== -->
+  <!-- المودالات الأساسية (الملف الشخصي، الطلب، الشات، الكاميرا، إضافة مستخدم) -->
+  <!-- MODAL: الملف الشخصي -->
   <div id="profileModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -606,7 +630,19 @@
         <div id="profEngineerFields" class="hidden space-y-2">
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">اسم الكمبوند / المشروع</label>
-            <input type="text" id="profEditCompound" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+            <select id="profEditCompound" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+              <option value="باتيو كازا">باتيو كازا</option>
+              <option value="المعادي 1">المعادي 1</option>
+              <option value="المعادي 2">المعادي 2</option>
+              <option value="فيلات كازا">فيلات كازا</option>
+              <option value="فيلات الباتيو">فيلات الباتيو</option>
+              <option value="المقاولون العرب">المقاولون العرب</option>
+              <option value="ليك فيو">ليك فيو</option>
+              <option value="جراند">جراند</option>
+              <option value="كليوباترا">كليوباترا</option>
+              <option value="الحلواني">الحلواني</option>
+              <option value="عملاء المخزن">عملاء المخزن</option>
+            </select>
           </div>
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">رقم الوحدة (فيلا / عمارة)</label>
@@ -626,9 +662,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL: طلب توريد جديد للمهندس -->
-  <!-- ========================================== -->
+  <!-- MODAL: طلب توريد خامات -->
   <div id="orderModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -668,9 +702,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
   <!-- MODAL: شات متكامل -->
-  <!-- ========================================== -->
   <div id="chatModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl flex flex-col h-[580px]">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -707,9 +739,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL: تصوير المون حصراً عبر الكاميرا الحية للسائق -->
-  <!-- ========================================== -->
+  <!-- MODAL: توثيق الكاميرا الحية للسائق -->
   <div id="proofModal" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -741,9 +771,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL: إضافة مستخدم جديد للمدير العام -->
-  <!-- ========================================== -->
+  <!-- MODAL: إضافة مستخدم جديد وتحديد الصلاحيات -->
   <div id="userManageModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -784,7 +812,19 @@
         <div id="extraEngineerFields" class="hidden space-y-2 pt-1 border-t border-slate-800">
           <div>
             <label class="block text-slate-300 mb-1">اسم الكمبوند</label>
-            <input type="text" id="newUserCompound" placeholder="كمبوند بادية - أو قطامية هيلز..." class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2 text-white">
+            <select id="newUserCompound" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2 text-white">
+              <option value="باتيو كازا">باتيو كازا</option>
+              <option value="المعادي 1">المعادي 1</option>
+              <option value="المعادي 2">المعادي 2</option>
+              <option value="فيلات كازا">فيلات كازا</option>
+              <option value="فيلات الباتيو">فيلات الباتيو</option>
+              <option value="المقاولون العرب">المقاولون العرب</option>
+              <option value="ليك فيو">ليك فيو</option>
+              <option value="جراند">جراند</option>
+              <option value="كليوباترا">كليوباترا</option>
+              <option value="الحلواني">الحلواني</option>
+              <option value="عملاء المخزن">عملاء المخزن</option>
+            </select>
           </div>
           <div>
             <label class="block text-slate-300 mb-1">رقم الوحدة والهاتف</label>
@@ -799,21 +839,27 @@
       </form>
     </div>
   </div>
-
   <!-- ========================================== -->
-  <!-- JAVASCRIPT & APPLICATION LOGIC -->
+  <!-- JAVASCRIPT: المنطق البرمجي والمزامنة الفورية -->
   <!-- ========================================== -->
   <script>
-    // Current User Session
+    // State variables
     let currentUser = null;
     let selectedOrderIdForProof = null;
+    let selectedCompoundFilter = 'باتيو كازا';
     let mediaStream = null;
     let mediaRecorder = null;
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // Users Database مع صورهم وحالة الحضور والانصراف
-    let users = {
+    // قائمة المشروعات الرسمية
+    const officialCompounds = [
+      'باتيو كازا', 'المعادي 1', 'المعادي 2', 'فيلات كازا', 'فيلات الباتيو',
+      'المقاولون العرب', 'ليك فيو', 'جراند', 'كليوباترا', 'الحلواني', 'عملاء المخزن'
+    ];
+
+    // البيانات الافتراضية
+    const defaultUsers = {
       'admin': {
         role: 'admin',
         name: 'محمد ناصر (المدير العام)',
@@ -826,7 +872,7 @@
       'acc1': {
         role: 'accountant',
         name: 'أ. محمود كمال',
-        jobTitle: 'محاسب مالي أول - قطاع أكتوبر',
+        jobTitle: 'محاسب مالي أول',
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
         phone: '01198765432',
         pass: '123',
@@ -844,7 +890,7 @@
       'driver1': {
         role: 'driver',
         name: 'الكابتن سيد عبد العال',
-        jobTitle: 'كابتن نقل ثقيل وتعتيق مون',
+        jobTitle: 'كابتن نقل وتعتيق مون',
         avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
         phone: '01555555555',
         pass: '123',
@@ -853,12 +899,12 @@
       'eng1': {
         role: 'engineer',
         name: 'م. أحمد ناصر',
-        jobTitle: 'مهندس تنفيذي / مالك الوحدة',
+        jobTitle: 'مهندس تنفيذي / عميل',
         avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
-        compound: 'كمبوند بادية - 6 أكتوبر',
+        compound: 'باتيو كازا',
         unit: 'فيلا 14',
         phone: '01012345678',
-        assignedAcc: 'acc1',
+        email: 'ahmed@patio.com',
         pass: '123'
       },
       'eng2': {
@@ -866,20 +912,19 @@
         name: 'م. طارق فاروق',
         jobTitle: 'مهندس تشطيبات / عميل',
         avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80',
-        compound: 'مشروع بيت الوطن - التجمع',
+        compound: 'المعادي 1',
         unit: 'عمارة 45',
         phone: '01234567890',
-        assignedAcc: 'acc1',
+        email: 'tarek@maadi.com',
         pass: '123'
       }
     };
 
-    // Orders Database
-    let orders = [
+    const defaultOrders = [
       {
         id: 'ORD-501',
         engineer: 'م. أحمد ناصر',
-        compound: 'كمبوند بادية - 6 أكتوبر',
+        compound: 'باتيو كازا',
         unit: 'فيلا 14',
         phone: '01012345678',
         item: 'طوب أحمر عادي',
@@ -893,7 +938,7 @@
       {
         id: 'ORD-500',
         engineer: 'م. طارق فاروق',
-        compound: 'مشروع بيت الوطن - التجمع',
+        compound: 'المعادي 1',
         unit: 'عمارة 45',
         phone: '01234567890',
         item: 'أسمنت مسلح ممتاز',
@@ -906,33 +951,135 @@
       }
     ];
 
+    // دوال المزامنة والتحميل
+    function loadUsers() {
+      try {
+        const stored = localStorage.getItem('alraed_erp_users_v2');
+        return stored ? JSON.parse(stored) : defaultUsers;
+      } catch (e) {
+        return defaultUsers;
+      }
+    }
+
+    function saveUsers(u) {
+      try {
+        localStorage.setItem('alraed_erp_users_v2', JSON.stringify(u));
+      } catch (e) {
+        console.error('Save error', e);
+      }
+    }
+
+    function loadOrders() {
+      try {
+        const stored = localStorage.getItem('alraed_erp_orders_v2');
+        return stored ? JSON.parse(stored) : defaultOrders;
+      } catch (e) {
+        return defaultOrders;
+      }
+    }
+
+    function saveOrders(o) {
+      try {
+        localStorage.setItem('alraed_erp_orders_v2', JSON.stringify(o));
+      } catch (e) {
+        console.error('Save error', e);
+      }
+    }
+
+    let users = loadUsers();
+    let orders = loadOrders();
+
+    // تبديل تبويب الدخول والتسجيل
+    function switchAuthTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('formLogin').classList.toggle('hidden', !isLogin);
+      document.getElementById('formRegister').classList.toggle('hidden', isLogin);
+      
+      const tLog = document.getElementById('tabLogin');
+      const tReg = document.getElementById('tabRegister');
+      if (isLogin) {
+        tLog.className = 'flex-1 pb-2.5 text-xs font-bold text-blue-400 border-b-2 border-blue-500 transition';
+        tReg.className = 'flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition';
+      } else {
+        tReg.className = 'flex-1 pb-2.5 text-xs font-bold text-emerald-400 border-b-2 border-emerald-500 transition';
+        tLog.className = 'flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition';
+      }
+    }
+
     function setQuickLogin(u) {
+      switchAuthTab('login');
       document.getElementById('loginUser').value = u;
       document.getElementById('loginPass').value = '123';
     }
 
+    // تسجيل الدخول
     function handleLogin(e) {
       e.preventDefault();
-      const u = document.getElementById('loginUser').value.trim();
+      users = loadUsers();
+      const inputVal = document.getElementById('loginUser').value.trim();
       const p = document.getElementById('loginPass').value.trim();
 
-      if (users[u] && users[u].pass === p) {
-        currentUser = { ...users[u], username: u };
-        document.getElementById('loginScreen').classList.add('hidden');
+      // البحث باسم المستخدم أو البريد
+      let foundKey = Object.keys(users).find(k => k === inputVal || (users[k].email && users[k].email.toLowerCase() === inputVal.toLowerCase()));
+
+      if (foundKey && users[foundKey].pass === p) {
+        currentUser = { ...users[foundKey], username: foundKey };
+        document.getElementById('authScreen').classList.add('hidden');
         document.getElementById('appContainer').classList.remove('hidden');
         updateHeaderAndSidebar();
         renderAppByRole();
       } else {
-        alert('بيانات الدخول غير صحيحة! تأكد من اسم المستخدم وكلمة المرور.');
+        alert('بيانات الدخول غير صحيحة! تأكد من اسم المستخدم/البريد وكلمة المرور.');
       }
+    }
+
+    // تسجيل حساب مهندس جديد بنفسه
+    function handleEngineerRegister(e) {
+      e.preventDefault();
+      users = loadUsers();
+
+      const name = document.getElementById('regName').value.trim();
+      const login = document.getElementById('regUser').value.trim();
+      const pass = document.getElementById('regPass').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const compound = document.getElementById('regCompound').value;
+      const unit = document.getElementById('regUnit').value.trim();
+
+      if (users[login]) {
+        alert('اسم المستخدم هذا مسجل بالفعل، يرجى اختيار اسم آخر.');
+        return;
+      }
+
+      users[login] = {
+        role: 'engineer',
+        name: name,
+        jobTitle: `مهندس موقع / ${compound}`,
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+        phone: phone,
+        email: email,
+        compound: compound,
+        unit: unit,
+        pass: pass
+      };
+
+      saveUsers(users);
+      alert(`أهلاً بك يا هندسة! تم إنشاء حسابك بنجاح في مشروع (${compound})، جاري تحويلك لحسابك فوراً.`);
+
+      currentUser = { ...users[login], username: login };
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('appContainer').classList.remove('hidden');
+      updateHeaderAndSidebar();
+      renderAppByRole();
     }
 
     function logout() {
       currentUser = null;
       document.getElementById('appContainer').classList.add('hidden');
-      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('authScreen').classList.remove('hidden');
       document.getElementById('loginUser').value = '';
       document.getElementById('loginPass').value = '';
+      switchAuthTab('login');
     }
 
     function toggleSidebar() {
@@ -944,25 +1091,224 @@
         ov.classList.remove('hidden');
       } else {
         sb.classList.add('translate-x-full');
-        sb.classList.remove('translate-x-0');
-        ov.classList.add('hidden');
+        sb.classList.remove('إليك الجزء الثاني والأخير (كود الـ JavaScript وإغلاق الصفحة). ضعه مباشرةً أسفل الجزء الأول داخل ملف `index.html`:
+
+```html
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT & DATA MANAGEMENT -->
+  <!-- ========================================== -->
+  <script>
+    const COMPOUNDS_LIST = [
+      'باتيو كازا', 'المعادي 1', 'المعادي 2', 'فيلات كازا',
+      'فيلات الباتيو', 'المقاولون العرب', 'ليك فيو', 'جراند',
+      'كليوباترا', 'الحلواني', 'عملاء المخزن'
+    ];
+
+    let currentUser = null;
+    let selectedOrderIdForProof = null;
+    let selectedCompoundFilter = 'الكل';
+    let mediaStream = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecordingVoice = false;
+
+    const initialUsers = {
+      'admin': {
+        role: 'admin',
+        name: 'محمد ناصر (المدير العام)',
+        jobTitle: 'الرئيس التنفيذي - مالك الشركة',
+        avatar: '[https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80)',
+        phone: '01000000001',
+        pass: '123',
+        attendance: { isWorking: true, startTime: '08:00 ص', endTime: '--' }
+      },
+      'acc1': {
+        role: 'accountant',
+        name: 'أ. محمود كمال',
+        jobTitle: 'محاسب مالي أول',
+        avatar: '[https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80)',
+        phone: '01198765432',
+        pass: '123',
+        attendance: { isWorking: false, startTime: '--', endTime: '--' }
+      },
+      'store1': {
+        role: 'store',
+        name: 'عم ربيع',
+        jobTitle: 'أمين التشوينة والمستودع الرئيسي',
+        avatar: '[https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80)',
+        phone: '01222222222',
+        pass: '123',
+        attendance: { isWorking: false, startTime: '--', endTime: '--' }
+      },
+      'driver1': {
+        role: 'driver',
+        name: 'الكابتن سيد عبد العال',
+        jobTitle: 'كابتن نقل وتعتيق',
+        avatar: '[https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80)',
+        phone: '01555555555',
+        pass: '123',
+        attendance: { isWorking: false, startTime: '--', endTime: '--' }
+      },
+      'eng1': {
+        role: 'engineer',
+        name: 'م. أحمد ناصر',
+        jobTitle: 'مهندس تنفيذي / مالك الوحدة',
+        avatar: '[https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80)',
+        compound: 'باتيو كازا',
+        unit: 'فيلا 14',
+        phone: '01012345678',
+        email: 'eng1@alraed.com',
+        pass: '123'
+      }
+    };
+
+    const initialOrders = [
+      {
+        id: 'ORD-501',
+        engineer: 'م. أحمد ناصر',
+        compound: 'باتيو كازا',
+        unit: 'فيلا 14',
+        phone: '01012345678',
+        item: 'طوب أحمر عادي',
+        qty: '3,000 طوبة',
+        total: 6300,
+        status: 'جاري الشحن',
+        driver: 'الكابتن سيد عبد العال',
+        proofImg: null,
+        date: '2026-10-04 02:30 م'
+      }
+    ];
+
+    function getStoredUsers() {
+      const data = localStorage.getItem('alraed_erp_users');
+      return data ? JSON.parse(data) : initialUsers;
+    }
+
+    function setStoredUsers(data) {
+      localStorage.setItem('alraed_erp_users', JSON.stringify(data));
+    }
+
+    function getStoredOrders() {
+      const data = localStorage.getItem('alraed_erp_orders');
+      return data ? JSON.parse(data) : initialOrders;
+    }
+
+    function setStoredOrders(data) {
+      localStorage.setItem('alraed_erp_orders', JSON.stringify(data));
+    }
+
+    function switchAuthTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('formLogin').classList.toggle('hidden', !isLogin);
+      document.getElementById('formRegister').classList.toggle('hidden', isLogin);
+      
+      const tabLogin = document.getElementById('tabLogin');
+      const tabReg = document.getElementById('tabRegister');
+      if (isLogin) {
+        tabLogin.className = 'flex-1 pb-2.5 text-xs font-bold text-blue-400 border-b-2 border-blue-500 transition';
+        tabReg.className = 'flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition';
+      } else {
+        tabReg.className = 'flex-1 pb-2.5 text-xs font-bold text-emerald-400 border-b-2 border-emerald-500 transition';
+        tabLogin.className = 'flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition';
       }
     }
 
+    function setQuickLogin(u) {
+      switchAuthTab('login');
+      document.getElementById('loginUser').value = u;
+      document.getElementById('loginPass').value = '123';
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const allUsers = getStoredUsers();
+      const loginInput = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+
+      const userKey = Object.keys(allUsers).find(k => 
+        (k === loginInput || (allUsers[k].email && allUsers[k].email === loginInput)) && allUsers[k].pass === pass
+      );
+
+      if (userKey) {
+        currentUser = { ...allUsers[userKey], username: userKey };
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appContainer').classList.remove('hidden');
+        updateHeaderAndSidebar();
+        renderAppByRole();
+      } else {
+        alert('بيانات الدخول غير صحيحة، يرجى التأكد من اسم المستخدم أو البريد وكلمة المرور.');
+      }
+    }
+
+    function handleEngineerRegister(e) {
+      e.preventDefault();
+      const allUsers = getStoredUsers();
+      const uKey = document.getElementById('regUser').value.trim();
+
+      if (allUsers[uKey]) {
+        alert('اسم المستخدم هذا مسجل مسبقاً، يرجى اختيار اسم آخر.');
+        return;
+      }
+
+      const newEngineer = {
+        role: 'engineer',
+        name: document.getElementById('regName').value.trim(),
+        jobTitle: 'مهندس موقع / مالك الوحدة',
+        avatar: '[https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80)',
+        phone: document.getElementById('regPhone').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        compound: document.getElementById('regCompound').value,
+        unit: document.getElementById('regUnit').value.trim(),
+        pass: document.getElementById('regPass').value.trim()
+      };
+
+      allUsers[uKey] = newEngineer;
+      setStoredUsers(allUsers);
+
+      currentUser = { ...newEngineer, username: uKey };
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('appContainer').classList.remove('hidden');
+      updateHeaderAndSidebar();
+      renderAppByRole();
+
+      alert(`أهلاً بك م. ${newEngineer.name}! تم إنشاء حسابك بنجاح وتسجيلك بمشروع (${newEngineer.compound}).`);
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('appContainer').classList.add('hidden');
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPass').value = '';
+      switchAuthTab('login');
+    }
+
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const ov = document.getElementById('sidebarOverlay');
+      const isClosed = sb.classList.contains('translate-x-full');
+      sb.classList.toggle('translate-x-full', !isClosed);
+      sb.classList.toggle('translate-x-0', isClosed);
+      ov.classList.toggle('hidden', !isClosed);
+    }
+
     function updateHeaderAndSidebar() {
+      const allUsers = getStoredUsers();
+      if (currentUser && allUsers[currentUser.username]) {
+        currentUser = { ...allUsers[currentUser.username], username: currentUser.username };
+      }
+
       document.getElementById('sidebarUserName').innerText = currentUser.name;
       document.getElementById('sidebarUserTitle').innerText = currentUser.jobTitle;
       document.getElementById('sidebarUserAvatar').src = currentUser.avatar;
       document.getElementById('mobileUserAvatar').src = currentUser.avatar;
 
-      // Status indicator in sidebar
       const isWorking = currentUser.attendance ? currentUser.attendance.isWorking : false;
       const statusDot = document.getElementById('sidebarStatusDot');
       if (statusDot) {
         statusDot.className = `w-3 h-3 rounded-full border-2 border-[#131d31] absolute -bottom-1 -left-1 ${isWorking ? 'bg-emerald-500' : 'bg-rose-500'}`;
       }
 
-      // Quick Attendance Button for Staff
       const attBox = document.getElementById('attendanceSidebarBox');
       if (currentUser.role !== 'engineer') {
         attBox.classList.remove('hidden');
@@ -971,7 +1317,6 @@
         attBox.classList.add('hidden');
       }
 
-      // Accountant and Store/Admin Nav items
       document.getElementById('accountantNavItems').classList.toggle('hidden', currentUser.role !== 'accountant');
       document.getElementById('attendanceNavItems').classList.toggle('hidden', currentUser.role !== 'store' && currentUser.role !== 'admin');
     }
@@ -999,25 +1344,26 @@
     function toggleAttendance() {
       if (!currentUser.attendance) return;
       const now = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+      const allUsers = getStoredUsers();
 
       if (!currentUser.attendance.isWorking) {
         currentUser.attendance.isWorking = true;
         currentUser.attendance.startTime = now;
-        alert(`تم تسجيل بدء العمل اليومي الساعة: ${now} 🟢 بالتوفيق!`);
+        alert(`تم تسجيل بدء العمل: ${now} 🟢`);
       } else {
         currentUser.attendance.isWorking = false;
         currentUser.attendance.endTime = now;
-        alert(`تم تسجيل انتهاء العمل اليومي الساعة: ${now} 🔴 يعطيك العافية!`);
+        alert(`تم تسجيل انتهاء العمل: ${now} 🔴`);
       }
 
-      users[currentUser.username].attendance = currentUser.attendance;
+      allUsers[currentUser.username].attendance = currentUser.attendance;
+      setStoredUsers(allUsers);
       updateHeaderAndSidebar();
       renderAttendanceTables();
     }
 
     function switchView(viewName) {
       if (window.innerWidth < 768) toggleSidebar();
-
       document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
 
       if (viewName === 'main') {
@@ -1068,8 +1414,12 @@
       }
     }
 
-    // --- Profile Modal Handling (للمهندس ولكل الحسابات) ---
     function openProfileModal() {
+      const allUsers = getStoredUsers();
+      if (allUsers[currentUser.username]) {
+        currentUser = { ...allUsers[currentUser.username], username: currentUser.username };
+      }
+
       document.getElementById('profModalAvatar').src = currentUser.avatar;
       document.getElementById('profModalTitle').innerText = currentUser.jobTitle;
       document.getElementById('profEditName').value = currentUser.name;
@@ -1078,7 +1428,7 @@
       const engBox = document.getElementById('profEngineerFields');
       if (currentUser.role === 'engineer') {
         engBox.classList.remove('hidden');
-        document.getElementById('profEditCompound').value = currentUser.compound || '';
+        document.getElementById('profEditCompound').value = currentUser.compound || 'باتيو كازا';
         document.getElementById('profEditUnit').value = currentUser.unit || '';
       } else {
         engBox.classList.add('hidden');
@@ -1092,8 +1442,10 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = function(evt) {
+          const allUsers = getStoredUsers();
           currentUser.avatar = evt.target.result;
-          users[currentUser.username].avatar = evt.target.result;
+          allUsers[currentUser.username].avatar = evt.target.result;
+          setStoredUsers(allUsers);
           document.getElementById('profModalAvatar').src = evt.target.result;
           updateHeaderAndSidebar();
           renderAppByRole();
@@ -1103,50 +1455,38 @@
     }
 
     function handleSaveProfile(e) {
-  e.preventDefault();
-  users = loadUsers(); // قراءة أحدث بيانات من الذاكرة
+      e.preventDefault();
+      const allUsers = getStoredUsers();
 
-  const newName = document.getElementById('profEditName').value.trim();
-  const newPhone = document.getElementById('profEditPhone').value.trim();
+      currentUser.name = document.getElementById('profEditName').value.trim();
+      currentUser.phone = document.getElementById('profEditPhone').value.trim();
 
-  // تحديث بيانات المستخدم الحالي
-  currentUser.name = newName;
-  currentUser.phone = newPhone;
+      if (currentUser.role === 'engineer') {
+        currentUser.compound = document.getElementById('profEditCompound').value;
+        currentUser.unit = document.getElementById('profEditUnit').value.trim();
+      }
 
-  if (currentUser.role === 'engineer') {
-    currentUser.compound = document.getElementById('profEditCompound').value.trim();
-    currentUser.unit = document.getElementById('profEditUnit').value.trim();
-  }
+      allUsers[currentUser.username] = { ...allUsers[currentUser.username], ...currentUser };
+      setStoredUsers(allUsers);
 
-  // تحديث الكائن الرئيسي بالكامل وحفظه في الذاكرة
-  users[currentUser.username] = { ...users[currentUser.username], ...currentUser };
-  saveUsers(users);
+      updateHeaderAndSidebar();
+      renderAppByRole();
+      closeModal('profileModal');
+      alert('تم تحديث وحفظ بيانات الملف الشخصي بنجاح!');
+    }
 
-  // تحديث الواجهة فوراً
-  updateHeaderAndSidebar();
-  renderAppByRole();
-  closeModal('profileModal');
-  alert('تم حفظ وتحديث بيانات الملف الشخصي بنجاح!');
-}
-
-
-    // --- الحضور والانصراف (الجداول المشتركة عند المخزن والمدير) ---
     function renderAttendanceTables() {
+      const allUsers = getStoredUsers();
       const storeTbody = document.getElementById('storeAttendanceBody');
       const adminTbody = document.getElementById('adminAttendanceBody');
       const sharedTbody = document.getElementById('sharedAttendanceTableBody');
 
       let html = '';
-      let activeCount = 0;
-
-      // جمع الموظفين غير المهندسين
-      const staffKeys = Object.keys(users).filter(k => users[k].role !== 'engineer');
+      const staffKeys = Object.keys(allUsers).filter(k => allUsers[k].role !== 'engineer');
 
       staffKeys.forEach(k => {
-        const u = users[k];
+        const u = allUsers[k];
         const isWorking = u.attendance ? u.attendance.isWorking : false;
-        if (isWorking) activeCount++;
-
         const dotColor = isWorking ? 'bg-emerald-500' : 'bg-rose-500';
         const statusText = isWorking ? 'متواجد بالعمل 🟢' : 'لم يبدأ العمل 🔴';
 
@@ -1154,13 +1494,13 @@
           <tr>
             <td class="p-2.5">
               <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full ${dotColor} ${isWorking ? 'animate-pulse' : ''}"></span>
+                <span class="w-2.5 h-2.5 rounded-full ${dotColor}"></span>
                 <img src="${u.avatar}" class="w-7 h-7 rounded-full object-cover border border-slate-700">
                 <span class="font-bold text-white">${u.name}</span>
               </div>
             </td>
             <td class="p-2.5 text-slate-400">${u.jobTitle}</td>
-            <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] ${isWorking ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'} font-bold">${statusText}</span></td>
+            <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] ${isWorking ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'} font-bold">${statusText}</span></td>
             <td class="p-2.5 text-slate-300 font-semibold">${u.attendance ? u.attendance.startTime : '--'}</td>
             <td class="p-2.5 text-slate-400">${u.attendance ? u.attendance.endTime : '--'}</td>
           </tr>
@@ -1170,13 +1510,10 @@
       if (storeTbody) storeTbody.innerHTML = html;
       if (adminTbody) adminTbody.innerHTML = html;
       if (sharedTbody) sharedTbody.innerHTML = html;
-
-      const statAtt = document.getElementById('stat-attendance-count');
-      if (statAtt) statAtt.innerText = `${activeCount} من ${staffKeys.length} حاضر`;
     }
 
-    // --- Engineer Methods ---
     function renderEngineerTable() {
+      const orders = getStoredOrders();
       const tbody = document.getElementById('engOrdersTable');
       tbody.innerHTML = '';
       const myOrders = orders.filter(o => o.engineer.includes(currentUser.name));
@@ -1198,6 +1535,7 @@
 
     function handleEngineerOrder(e) {
       e.preventDefault();
+      const orders = getStoredOrders();
       const sel = document.getElementById('modalItem');
       const item = sel.value;
       const price = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-price'));
@@ -1222,32 +1560,31 @@
       };
 
       orders.unshift(newOrder);
+      setStoredOrders(orders);
       closeModal('orderModal');
       renderEngineerTable();
-      alert('تم إرسال طلب التوريد إلى المحاسب المسؤول!');
+      alert('تم إرسال طلب التوريد للمحاسب بنجاح!');
     }
 
-    // --- Accountant View & Clients ---
     function renderAccountantView() {
+      const allUsers = getStoredUsers();
+      const orders = getStoredOrders();
       const clientsBox = document.getElementById('accClientsList');
       clientsBox.innerHTML = '';
-      
-      const engineerKeys = Object.keys(users).filter(k => users[k].role === 'engineer');
+
+      const engineerKeys = Object.keys(allUsers).filter(k => allUsers[k].role === 'engineer');
       engineerKeys.forEach(k => {
-        const u = users[k];
+        const u = allUsers[k];
         clientsBox.innerHTML += `
           <div onclick="showEngineerOrdersHistory('${k}')" class="bg-slate-900/80 border border-slate-800 hover:border-blue-500/80 p-3.5 rounded-2xl flex items-center gap-3.5 cursor-pointer transition shadow-md">
-            <img src="${u.avatar}" class="w-13 h-13 rounded-2xl object-cover border border-slate-700 shadow" alt="${u.name}">
+            <img src="${u.avatar}" class="w-12 h-12 rounded-2xl object-cover border border-slate-700" alt="${u.name}">
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-start">
                 <p class="font-bold text-white text-xs truncate">${u.name}</p>
-                <span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-bold">عرض السجل</span>
+                <span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-bold">سجل الطلبات</span>
               </div>
               <p class="text-[11px] text-blue-400 font-semibold mt-0.5 truncate">${u.compound}</p>
-              <p class="text-[10px] text-slate-300 font-medium">الوحدة: <b class="text-white">${u.unit}</b></p>
-              <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
-                <i class="fa-solid fa-phone text-emerald-400"></i> ${u.phone}
-              </p>
+              <p class="text-[10px] text-slate-300">الوحدة: <b class="text-white">${u.unit}</b> | هاتف: ${u.phone}</p>
             </div>
           </div>
         `;
@@ -1263,9 +1600,9 @@
             <td class="p-3 font-semibold text-blue-400">${o.unit}<br><span class="text-[10px] text-slate-400">${o.phone}</span></td>
             <td class="p-3">${o.item} (${o.qty})</td>
             <td class="p-3 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700 text-slate-300">${o.status}</span></td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
             <td class="p-3 text-center space-x-1 space-x-reverse">
-              <button onclick="updateOrderStatus('${o.id}', 'تم التوجيه للمخزن للتجهيز')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[10px] font-bold">إرسال للمخزن</button>
+              <button onclick="updateOrderStatus('${o.id}', 'تم التوجيه للمخزن للتجهيز')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[10px] font-bold">للمخزن</button>
               <button onclick="updateOrderStatus('${o.id}', 'تم التسليم للعميل')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">تم التسليم</button>
             </td>
           </tr>
@@ -1274,24 +1611,23 @@
     }
 
     function showEngineerOrdersHistory(userKey) {
-      const u = users[userKey];
+      const allUsers = getStoredUsers();
+      const orders = getStoredOrders();
+      const u = allUsers[userKey];
       const box = document.getElementById('engineerHistoryBox');
       box.classList.remove('hidden');
-      
+
       document.getElementById('selectedEngName').innerText = u.name;
       document.getElementById('selectedEngDetails').innerText = `${u.compound} | الوحدة: ${u.unit} | الهاتف: ${u.phone}`;
-      
-      const chatBtn = document.getElementById('selectedEngChatBtn');
-      chatBtn.onclick = function() {
-        openChat(`محادثة مع المهندس: ${u.name}`, 'eng');
-      };
+
+      document.getElementById('selectedEngChatBtn').onclick = () => openChat(`محادثة مع المهندس: ${u.name}`);
 
       const tbody = document.getElementById('selectedEngOrdersBody');
       tbody.innerHTML = '';
       const engOrders = orders.filter(o => o.engineer.includes(u.name));
 
       if (engOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد طلبات سابقة مسجلة لهذا المهندس</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد طلبات سابقة مسجلة</td></tr>`;
       } else {
         engOrders.forEach(o => {
           tbody.innerHTML += `
@@ -1300,15 +1636,12 @@
               <td class="p-2.5 text-slate-400">${o.date}</td>
               <td class="p-2.5 font-semibold text-slate-200">${o.item} (${o.qty})</td>
               <td class="p-2.5 font-bold text-emerald-400">${o.total.toLocaleString()} ج.م</td>
-              <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700 text-blue-400">${o.status}</span></td>
-              <td class="p-2.5">
-                ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline flex items-center gap-1"><i class="fa-solid fa-camera"></i> صورة التعتيق</a>` : '<span class="text-slate-500 text-[10px]">لا يوجد</span>'}
-              </td>
+              <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400">${o.status}</span></td>
+              <td class="p-2.5">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline">صورة التعتيق</a>` : '--'}</td>
             </tr>
           `;
         });
       }
-
       box.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1316,8 +1649,8 @@
       document.getElementById('engineerHistoryBox').classList.add('hidden');
     }
 
-    // --- Store Yard ---
     function renderStoreTable() {
+      const orders = getStoredOrders();
       const tbody = document.getElementById('storeOrdersTable');
       tbody.innerHTML = '';
       orders.forEach(o => {
@@ -1326,18 +1659,18 @@
             <td class="p-3 font-bold text-white">#${o.id}</td>
             <td class="p-3">${o.compound} - ${o.unit}</td>
             <td class="p-3 font-bold text-amber-400">${o.item} (${o.qty})</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700">${o.status}</span></td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
             <td class="p-3 text-center space-x-1 space-x-reverse">
-              <button onclick="updateOrderStatus('${o.id}', 'جاري التجهيز بالتشوينة')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">جاري التجهيز</button>
-              <button onclick="updateOrderStatus('${o.id}', 'جاري الشحن')" class="px-2 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-[10px] font-bold">تم التحميل مع السائق</button>
+              <button onclick="updateOrderStatus('${o.id}', 'جاري التجهيز بالتشوينة')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">تجهيز</button>
+              <button onclick="updateOrderStatus('${o.id}', 'جاري الشحن')" class="px-2 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-[10px] font-bold">شحن مع السائق</button>
             </td>
           </tr>
         `;
       });
     }
 
-    // --- Driver Portal ---
     function renderDriverCards() {
+      const orders = getStoredOrders();
       const container = document.getElementById('driverCardsList');
       container.innerHTML = '';
 
@@ -1358,9 +1691,8 @@
               ${isDelivered ? `
                 <span class="text-emerald-400 text-xs font-bold flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> تم التوثيق بالكاميرا</span>
               ` : `
-                <button onclick="openLiveCameraModal('${o.id}')" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-600/30">
-                  <i class="fa-solid fa-camera"></i>
-                  <span>فتح الكاميرا لتوثيق التسليم</span>
+                <button onclick="openLiveCameraModal('${o.id}')" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
+                  <i class="fa-solid fa-camera"></i> تصوير المون لايف
                 </button>
               `}
             </div>
@@ -1369,15 +1701,16 @@
       });
     }
 
-    // --- Admin Dashboard ---
     function renderAdminDashboard() {
+      const allUsers = getStoredUsers();
+      renderCompoundFilterTabs();
+      renderCompoundEngineersList();
+
       const userTbody = document.getElementById('adminUsersTable');
       userTbody.innerHTML = '';
-      const userKeys = Object.keys(users);
-      document.getElementById('stat-total-users').innerText = `${userKeys.length} مستخدم`;
 
-      userKeys.forEach(k => {
-        const u = users[k];
+      Object.keys(allUsers).forEach(k => {
+        const u = allUsers[k];
         userTbody.innerHTML += `
           <tr>
             <td class="p-3">
@@ -1387,21 +1720,78 @@
               </div>
             </td>
             <td class="p-3 text-slate-400">${k}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold">${u.jobTitle}</span></td>
-            <td class="p-3 text-[11px] text-slate-300">${u.compound ? `${u.compound} (${u.unit})` : 'مقر الشركة الرئيسي'}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-400 font-bold">${u.jobTitle}</span></td>
+            <td class="p-3 text-[11px] text-slate-300">${u.compound ? `${u.compound} (${u.unit})` : u.phone}</td>
             <td class="p-3 text-center">
               ${u.role !== 'admin' ? `
-                <button onclick="revokeUser('${k}')" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded text-[10px] font-bold">
-                  سحب الصلاحية
-                </button>
-              ` : '<span class="text-slate-500 text-[10px]">المالك الرئيسي</span>'}
+                <button onclick="revokeUser('${k}')" class="px-2.5 py-1 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded text-[10px] font-bold">سحب الصلاحية</button>
+              ` : '<span class="text-slate-500 text-[10px]">المالك</span>'}
             </td>
           </tr>
         `;
       });
     }
 
+    function renderCompoundFilterTabs() {
+      const container = document.getElementById('compoundFilterTabs');
+      container.innerHTML = `
+        <button onclick="filterByCompound('الكل')" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${selectedCompoundFilter === 'الكل' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
+          الكل
+        </button>
+      `;
+
+      COMPOUNDS_LIST.forEach(comp => {
+        const isActive = selectedCompoundFilter === comp;
+        container.innerHTML += `
+          <button onclick="filterByCompound('${comp}')" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
+            ${comp}
+          </button>
+        `;
+      });
+    }
+
+    function filterByCompound(comp) {
+      selectedCompoundFilter = comp;
+      renderCompoundFilterTabs();
+      renderCompoundEngineersList();
+    }
+
+    function renderCompoundEngineersList() {
+      const allUsers = getStoredUsers();
+      const container = document.getElementById('compoundEngineersList');
+      container.innerHTML = '';
+
+      const engKeys = Object.keys(allUsers).filter(k => {
+        if (allUsers[k].role !== 'engineer') return false;
+        if (selectedCompoundFilter === 'الكل') return true;
+        return allUsers[k].compound === selectedCompoundFilter;
+      });
+
+      if (engKeys.length === 0) {
+        container.innerHTML = `<div class="col-span-3 p-4 text-center text-slate-500 text-xs">لا يوجد مهندسين مسجلين في هذا المشروع حتى الآن.</div>`;
+        return;
+      }
+
+      engKeys.forEach(k => {
+        const u = allUsers[k];
+        container.innerHTML += `
+          <div class="bg-slate-900/90 border border-slate-800 p-3 rounded-2xl flex items-center gap-3">
+            <img src="${u.avatar}" class="w-11 h-11 rounded-xl object-cover border border-slate-700">
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-white text-xs truncate">${u.name}</p>
+              <p class="text-[11px] text-blue-400 font-semibold">${u.compound}</p>
+              <p class="text-[10px] text-slate-400">الوحدة: <b class="text-slate-200">${u.unit}</b> | ${u.phone}</p>
+            </div>
+            <button onclick="openChat('محادثة مع المهندس: ${u.name}')" class="p-2 bg-blue-600/20 text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition">
+              <i class="fa-solid fa-comments"></i>
+            </button>
+          </div>
+        `;
+      });
+    }
+
     function renderAllOrdersTable() {
+      const orders = getStoredOrders();
       const tbody = document.getElementById('allOrdersTableBody');
       tbody.innerHTML = '';
       orders.forEach(o => {
@@ -1412,10 +1802,8 @@
             <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer} (${o.unit})</span></td>
             <td class="p-3">${o.item} - ${o.qty}</td>
             <td class="p-3 font-bold text-white">${o.total.toLocaleString()} ج.م</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700">${o.status}</span></td>
-            <td class="p-3">
-              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline font-semibold"><i class="fa-solid fa-camera"></i> عرض التوثيق</a>` : '<span class="text-slate-500 text-[10px]">قيد التنفيذ</span>'}
-            </td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
+            <td class="p-3">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline">عرض التوثيق</a>` : '--'}</td>
           </tr>
         `;
       });
@@ -1423,65 +1811,67 @@
 
     function toggleExtraUserFields() {
       const r = document.getElementById('newUserRole').value;
-      const box = document.getElementById('extraEngineerFields');
-      if (r === 'engineer') box.classList.remove('hidden');
-      else box.classList.add('hidden');
+      document.getElementById('extraEngineerFields').classList.toggle('hidden', r !== 'engineer');
     }
 
     function handleCreateUser(e) {
       e.preventDefault();
+      const allUsers = getStoredUsers();
       const name = document.getElementById('newUserName').value.trim();
       const login = document.getElementById('newUserLogin').value.trim();
       const pass = document.getElementById('newUserPass').value.trim();
       const role = document.getElementById('newUserRole').value;
       const compound = document.getElementById('newUserCompound').value;
-      const unit = document.getElementById('newUserUnit').value;
+      const unit = document.getElementById('newUserUnit').value.trim();
 
       let jTitle = 'محاسب مالي';
       if (role === 'engineer') jTitle = 'مهندس / مالك وحدة';
       if (role === 'driver') jTitle = 'كابتن نقل وتعتيق';
       if (role === 'store') jTitle = 'أمين تشوينة ومستودع';
 
-      users[login] = {
-        role: role,
-        name: name,
+      allUsers[login] = {
+        role,
+        name,
         jobTitle: jTitle,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
-        pass: pass,
-        compound: compound || '',
-        unit: unit || '',
+        avatar: '[https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80)',
+        pass,
+        compound: role === 'engineer' ? compound : '',
+        unit: role === 'engineer' ? unit : '',
         phone: '01000000000',
         attendance: role !== 'engineer' ? { isWorking: false, startTime: '--', endTime: '--' } : null
       };
 
+      setStoredUsers(allUsers);
       closeModal('userManageModal');
       renderAdminDashboard();
       renderAttendanceTables();
-      alert(`تم إضافة وتفعيل الحساب بنجاح باسم مستخدم: ${login}`);
+      alert(`تم إضافة المستخدم بنجاح: ${login}`);
     }
 
     function revokeUser(k) {
-      if (confirm(`هل أنت متأكد من سحب صلاحية وحذف حساب: ${users[k].name}؟`)) {
-        delete users[k];
+      const allUsers = getStoredUsers();
+      if (confirm(`هل أنت متأكد من حذف الحساب: ${allUsers[k].name}؟`)) {
+        delete allUsers[k];
+        setStoredUsers(allUsers);
         renderAdminDashboard();
         renderAttendanceTables();
       }
     }
 
     function updateOrderStatus(id, newStatus) {
+      const orders = getStoredOrders();
       const o = orders.find(x => x.id === id);
       if (o) {
         o.status = newStatus;
+        setStoredOrders(orders);
         renderAppByRole();
         alert(`تم تغيير حالة الطلب #${id} إلى: (${newStatus})`);
       }
     }
 
-    // Modal Helpers
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    // --- Strict Live Camera (ممنوع الألبوم) ---
     async function openLiveCameraModal(orderId) {
       selectedOrderIdForProof = orderId;
       openModal('proofModal');
@@ -1497,7 +1887,7 @@
         });
         document.getElementById('cameraStream').srcObject = mediaStream;
       } catch (err) {
-        alert('يرجى السماح بصلاحية فتح الكاميرا لتصوير وتوثيق المون!');
+        alert('يرجى السماح بصلاحية الكاميرا لتصوير المون!');
         closeProofCamera();
       }
     }
@@ -1522,13 +1912,15 @@
 
     function confirmSnapshotDelivery() {
       if (!selectedOrderIdForProof) return;
+      const orders = getStoredOrders();
       const o = orders.find(x => x.id === selectedOrderIdForProof);
       if (o) {
         o.status = 'تم التسليم للعميل';
         o.proofImg = document.getElementById('photoCapturedResult').src;
+        setStoredOrders(orders);
         closeProofCamera();
         renderAppByRole();
-        alert('تم تأكيد التعتيق والتسليم وتوثيق صورة المون الحية بنجاح!');
+        alert('تم تأكيد التعتيق والتسليم وتوثيق الصورة الحية بنجاح!');
       }
     }
 
@@ -1540,21 +1932,19 @@
       closeModal('proofModal');
     }
 
-    // --- Advanced Chat ---
-    function openChat(title, targetRole) {
+    function openChat(title) {
       document.getElementById('chatTitle').innerText = title;
       openModal('chatModal');
     }
 
     function openBroadcastChat() {
-      openChat('شات البث المباشر (التشوينات ↔ جميع المحاسبين)', 'all');
+      openChat('شات البث المباشر (التشوينات ↔ المحاسبين)');
     }
 
     function sendChatMessage() {
       const input = document.getElementById('chatInput');
       const val = input.value.trim();
       if (!val) return;
-
       appendChatMessage(currentUser.name, val, 'text');
       input.value = '';
     }
@@ -1584,14 +1974,13 @@
           mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
           mediaRecorder.onstop = () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-            const audioUrl = URL.createObjectURL(audioBlob);
-            appendChatMessage(currentUser.name, audioUrl, 'audio');
+            appendChatMessage(currentUser.name, URL.createObjectURL(audioBlob), 'audio');
           };
           mediaRecorder.start();
           isRecordingVoice = true;
           document.getElementById('recordingIndicator').classList.remove('hidden');
         } catch (err) {
-          alert('يرجى تفعيل صلاحية الميكروفون لتسجيل الفويس!');
+          alert('يرجى تفعيل صلاحية الميكروفون!');
         }
       }
     }
