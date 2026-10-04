@@ -1103,21 +1103,32 @@
     }
 
     function handleSaveProfile(e) {
-      e.preventDefault();
-      currentUser.name = document.getElementById('profEditName').value.trim();
-      currentUser.phone = document.getElementById('profEditPhone').value.trim();
+  e.preventDefault();
+  users = loadUsers(); // قراءة أحدث بيانات من الذاكرة
 
-      if (currentUser.role === 'engineer') {
-        currentUser.compound = document.getElementById('profEditCompound').value.trim();
-        currentUser.unit = document.getElementById('profEditUnit').value.trim();
-      }
+  const newName = document.getElementById('profEditName').value.trim();
+  const newPhone = document.getElementById('profEditPhone').value.trim();
 
-      users[currentUser.username] = { ...users[currentUser.username], ...currentUser };
-      updateHeaderAndSidebar();
-      renderAppByRole();
-      closeModal('profileModal');
-      alert('تم حفظ وتحديث بيانات الملف الشخصي والصورة بنجاح!');
-    }
+  // تحديث بيانات المستخدم الحالي
+  currentUser.name = newName;
+  currentUser.phone = newPhone;
+
+  if (currentUser.role === 'engineer') {
+    currentUser.compound = document.getElementById('profEditCompound').value.trim();
+    currentUser.unit = document.getElementById('profEditUnit').value.trim();
+  }
+
+  // تحديث الكائن الرئيسي بالكامل وحفظه في الذاكرة
+  users[currentUser.username] = { ...users[currentUser.username], ...currentUser };
+  saveUsers(users);
+
+  // تحديث الواجهة فوراً
+  updateHeaderAndSidebar();
+  renderAppByRole();
+  closeModal('profileModal');
+  alert('تم حفظ وتحديث بيانات الملف الشخصي بنجاح!');
+}
+
 
     // --- الحضور والانصراف (الجداول المشتركة عند المخزن والمدير) ---
     function renderAttendanceTables() {
