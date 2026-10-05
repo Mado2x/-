@@ -33,7 +33,7 @@
 <body class="bg-[#0b1120] text-slate-100 min-h-screen">
 
   <!-- ========================================== -->
-  <!-- 1. شاشة تسجيل الدخول وإنشاء الحساب للمهندس -->
+  <!-- 1. شاشة تسجيل الدخول وإنشاء حساب المهندس -->
   <!-- ========================================== -->
   <div id="authScreen" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#131d31] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative">
@@ -53,10 +53,10 @@
       <!-- نموذج الدخول -->
       <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1.5">البريد الإلكتروني أو اسم الحساب</label>
+          <label class="block text-slate-300 font-semibold mb-1.5">البريد الإلكتروني أو اسم الدخول السريع</label>
           <div class="relative">
-            <i class="fa-solid fa-envelope absolute right-3.5 top-3.5 text-slate-500"></i>
-            <input type="text" id="loginUser" required placeholder="admin أو eng@example.com" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
+            <i class="fa-solid fa-user-check absolute right-3.5 top-3.5 text-slate-500"></i>
+            <input type="text" id="loginUser" required placeholder="admin أو البريد الإلكتروني" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
           </div>
         </div>
 
@@ -64,7 +64,7 @@
           <label class="block text-slate-300 font-semibold mb-1.5">كلمة المرور</label>
           <div class="relative">
             <i class="fa-solid fa-lock absolute right-3.5 top-3.5 text-slate-500"></i>
-            <input type="password" id="loginPass" required placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
+            <input type="password" id="loginPass" required value="123" placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
           </div>
         </div>
 
@@ -73,7 +73,7 @@
         </button>
       </form>
 
-      <!-- نموذج تسجيل مهندس جديد -->
+      <!-- نموذج تسجيل المهندس بدون اسم دخول -->
       <form id="formRegister" onsubmit="handleEngineerRegister(event)" class="space-y-3 text-xs hidden">
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الاسم بالكامل</label>
@@ -88,7 +88,7 @@
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">كلمة المرور</label>
-            <input type="password" id="regPass" required placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+            <input type="password" id="regPass" required value="123" placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
           </div>
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">رقم التليفون</label>
@@ -123,16 +123,16 @@
         </button>
       </form>
 
-      <!-- دخول سريع فوري ومضمون -->
+      <!-- دخول تجريبي مباشر بضغطة زرار واحدة -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-        <p class="font-bold text-slate-300 mb-2">تسجيل دخول فوري للتجربة (الباسورد: 123):</p>
+        <p class="font-bold text-slate-300 mb-2">اضغط على أي حساب للدخول المباشر فوراً:</p>
         <div class="grid grid-cols-3 gap-1.5 text-center">
-          <span onclick="setQuickLogin('admin@company.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 text-blue-400 font-bold">المدير العام</span>
-          <span onclick="setQuickLogin('zahran@company.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">أحمد زهران (محاسب)</span>
-          <span onclick="setQuickLogin('rabia@company.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">عم ربيع (التشوينة)</span>
-          <span onclick="setQuickLogin('driver@company.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">سائق</span>
-          <span onclick="setQuickLogin('ibrahim@maadi.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس المعادي</span>
-          <span onclick="setQuickLogin('tamer@grand.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس جراند</span>
+          <button type="button" onclick="directQuickLogin('admin')" class="bg-blue-600/20 text-blue-400 font-bold py-2 rounded-lg border border-blue-500/40 hover:bg-blue-600 hover:text-white transition">المدير العام</button>
+          <button type="button" onclick="directQuickLogin('acc1')" class="bg-slate-800/80 py-2 rounded-lg border border-slate-700 hover:border-blue-500 transition">أحمد زهران</button>
+          <button type="button" onclick="directQuickLogin('store1')" class="bg-slate-800/80 py-2 rounded-lg border border-slate-700 hover:border-blue-500 transition">عم ربيع</button>
+          <button type="button" onclick="directQuickLogin('driver1')" class="bg-slate-800/80 py-2 rounded-lg border border-slate-700 hover:border-blue-500 transition">السائق</button>
+          <button type="button" onclick="directQuickLogin('eng1')" class="bg-slate-800/80 py-2 rounded-lg border border-slate-700 hover:border-blue-500 transition">م. المعادي</button>
+          <button type="button" onclick="directQuickLogin('eng2')" class="bg-slate-800/80 py-2 rounded-lg border border-slate-700 hover:border-blue-500 transition">م. جراند</button>
         </div>
       </div>
     </div>
@@ -982,7 +982,7 @@
     </div>
   </div>
   <!-- ========================================== -->
-  <!-- 3. المنطق البرمجي (JAVASCRIPT) ومعالجة الدخول المرن -->
+  <!-- 3. المنطق البرمجي (JAVASCRIPT) وتصحيح التخزين والدخول المباشر -->
   <!-- ========================================== -->
   <script>
     const COMPOUNDS_LIST = [
@@ -991,7 +991,6 @@
       'كليوباترا', 'الحلواني', 'عملاء التشوينة'
     ];
 
-    // قائمة المون الـ 13 الرسمية
     const OFFICIAL_MATERIALS = [
       { key: 'sand_regular', name: 'رمل عادي', unit: 'متر³', defaultPrice: 170, category: 'رمل' },
       { key: 'sand_capital', name: 'رمل العاصمة', unit: 'متر³', defaultPrice: 190, category: 'رمل' },
@@ -1021,57 +1020,57 @@
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // قاعدة بيانات المستخدمين بدعم المفاتيح والبريد معاً
-    const initialUsers = {
-      'admin@company.com': {
+    // الحسابات الأساسية الرسمية بمفاتيـح متعددة لضمان الدخول بدون أي تعليق
+    const defaultUsers = {
+      'admin': {
         role: 'admin',
         name: 'محمد ناصر (المدير العام)',
         jobTitle: 'الرئيس التنفيذي - مالك الشركة',
         avatar: DEFAULT_AVATAR,
         phone: '01000000001',
         email: 'admin@company.com',
-        usernameAlias: 'admin',
+        aliases: ['admin', 'admin@company.com', 'المدير'],
         pass: '123',
         assignedCompounds: ['باتيو كازا', 'المعادي 1', 'جراند'],
         attendance: { isWorking: true, startTime: '08:00 ص', endTime: '--' }
       },
-      'zahran@company.com': {
+      'acc1': {
         role: 'accountant',
         name: 'أحمد زهران',
         jobTitle: 'محاسب',
         avatar: DEFAULT_AVATAR,
         phone: '01198765432',
         email: 'zahran@company.com',
-        usernameAlias: 'acc1',
+        aliases: ['acc1', 'zahran@company.com', 'zahran'],
         pass: '123',
         assignedCompounds: ['المعادي 1', 'المعادي 2'],
         attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
-      'rabia@company.com': {
+      'store1': {
         role: 'store',
         name: 'عم ربيع',
         jobTitle: 'مسؤول تشوينة',
         avatar: DEFAULT_AVATAR,
         phone: '01222222222',
         email: 'rabia@company.com',
-        usernameAlias: 'store1',
+        aliases: ['store1', 'rabia@company.com', 'rabia'],
         pass: '123',
         assignedCompounds: ['عملاء التشوينة', 'المعادي 1'],
         attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
-      'driver@company.com': {
+      'driver1': {
         role: 'driver',
         name: 'الكابتن سيد عبد العال',
         jobTitle: 'سائق نقل وتعتيق',
         avatar: DEFAULT_AVATAR,
         phone: '01555555555',
         email: 'driver@company.com',
-        usernameAlias: 'driver1',
+        aliases: ['driver1', 'driver@company.com', 'driver'],
         pass: '123',
         assignedCompounds: ['المعادي 1', 'جراند'],
         attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
-      'ibrahim@maadi.com': {
+      'eng1': {
         role: 'engineer',
         name: 'م. إبراهيم خليل',
         jobTitle: 'مهندس موقع / مالك الوحدة',
@@ -1080,10 +1079,10 @@
         unit: 'فيلا 18',
         phone: '01012345678',
         email: 'ibrahim@maadi.com',
-        usernameAlias: 'eng1',
+        aliases: ['eng1', 'ibrahim@maadi.com', 'ibrahim'],
         pass: '123'
       },
-      'tamer@grand.com': {
+      'eng2': {
         role: 'engineer',
         name: 'م. تامر حسني',
         jobTitle: 'مهندس موقع / تشطيبات',
@@ -1092,7 +1091,7 @@
         unit: 'عمارة 10A',
         phone: '01234567890',
         email: 'tamer@grand.com',
-        usernameAlias: 'eng2',
+        aliases: ['eng2', 'tamer@grand.com', 'tamer'],
         pass: '123'
       }
     };
@@ -1137,43 +1136,73 @@
       }
     ];
 
+    // تنظيف النسخ القديمة وتثبيت التخزين النظيف
+    const STORAGE_KEY_USERS = 'alraed_erp_v9_users';
+    const STORAGE_KEY_ORDERS = 'alraed_erp_v9_orders';
+    const STORAGE_KEY_SESSION = 'alraed_erp_v9_session';
+
     function getStoredUsers() {
-      const data = localStorage.getItem('alraed_erp_users_v8');
-      return data ? JSON.parse(data) : initialUsers;
+      const data = localStorage.getItem(STORAGE_KEY_USERS);
+      if (!data) {
+        localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(defaultUsers));
+        return defaultUsers;
+      }
+      try {
+        const parsed = JSON.parse(data);
+        // التحقق من وجود الحسابات الأساسية لضمان عدم تلفها
+        if (!parsed['admin'] || !parsed['acc1']) {
+          const merged = { ...defaultUsers, ...parsed };
+          localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(merged));
+          return merged;
+        }
+        return parsed;
+      } catch (e) {
+        localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(defaultUsers));
+        return defaultUsers;
+      }
     }
 
     function setStoredUsers(data) {
-      localStorage.setItem('alraed_erp_users_v8', JSON.stringify(data));
+      localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(data));
     }
 
     function getStoredOrders() {
-      const data = localStorage.getItem('alraed_erp_orders_v8');
-      return data ? JSON.parse(data) : initialOrders;
+      const data = localStorage.getItem(STORAGE_KEY_ORDERS);
+      if (!data) {
+        localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(initialOrders));
+        return initialOrders;
+      }
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return initialOrders;
+      }
     }
 
     function setStoredOrders(data) {
-      localStorage.setItem('alraed_erp_orders_v8', JSON.stringify(data));
+      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(data));
     }
 
-    function saveSession(userKey) {
-      localStorage.setItem('alraed_session_user_v8', userKey);
+    function saveSession(key) {
+      localStorage.setItem(STORAGE_KEY_SESSION, key);
     }
 
     function getSession() {
-      return localStorage.getItem('alraed_session_user_v8');
+      return localStorage.getItem(STORAGE_KEY_SESSION);
     }
 
     function clearSession() {
-      localStorage.removeItem('alraed_session_user_v8');
+      localStorage.removeItem(STORAGE_KEY_SESSION);
     }
 
+    // تهيئة الصفحة
     window.addEventListener('DOMContentLoaded', () => {
       populateCartMaterialSelect();
       const savedKey = getSession();
       if (savedKey) {
         const allUsers = getStoredUsers();
         if (allUsers[savedKey]) {
-          currentUser = { ...allUsers[savedKey], userKey: savedKey };
+          currentUser = { ...allUsers[savedKey], currentKey: savedKey };
           document.getElementById('authScreen').classList.add('hidden');
           document.getElementById('appContainer').classList.remove('hidden');
           updateHeaderAndSidebar();
@@ -1206,47 +1235,71 @@
       }
     }
 
-    function setQuickLogin(identifier) {
-      switchAuthTab('login');
-      document.getElementById('loginUser').value = identifier;
-      document.getElementById('loginPass').value = '123';
+    // دالة الدخول الفوري بضغطة زر واحدة (تتجاوز أي خطأ كتابي وتدخل في ثانية)
+    function directQuickLogin(roleKey) {
+      const allUsers = getStoredUsers();
+      let matchedKey = null;
+
+      // مطابقة المفتاح الأساسي أو أي اسم مشابه
+      if (allUsers[roleKey]) {
+        matchedKey = roleKey;
+      } else {
+        matchedKey = Object.keys(allUsers).find(k => {
+          const u = allUsers[k];
+          return (u.aliases && u.aliases.includes(roleKey)) || u.role === roleKey;
+        });
+      }
+
+      if (matchedKey && allUsers[matchedKey]) {
+        currentUser = { ...allUsers[matchedKey], currentKey: matchedKey };
+        saveSession(matchedKey);
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appContainer').classList.remove('hidden');
+        updateHeaderAndSidebar();
+        renderAppByRole();
+      } else {
+        // إعادة تعيين الحسابات في حال حدوث أي تلف
+        setStoredUsers(defaultUsers);
+        directQuickLogin(roleKey);
+      }
     }
 
-    // تسجيل دخول ذكي ومرن يدعم (الإيميل، أو الاسم المختصر مثل admin أو zahran)
+    // تسجيل الدخول العادي عبر الفورم
     function handleLogin(e) {
       e.preventDefault();
       const allUsers = getStoredUsers();
       const input = document.getElementById('loginUser').value.trim().toLowerCase();
       const pass = document.getElementById('loginPass').value.trim();
 
-      const userKey = Object.keys(allUsers).find(k => {
+      const matchedKey = Object.keys(allUsers).find(k => {
         const u = allUsers[k];
         const matchKey = k.toLowerCase() === input;
         const matchEmail = u.email && u.email.toLowerCase() === input;
-        const matchAlias = u.usernameAlias && u.usernameAlias.toLowerCase() === input;
+        const matchAlias = u.aliases && u.aliases.some(a => a.toLowerCase() === input);
         const matchPrefix = u.email && u.email.split('@')[0].toLowerCase() === input;
         return (matchKey || matchEmail || matchAlias || matchPrefix) && u.pass === pass;
       });
 
-      if (userKey) {
-        currentUser = { ...allUsers[userKey], userKey: userKey };
-        saveSession(userKey);
+      if (matchedKey) {
+        currentUser = { ...allUsers[matchedKey], currentKey: matchedKey };
+        saveSession(matchedKey);
         document.getElementById('authScreen').classList.add('hidden');
         document.getElementById('appContainer').classList.remove('hidden');
         updateHeaderAndSidebar();
         renderAppByRole();
       } else {
-        alert('بيانات الدخول غير صحيحة، يرجى مراجعة البريد الإلكتروني أو اسم الحساب وكلمة المرور.');
+        alert('بيانات الدخول غير صحيحة، يرجى كتابة اسم المستخدم أو الإيميل وباسورد 123، أو الضغط على الأزرار السريعة بالأسفل مباشرة.');
       }
     }
 
+    // تسجيل مهندس جديد بالإيميل
     function handleEngineerRegister(e) {
       e.preventDefault();
       const allUsers = getStoredUsers();
       const email = document.getElementById('regEmail').value.trim().toLowerCase();
 
       if (allUsers[email]) {
-        alert('هذا البريد الإلكتروني مسجل مسبقاً، يمكنك تسجيل الدخول مباشرة به.');
+        alert('هذا البريد الإلكتروني مسجل مسبقاً، يمكنك تسجيل الدخول به مباشرة.');
         return;
       }
 
@@ -1257,7 +1310,7 @@
         avatar: DEFAULT_AVATAR,
         phone: document.getElementById('regPhone').value.trim(),
         email: email,
-        usernameAlias: email.split('@')[0],
+        aliases: [email, email.split('@')[0]],
         compound: document.getElementById('regCompound').value,
         unit: document.getElementById('regUnit').value.trim(),
         pass: document.getElementById('regPass').value.trim()
@@ -1266,14 +1319,14 @@
       allUsers[email] = newEngineer;
       setStoredUsers(allUsers);
 
-      currentUser = { ...newEngineer, userKey: email };
+      currentUser = { ...newEngineer, currentKey: email };
       saveSession(email);
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('appContainer').classList.remove('hidden');
       updateHeaderAndSidebar();
       renderAppByRole();
 
-      alert(`تم تسجيل حسابك بنجاح بالبريد (${email}) لمشروع (${newEngineer.compound}).`);
+      alert(`تم تسجيل حسابك بنجاح لمشروع (${newEngineer.compound}).`);
     }
 
     function logout() {
@@ -1282,7 +1335,7 @@
       document.getElementById('appContainer').classList.add('hidden');
       document.getElementById('authScreen').classList.remove('hidden');
       document.getElementById('loginUser').value = '';
-      document.getElementById('loginPass').value = '';
+      document.getElementById('loginPass').value = '123';
       switchAuthTab('login');
     }
 
@@ -1297,8 +1350,8 @@
 
     function updateHeaderAndSidebar() {
       const allUsers = getStoredUsers();
-      if (currentUser && allUsers[currentUser.userKey]) {
-        currentUser = { ...allUsers[currentUser.userKey], userKey: currentUser.userKey };
+      if (currentUser && allUsers[currentUser.currentKey]) {
+        currentUser = { ...allUsers[currentUser.currentKey], currentKey: currentUser.currentKey };
       }
 
       const userAvatar = currentUser.avatar || DEFAULT_AVATAR;
@@ -1386,7 +1439,7 @@
         alert(`تم تسجيل انتهاء العمل: ${now}`);
       }
 
-      allUsers[currentUser.userKey].attendance = currentUser.attendance;
+      allUsers[currentUser.currentKey].attendance = currentUser.attendance;
       setStoredUsers(allUsers);
       updateHeaderAndSidebar();
       renderAttendanceTables();
@@ -1513,7 +1566,6 @@
       }
     }
 
-    // إدارة سلة طلبات المهندس
     function openOrderCartModal() {
       currentOrderCart = [];
       renderOrderCartUI();
@@ -1573,7 +1625,7 @@
         tbody.innerHTML += `
           <tr>
             <td class="p-2 font-bold text-white">${item.name}</td>
-            <td class="p-2">${item.qty}${item.unit}</td>
+            <td class="p-2">${item.qty} ${item.unit}</td>
             <td class="p-2 text-slate-400">${item.pricePerUnit} ج</td>
             <td class="p-2 font-bold text-emerald-400">${item.itemTotal.toLocaleString()} ج</td>
             <td class="p-2 text-center">
@@ -1628,7 +1680,7 @@
 
     function formatOrderItemsHtml(items) {
       if (!items || !Array.isArray(items) || items.length === 0) return '--';
-      return items.map(i => `<span class="inline-block bg-slate-800/90 border border-slate-700/80 px-2 py-0.5 rounded text-[11px] m-0.5"><b class="text-white">${i.name}</b>: ${i.qty}${i.unit}</span>`).join(' ');
+      return items.map(i => `<span class="inline-block bg-slate-800/90 border border-slate-700/80 px-2 py-0.5 rounded text-[11px] m-0.5"><b class="text-white">${i.name}</b>: ${i.qty} ${i.unit}</span>`).join(' ');
     }
 
     function renderEngineerTable() {
@@ -1696,4 +1748,742 @@
           } else if (status === 'جاري الشحن') {
             actionButtonHtml = `
               <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 rounded-lg text-[10px] font-bold">
-                <i class="fa-solid fa-truck-fast"></i>
+                <i class="fa-solid fa-truck-fast"></i> مع السائق في الطريق
+              </span>
+            `;
+          } else if (status === 'تم التسليم للعميل') {
+            const isFullyPaid = (o.remaining <= 0);
+            actionButtonHtml = `
+              <div class="flex flex-col items-center gap-1">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded text-[10px] font-bold">
+                  <i class="fa-solid fa-check-double"></i> تم التسليم والتعتيق
+                </span>
+                ${isFullyPaid ? `
+                  <span class="text-[9px] text-emerald-400 font-bold">✔ خالص بالكامل</span>
+                ` : `
+                  <button onclick="openCollectModal('${o.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[10px] font-bold shadow transition flex items-center gap-1 mt-0.5">
+                    <i class="fa-solid fa-hand-holding-dollar"></i> تحصيل المتبقي (${o.remaining.toLocaleString()} ج)
+                  </button>
+                `}
+              </div>
+            `;
+          }
+
+          tbody.innerHTML += `
+            <tr>
+              <td class="p-3 font-bold text-white">#${o.id}</td>
+              <td class="p-3">${o.engineer}<br><span class="text-[10px] text-emerald-400 font-semibold">${o.compound}</span></td>
+              <td class="p-3 font-semibold text-blue-400">${o.unit}<br><span class="text-[10px] text-slate-400">${o.phone}</span></td>
+              <td class="p-3 max-w-xs">${itemsHtml}</td>
+              <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
+              <td class="p-3 text-center">${actionButtonHtml}</td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function sendOrderToStore(orderId) {
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === orderId);
+      if (o) {
+        o.status = 'تم التوجيه للتشوينة للتجهيز';
+        setStoredOrders(orders);
+        renderAccountantView();
+        alert(`تم إرسال الطلب #${orderId} لمسؤول التشوينة للبدء في تجهيز وتحميل الأصناف 🏗️`);
+      }
+    }
+
+    function openCollectModal(orderId) {
+      selectedOrderIdForCollect = orderId;
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === orderId);
+      if (!o) return;
+
+      document.getElementById('collectOrderId').innerText = '#' + o.id;
+      document.getElementById('collectTotalBill').innerText = (o.total || 0).toLocaleString() + ' ج.م';
+      document.getElementById('collectAlreadyPaid').innerText = (o.collected || 0).toLocaleString() + ' ج.م';
+      document.getElementById('collectRemainingBill').innerText = (o.remaining || 0).toLocaleString() + ' ج.م';
+      document.getElementById('collectAmountInput').value = o.remaining || 0;
+
+      openModal('collectMoneyModal');
+    }
+
+    function confirmCollectPayment() {
+      if (!selectedOrderIdForCollect) return;
+      const amount = parseFloat(document.getElementById('collectAmountInput').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('يرجى إدخال مبلغ تحصيل صحيح.');
+        return;
+      }
+
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === selectedOrderIdForCollect);
+      if (o) {
+        o.collected = (o.collected || 0) + amount;
+        o.remaining = Math.max(0, (o.total || 0) - o.collected);
+        setStoredOrders(orders);
+        closeModal('collectMoneyModal');
+        renderAccountantView();
+        alert(`تم تسجيل تحصيل مبلغ ${amount.toLocaleString()} ج.م للطلب #${o.id}.`);
+      }
+    }
+
+    function renderStoreTable() {
+      const orders = getStoredOrders();
+      const assigned = currentUser.assignedCompounds || [];
+      const tbody = document.getElementById('storeOrdersTable');
+      tbody.innerHTML = '';
+
+      const storeOrders = orders.filter(o => 
+        (assigned.includes(o.compound) || assigned.includes('عملاء التشوينة')) &&
+        (o.status === 'تم التوجيه للتشوينة للتجهيز' || o.status === 'جاري التجهيز بالتشوينة' || o.status === 'جاري الشحن')
+      );
+
+      if (storeOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">لا توجد أوامر تحميل واردة للتشوينة حالياً.</td></tr>`;
+      } else {
+        storeOrders.forEach(o => {
+          const itemsHtml = formatOrderItemsHtml(o.items);
+          tbody.innerHTML += `
+            <tr>
+              <td class="p-3 font-bold text-white">#${o.id}</td>
+              <td class="p-3">${o.compound} - ${o.unit}</td>
+              <td class="p-3">${itemsHtml}</td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
+              <td class="p-3 text-center space-x-1 space-x-reverse">
+                <button onclick="updateStoreOrderStatus('${o.id}', 'جاري التجهيز بالتشوينة')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">بدء التحميل</button>
+                <button onclick="updateStoreOrderStatus('${o.id}', 'جاري الشحن')" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-[10px] font-bold">صرف للسائق 🚚</button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function updateStoreOrderStatus(orderId, newStatus) {
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === orderId);
+      if (o) {
+        o.status = newStatus;
+        if (newStatus === 'جاري الشحن' && (!o.driver || o.driver === 'لم يحدد بعد')) {
+          o.driver = 'الكابتن سيد عبد العال';
+        }
+        setStoredOrders(orders);
+        renderStoreTable();
+        alert(`تم تغيير حالة الطلب #${orderId} إلى: (${newStatus})`);
+      }
+    }
+
+    function renderDriverCards() {
+      const orders = getStoredOrders();
+      const container = document.getElementById('driverCardsList');
+      container.innerHTML = '';
+
+      orders.filter(o => o.status === 'جاري الشحن' || o.status === 'تم التسليم للعميل').forEach(o => {
+        const isDelivered = o.status === 'تم التسليم للعميل';
+        const itemsHtml = formatOrderItemsHtml(o.items);
+        container.innerHTML += `
+          <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white text-base">#${o.id}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] ${isDelivered ? 'bg-emerald-500/20 text-emerald-400' : 'bg-cyan-500/20 text-cyan-400'}">${o.status}</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">الموقع: <b class="text-white">${o.compound}</b> (الوحدة: ${o.unit})</p>
+              <p class="text-xs text-slate-400">المهندس: ${o.engineer} - هاتف: <a href="tel:${o.phone}" class="text-blue-400 underline">${o.phone}</a></p>
+              <div class="mt-1.5">${itemsHtml}</div>
+            </div>
+            <div>
+              ${isDelivered ? `
+                <span class="text-emerald-400 text-xs font-bold flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> تم التوثيق بالكاميرا الحية</span>
+              ` : `
+                <button onclick="openLiveCameraModal('${o.id}')" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
+                  <i class="fa-solid fa-camera"></i> تصوير المون لايف
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderCurrentClientsSection() {
+      const allUsers = getStoredUsers();
+      const container = document.getElementById('currentClientsCardsContainer');
+      const filterBox = document.getElementById('clientsFilterBox');
+      container.innerHTML = '';
+      filterBox.innerHTML = '';
+
+      let allowedCompounds = COMPOUNDS_LIST;
+      if (currentUser.role === 'accountant' || currentUser.role === 'store') {
+        allowedCompounds = currentUser.assignedCompounds || [];
+        document.getElementById('clientsSectionSubtitle').innerText = 
+          `قائمة المهندسين والعملاء بالمواقع المسندة إليك: (${allowedCompounds.join(' - ') || 'لا توجد'})`;
+      } else {
+        document.getElementById('clientsSectionSubtitle').innerText = 
+          'عرض المهندسين والعملاء في كافة المشروعات مع إمكانية الاتصال المباشر والاطلاع على التقرير المالي التراكمي.';
+      }
+
+      filterBox.innerHTML += `
+        <button onclick="filterClientsByCompound('الكل')" class="px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition ${selectedCompoundFilterClients === 'الكل' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300'}">
+          الكل
+        </button>
+      `;
+      allowedCompounds.forEach(comp => {
+        const isActive = selectedCompoundFilterClients === comp;
+        filterBox.innerHTML += `
+          <button onclick="filterClientsByCompound('${comp}')" class="px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300'}">
+            ${comp}
+          </button>
+        `;
+      });
+
+      const engineerKeys = Object.keys(allUsers).filter(k => {
+        const u = allUsers[k];
+        if (u.role !== 'engineer') return false;
+        if (!allowedCompounds.includes(u.compound)) return false;
+        if (selectedCompoundFilterClients !== 'الكل' && u.compound !== selectedCompoundFilterClients) return false;
+        return true;
+      });
+
+      if (engineerKeys.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-3 p-8 text-center text-slate-500 bg-slate-900/50 rounded-2xl border border-slate-800">
+            لا يوجد عملاء أو مهندسين مسجلين في هذا النطاق حالياً.
+          </div>
+        `;
+        return;
+      }
+
+      engineerKeys.forEach(k => {
+        const u = allUsers[k];
+        const cleanPhone = u.phone.replace(/[^0-9]/g, '');
+        const waLink = `https://wa.me/2${cleanPhone}`;
+
+        container.innerHTML += `
+          <div class="bg-slate-900/90 border border-slate-800 hover:border-blue-500/80 p-4 rounded-2xl flex flex-col justify-between transition shadow-lg">
+            <div class="flex items-center gap-3">
+              <img src="${u.avatar || DEFAULT_AVATAR}" class="w-13 h-13 rounded-2xl object-cover border border-slate-700 shadow bg-slate-800" alt="${u.name}">
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-white text-sm truncate">${u.name}</h4>
+                <p class="text-xs text-blue-400 font-semibold mt-0.5">${u.compound}</p>
+                <p class="text-[11px] text-slate-300">الوحدة: <b class="text-white">${u.unit}</b></p>
+                <p class="text-[10px] text-slate-400 mt-1">${u.phone}</p>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-col gap-2">
+              <div class="flex gap-2">
+                <a href="tel:${u.phone}" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-solid fa-phone text-blue-400"></i> اتصال هاتف
+                </a>
+                <a href="${waLink}" target="_blank" class="flex-1 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> محادثة واتساب
+                </a>
+              </div>
+              <button onclick="openClientCumulativeReport('${k}')" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-600/20 transition">
+                <i class="fa-solid fa-file-invoice-dollar"></i> كشف حساب وتقرير الطلبات التراكمي
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterClientsByCompound(comp) {
+      selectedCompoundFilterClients = comp;
+      renderCurrentClientsSection();
+    }
+
+    function openClientCumulativeReport(engKey) {
+      const allUsers = getStoredUsers();
+      const allOrders = getStoredOrders();
+      const eng = allUsers[engKey];
+      if (!eng) return;
+
+      document.getElementById('repClientAvatar').src = eng.avatar || DEFAULT_AVATAR;
+      document.getElementById('repClientName').innerText = eng.name;
+      document.getElementById('repClientCompound').innerText = eng.compound;
+      document.getElementById('repClientUnit').innerText = eng.unit;
+      document.getElementById('repClientPhone').innerText = eng.phone;
+
+      const myOrders = allOrders.filter(o => o.engineer.includes(eng.name));
+      const tbody = document.getElementById('clientReportTableBody');
+      tbody.innerHTML = '';
+
+      let grandTotal = 0;
+
+      if (myOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">لا توجد طلبات أو مسحوبات مسجلة لهذا العميل حتى الآن.</td></tr>`;
+      } else {
+        myOrders.forEach(o => {
+          grandTotal += (o.total || 0);
+          const itemsHtml = formatOrderItemsHtml(o.items);
+          tbody.innerHTML += `
+            <tr>
+              <td class="p-2.5 font-bold text-white">#${o.id}</td>
+              <td class="p-2.5 text-slate-400">${o.date}</td>
+              <td class="p-2.5">${itemsHtml}</td>
+              <td class="p-2.5 font-bold text-emerald-400">${(o.total || 0).toLocaleString()} ج.م</td>
+              <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400">${o.status}</span></td>
+              <td class="p-2.5">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline">عرض التوثيق</a>` : '--'}</td>
+            </tr>
+          `;
+        });
+      }
+
+      document.getElementById('repTotalOrdersCount').innerText = `${myOrders.length} طلب`;
+      document.getElementById('repGrandTotalSum').innerText = `${grandTotal.toLocaleString()} ج.م`;
+
+      openModal('clientReportModal');
+    }
+
+    function renderAdminDashboard() {
+      const allUsers = getStoredUsers();
+      const staffTbody = document.getElementById('adminStaffAssignTable');
+      staffTbody.innerHTML = '';
+
+      const staffKeys = Object.keys(allUsers).filter(k => allUsers[k].role !== 'engineer' && allUsers[k].role !== 'admin');
+
+      staffKeys.forEach(k => {
+        const u = allUsers[k];
+        const assigned = u.assignedCompounds && u.assignedCompounds.length > 0 
+          ? u.assignedCompounds.map(c => `<span class="inline-block px-2 py-0.5 m-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded font-bold">${c}</span>`).join('') 
+          : '<span class="text-rose-400 text-[10px]">غير مسند إليه أي موقع أو تشوينة</span>';
+
+        staffTbody.innerHTML += `
+          <tr>
+            <td class="p-3">
+              <div class="flex items-center gap-2">
+                <img src="${u.avatar || DEFAULT_AVATAR}" class="w-8 h-8 rounded-full object-cover border border-slate-700 bg-slate-800">
+                <span class="font-bold text-white">${u.name}</span>
+              </div>
+            </td>
+            <td class="p-3 text-slate-400 font-mono">${u.email || k}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-emerald-400 font-bold">${u.jobTitle}</span></td>
+            <td class="p-3">${assigned}</td>
+            <td class="p-3 text-center">
+              <button onclick="openAssignSitesModal('${k}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 mx-auto">
+                <i class="fa-solid fa-pen-to-square"></i> إسناد ونقل العمل
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      const usersTbody = document.getElementById('adminUsersTable');
+      usersTbody.innerHTML = '';
+      Object.keys(allUsers).forEach(k => {
+        const u = allUsers[k];
+        usersTbody.innerHTML += `
+          <tr>
+            <td class="p-3">
+              <div class="flex items-center gap-2">
+                <img src="${u.avatar || DEFAULT_AVATAR}" class="w-8 h-8 rounded-full object-cover border border-slate-700 bg-slate-800">
+                <span class="font-bold text-white">${u.name}</span>
+              </div>
+            </td>
+            <td class="p-3 text-slate-400 font-mono">${u.email || k}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400 font-bold">${u.jobTitle}</span></td>
+            <td class="p-3 text-slate-300 text-[11px]">${u.compound ? `${u.compound} (${u.unit})` : u.phone}</td>
+            <td class="p-3 text-center">
+              ${u.role !== 'admin' ? `
+                <button onclick="revokeUser('${k}')" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded text-[10px] font-bold">سحب الصلاحية</button>
+              ` : '<span class="text-slate-500 text-[10px]">المالك العام</span>'}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function openAssignSitesModal(staffKey) {
+      selectedStaffForAssign = staffKey;
+      const allUsers = getStoredUsers();
+      const staff = allUsers[staffKey];
+      document.getElementById('assignStaffName').innerText = `${staff.name} (${staff.jobTitle})`;
+
+      const container = document.getElementById('compCheckboxesContainer');
+      container.innerHTML = '';
+
+      const currentlyAssigned = staff.assignedCompounds || [];
+
+      COMPOUNDS_LIST.forEach(comp => {
+        const isChecked = currentlyAssigned.includes(comp) ? 'checked' : '';
+        container.innerHTML += `
+          <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-800/80 cursor-pointer">
+            <input type="checkbox" name="assignCompCheckbox" value="${comp}" ${isChecked} class="rounded text-blue-600 focus:ring-0 bg-slate-900 border-slate-700">
+            <span class="text-slate-200 text-xs">${comp}</span>
+          </label>
+        `;
+      });
+
+      openModal('assignSitesModal');
+    }
+
+    function saveAssignedSites() {
+      if (!selectedStaffForAssign) return;
+      const allUsers = getStoredUsers();
+      const checkboxes = document.querySelectorAll('input[name="assignCompCheckbox"]:checked');
+      const selected = Array.from(checkboxes).map(cb => cb.value);
+
+      allUsers[selectedStaffForAssign].assignedCompounds = selected;
+      setStoredUsers(allUsers);
+
+      closeModal('assignSitesModal');
+      renderAdminDashboard();
+      alert(`تم بنجاح نقل وتحديث اختصاصات الموظف (${allUsers[selectedStaffForAssign].name}).`);
+    }
+
+    function openChatWithAssignedAccountant() {
+      const allUsers = getStoredUsers();
+      const myCompound = currentUser.compound;
+      const accountantKey = Object.keys(allUsers).find(k => 
+        allUsers[k].role === 'accountant' && allUsers[k].assignedCompounds && allUsers[k].assignedCompounds.includes(myCompound)
+      );
+
+      if (accountantKey) {
+        openChat(`محادثة مع المحاسب المسؤول (${allUsers[accountantKey].name}) - موقع ${myCompound}`);
+      } else {
+        openChat(`المحادثة مع الإدارة المالية لمشروع ${myCompound}`);
+      }
+    }
+
+    function renderAttendanceTables() {
+      const allUsers = getStoredUsers();
+      const sharedTbody = document.getElementById('sharedAttendanceTableBody');
+      const adminTbody = document.getElementById('adminAttendanceBody');
+
+      let html = '';
+      const staffKeys = Object.keys(allUsers).filter(k => allUsers[k].role !== 'engineer');
+
+      staffKeys.forEach(k => {
+        const u = allUsers[k];
+        const isWorking = u.attendance ? u.attendance.isWorking : false;
+        const dotColor = isWorking ? 'bg-emerald-500' : 'bg-rose-500';
+        const statusText = isWorking ? 'مباشر للعمل 🟢' : 'خارج العمل 🔴';
+
+        html += `
+          <tr>
+            <td class="p-2.5">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full ${dotColor}"></span>
+                <img src="${u.avatar || DEFAULT_AVATAR}" class="w-7 h-7 rounded-full object-cover border border-slate-700 bg-slate-800">
+                <span class="font-bold text-white">${u.name}</span>
+              </div>
+            </td>
+            <td class="p-2.5 text-slate-400">${u.jobTitle}</td>
+            <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] ${isWorking ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'} font-bold">${statusText}</span></td>
+            <td class="p-2.5 text-slate-300 font-semibold">${u.attendance ? u.attendance.startTime : '--'}</td>
+            <td class="p-2.5 text-slate-400">${u.attendance ? u.attendance.endTime : '--'}</td>
+          </tr>
+        `;
+      });
+
+      if (sharedTbody) sharedTbody.innerHTML = html;
+      if (adminTbody) adminTbody.innerHTML = html;
+    }
+
+    function renderAllOrdersTable() {
+      const orders = getStoredOrders();
+      const tbody = document.getElementById('allOrdersTableBody');
+      tbody.innerHTML = '';
+      orders.forEach(o => {
+        const itemsHtml = formatOrderItemsHtml(o.items);
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-3 font-bold text-white">#${o.id}</td>
+            <td class="p-3 text-slate-400">${o.date}</td>
+            <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer} (${o.unit})</span></td>
+            <td class="p-3">${itemsHtml}</td>
+            <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
+            <td class="p-3">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline">عرض التوثيق</a>` : '--'}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function openProfileModal() {
+      const allUsers = getStoredUsers();
+      if (allUsers[currentUser.currentKey]) {
+        currentUser = { ...allUsers[currentUser.currentKey], currentKey: currentUser.currentKey };
+      }
+
+      document.getElementById('profModalAvatar').src = currentUser.avatar || DEFAULT_AVATAR;
+      document.getElementById('profModalTitle').innerText = currentUser.jobTitle;
+      document.getElementById('profEditName').value = currentUser.name;
+      document.getElementById('profEditPhone').value = currentUser.phone;
+
+      const engBox = document.getElementById('profEngineerFields');
+      if (currentUser.role === 'engineer') {
+        engBox.classList.remove('hidden');
+        document.getElementById('profEditCompound').value = currentUser.compound || 'باتيو كازا';
+        document.getElementById('profEditUnit').value = currentUser.unit || '';
+      } else {
+        engBox.classList.add('hidden');
+      }
+
+      openModal('profileModal');
+    }
+
+    function updateProfileAvatar(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const allUsers = getStoredUsers();
+          currentUser.avatar = evt.target.result;
+          allUsers[currentUser.currentKey].avatar = evt.target.result;
+          setStoredUsers(allUsers);
+          document.getElementById('profModalAvatar').src = evt.target.result;
+          updateHeaderAndSidebar();
+          renderAppByRole();
+          alert('تم تحديث صورتك الشخصية بنجاح!');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleSaveProfile(e) {
+      e.preventDefault();
+      const allUsers = getStoredUsers();
+
+      currentUser.name = document.getElementById('profEditName').value.trim();
+      currentUser.phone = document.getElementById('profEditPhone').value.trim();
+
+      if (currentUser.role === 'engineer') {
+        currentUser.compound = document.getElementById('profEditCompound').value;
+        currentUser.unit = document.getElementById('profEditUnit').value.trim();
+      }
+
+      allUsers[currentUser.currentKey] = { ...allUsers[currentUser.currentKey], ...currentUser };
+      setStoredUsers(allUsers);
+
+      updateHeaderAndSidebar();
+      renderAppByRole();
+      closeModal('profileModal');
+      alert('تم تحديث وحفظ بيانات الملف الشخصي بنجاح.');
+    }
+
+    function toggleExtraUserFields() {
+      const r = document.getElementById('newUserRole').value;
+      document.getElementById('extraEngineerFields').classList.toggle('hidden', r !== 'engineer');
+    }
+
+    function handleCreateUser(e) {
+      e.preventDefault();
+      const allUsers = getStoredUsers();
+      const name = document.getElementById('newUserName').value.trim();
+      const loginEmail = document.getElementById('newUserLogin').value.trim().toLowerCase();
+      const pass = document.getElementById('newUserPass').value.trim();
+      const role = document.getElementById('newUserRole').value;
+      const compound = document.getElementById('newUserCompound').value;
+      const unit = document.getElementById('newUserUnit').value.trim();
+
+      let jTitle = 'محاسب';
+      if (role === 'engineer') jTitle = 'مهندس موقع / مالك وحدة';
+      if (role === 'driver') jTitle = 'سائق نقل وتعتيق';
+      if (role === 'store') jTitle = 'مسؤول تشوينة';
+
+      allUsers[loginEmail] = {
+        role,
+        name,
+        jobTitle: jTitle,
+        avatar: DEFAULT_AVATAR,
+        pass,
+        email: loginEmail,
+        aliases: [loginEmail, loginEmail.split('@')[0]],
+        compound: role === 'engineer' ? compound : '',
+        unit: role === 'engineer' ? unit : '',
+        phone: '01000000000',
+        assignedCompounds: role !== 'engineer' ? [] : undefined,
+        attendance: role !== 'engineer' ? { isWorking: false, startTime: '--', endTime: '--' } : null
+      };
+
+      setStoredUsers(allUsers);
+      closeModal('userManageModal');
+      renderAdminDashboard();
+      alert(`تم إضافة المستخدم بنجاح: ${loginEmail}`);
+    }
+
+    function revokeUser(k) {
+      const allUsers = getStoredUsers();
+      if (confirm(`هل أنت متأكد من سحب صلاحية وحذف حساب: ${allUsers[k].name}؟`)) {
+        delete allUsers[k];
+        setStoredUsers(allUsers);
+        renderAdminDashboard();
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    async function openLiveCameraModal(orderId) {
+      selectedOrderIdForProof = orderId;
+      openModal('proofModal');
+      document.getElementById('photoCapturedResult').classList.add('hidden');
+      document.getElementById('cameraStream').classList.remove('hidden');
+      document.getElementById('snapBtn').classList.remove('hidden');
+      document.getElementById('saveSnapBtn').classList.add('hidden');
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } },
+          audio: false
+        });
+        document.getElementById('cameraStream').srcObject = mediaStream;
+      } catch (err) {
+        alert('يرجى منح صلاحية الكاميرا الحية لتصوير المون في الموقع.');
+        closeProofCamera();
+      }
+    }
+
+    function takeSnapshot() {
+      const video = document.getElementById('cameraStream');
+      const canvas = document.getElementById('photoCanvas');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      const img = document.getElementById('photoCapturedResult');
+      img.src = dataUrl;
+      img.classList.remove('hidden');
+      video.classList.add('hidden');
+
+      document.getElementById('snapBtn').classList.add('hidden');
+      document.getElementById('saveSnapBtn').classList.remove('hidden');
+    }
+
+    function confirmSnapshotDelivery() {
+      if (!selectedOrderIdForProof) return;
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === selectedOrderIdForProof);
+      if (o) {
+        o.status = 'تم التسليم للعميل';
+        o.proofImg = document.getElementById('photoCapturedResult').src;
+        setStoredOrders(orders);
+        closeProofCamera();
+        renderAppByRole();
+        alert('تم تأكيد التعتيق وتوثيق تفريغ المون بالصورة الحية.');
+      }
+    }
+
+    function closeProofCamera() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+      }
+      closeModal('proofModal');
+    }
+
+    function openChat(title) {
+      document.getElementById('chatTitle').innerText = title;
+      openModal('chatModal');
+    }
+
+    function openBroadcastChat() {
+      openChat('شات التنسيق الفوري (التشوينات ↔ المحاسبين)');
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      appendChatMessage(currentUser.name, val, 'text');
+      input.value = '';
+    }
+
+    function sendChatFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        let type = 'file';
+        if (file.type.startsWith('image/')) type = 'image';
+        else if (file.type.includes('pdf')) type = 'pdf';
+        else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) type = 'word';
+
+        appendChatMessage(currentUser.name, evt.target.result, type, file.name);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function toggleVoiceRecording() {
+      if (!isRecordingVoice) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+            appendChatMessage(currentUser.name, URL.createObjectURL(audioBlob), 'audio');
+          };
+          mediaRecorder.start();
+          isRecordingVoice = true;
+          document.getElementById('recordingIndicator').classList.remove('hidden');
+        } catch (err) {
+          alert('يرجى تفعيل صلاحية الميكروفون لتسجيل الرسالة الصوتية.');
+        }
+      }
+    }
+
+    function stopVoiceRecording() {
+      if (mediaRecorder && isRecordingVoice) {
+        mediaRecorder.stop();
+        isRecordingVoice = false;
+        document.getElementById('recordingIndicator').classList.add('hidden');
+      }
+    }
+
+    function appendChatMessage(sender, content, type, filename) {
+      const chatBox = document.getElementById('chatBox');
+      const isMe = sender === currentUser.name;
+      let bodyHtml = '';
+
+      if (type === 'text') {
+        bodyHtml = `<p>${content}</p>`;
+      } else if (type === 'image') {
+        bodyHtml = `<img src="${content}" class="max-w-[200px] rounded-lg mt-1 border border-slate-700">`;
+      } else if (type === 'audio') {
+        bodyHtml = `<audio controls src="${content}" class="w-48 mt-1"></audio>`;
+      } else if (type === 'pdf') {
+        bodyHtml = `
+          <div class="flex items-center gap-2 p-2 bg-slate-900/80 rounded-xl border border-rose-500/40 mt-1">
+            <i class="fa-solid fa-file-pdf text-rose-500 text-xl"></i>
+            <div class="flex-1 truncate">
+              <p class="font-bold text-[11px] text-white truncate">${filename}</p>
+              <a href="${content}" download="${filename}" class="text-[10px] text-blue-400 hover:underline">تحميل مستند PDF</a>
+            </div>
+          </div>
+        `;
+      } else if (type === 'word') {
+        bodyHtml = `
+          <div class="flex items-center gap-2 p-2 bg-slate-900/80 rounded-xl border border-blue-500/40 mt-1">
+            <i class="fa-solid fa-file-word text-blue-500 text-xl"></i>
+            <div class="flex-1 truncate">
+              <p class="font-bold text-[11px] text-white truncate">${filename}</p>
+              <a href="${content}" download="${filename}" class="text-[10px] text-blue-400 hover:underline">تحميل مستند Word</a>
+            </div>
+          </div>
+        `;
+      } else if (type === 'file') {
+        bodyHtml = `<a href="${content}" download="${filename}" class="text-blue-400 underline flex items-center gap-1 mt-1"><i class="fa-solid fa-paperclip"></i> ${filename}</a>`;
+      }
+
+      chatBox.innerHTML += `
+        <div class="${isMe ? 'bg-blue-600/30 border-blue-500/30 mr-auto text-left' : 'bg-slate-800/80 border-slate-700/80 ml-auto'} border p-3 rounded-2xl max-w-[85%] text-slate-200">
+          <p class="text-[10px] ${isMe ? 'text-blue-300' : 'text-emerald-400'} font-bold mb-1">${sender}:</p>
+          ${bodyHtml}
+        </div>
+      `;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
