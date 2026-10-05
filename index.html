@@ -203,6 +203,12 @@
           <span>الحصر اليومي والمبيعات</span>
         </button>
 
+        <!-- التبويب الجديد: أرشيف وسجل الأسابيع السابقة -->
+        <button id="navWeeklyArchiveBtn" onclick="switchView('weekly-archive-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition hidden">
+          <i class="fa-solid fa-book-bookmark w-4 text-center text-emerald-400"></i>
+          <span>سجل وأرشيف الأسابيع</span>
+        </button>
+
         <!-- قسم حركة المخازن والكميات والهوالك -->
         <button id="navWarehouseBtn" onclick="switchView('warehouse-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition hidden">
           <i class="fa-solid fa-warehouse w-4 text-center text-amber-400"></i>
@@ -250,8 +256,74 @@
     <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto overflow-y-auto">
 
       <!-- ========================================== -->
-      <!-- SECTION: قسم حركة المخازن والكميات والهوالك -->
+      <!-- SECTION: قسم أرشيف وسجل إغلاقات الأسابيع السابقة (الجديد) -->
       <!-- ========================================== -->
+      <section id="view-weekly-archive-section" class="role-view hidden space-y-5">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-gradient-to-r from-emerald-950/40 to-[#131d31] p-4 rounded-2xl border border-emerald-500/30">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-book-bookmark text-emerald-400"></i>
+              أرشيف وسجل إغلاقات الأسابيع السابقة
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">مراجعة كاملة لحسابات أي أسبوع سابق وفواتيره دون ضياع أي معلومة</p>
+          </div>
+          <!-- قائمة اختيار الأسبوع المؤرشف -->
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <span class="text-xs text-slate-300 font-semibold whitespace-nowrap">اختر الأسبوع:</span>
+            <select id="weeklyArchiveSelector" onchange="renderSelectedArchiveWeekDetails()" class="bg-[#0b1120] border border-slate-700 rounded-xl p-2 text-white text-xs font-bold focus:border-emerald-500 flex-1 md:flex-none"></select>
+          </div>
+        </div>
+
+        <!-- كروت ملخص الأسبوع المختار -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+          <div class="p-3.5 bg-blue-950/20 border border-blue-500/30 rounded-2xl">
+            <span class="text-blue-300 font-bold">مبيعات هذا الأسبوع</span>
+            <p class="text-xl font-black text-white mt-1.5" id="archTotalSalesSum">0 ج.م</p>
+          </div>
+
+          <div class="p-3.5 bg-emerald-950/20 border border-emerald-500/30 rounded-2xl">
+            <span class="text-emerald-300 font-bold">المحصل في هذا الأسبوع</span>
+            <p class="text-xl font-black text-emerald-400 mt-1.5" id="archTotalCollectedSum">0 ج.م</p>
+          </div>
+
+          <div class="p-3.5 bg-rose-950/20 border border-rose-500/30 rounded-2xl">
+            <span class="text-rose-300 font-bold">المتبقي المطلوب لتقفيله</span>
+            <p class="text-xl font-black text-rose-400 mt-1.5" id="archTotalRemainingSum">0 ج.م</p>
+          </div>
+
+          <div class="p-3.5 bg-purple-950/20 border border-purple-500/30 rounded-2xl">
+            <span class="text-purple-300 font-bold">تاريخ تقفيل الأسبوع</span>
+            <p class="text-sm font-bold text-slate-200 mt-2" id="archCloseDateDisplay">--</p>
+          </div>
+        </div>
+
+        <!-- جدول أوامر التوريد الخاصة بالأسبوع المختار -->
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-emerald-400"></i>
+            كافة فواتير وأوامر التوريد المنفذة خلال هذا الأسبوع
+          </h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-800/80 text-slate-300 border-b border-slate-700">
+                <tr>
+                  <th class="p-2.5">رقم الطلب</th>
+                  <th class="p-2.5">تاريخ التوريد</th>
+                  <th class="p-2.5">المهندس / الموقع والوحدة</th>
+                  <th class="p-2.5">الأصناف المجمعة</th>
+                  <th class="p-2.5 text-white font-bold">إجمالي الفاتورة</th>
+                  <th class="p-2.5 text-emerald-400">المحصل فيها</th>
+                  <th class="p-2.5 text-rose-400">المتبقي</th>
+                  <th class="p-2.5">الحالة النهائية</th>
+                </tr>
+              </thead>
+              <tbody id="archivedOrdersTableBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: قسم حركة المخازن والكميات والهوالك -->
       <section id="view-warehouse-section" class="role-view hidden space-y-5">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-gradient-to-r from-amber-950/40 to-[#131d31] p-4 rounded-2xl border border-amber-500/30">
           <div>
@@ -271,7 +343,6 @@
           </div>
         </div>
 
-        <!-- جدول أرصدة المون بالمخزن -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
             <i class="fa-solid fa-cubes text-amber-400"></i>
@@ -296,9 +367,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- SECTION: قسم الموردين وحسابات المشتريات -->
-      <!-- ========================================== -->
       <section id="view-suppliers-section" class="role-view hidden space-y-5">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-gradient-to-r from-purple-950/40 to-[#131d31] p-4 rounded-2xl border border-purple-500/30">
           <div>
@@ -313,7 +382,6 @@
           </button>
         </div>
 
-        <!-- ملخص مالي للموردين -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
           <div class="p-3.5 bg-purple-950/20 border border-purple-500/30 rounded-2xl">
             <span class="text-purple-300 font-bold">إجمالي المشتريات من الموردين</span>
@@ -329,7 +397,6 @@
           </div>
         </div>
 
-        <!-- جدول فواتير الموردين -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
             <i class="fa-solid fa-file-invoice text-purple-400"></i>
@@ -473,6 +540,9 @@
             <button onclick="switchView('daily-inventory-section')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
               <i class="fa-solid fa-calculator"></i> عرض الحصر وتقفيل الأسبوع
             </button>
+            <button onclick="switchView('weekly-archive-section')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+              <i class="fa-solid fa-book-bookmark"></i> أرشيف الأسابيع
+            </button>
             <button onclick="openBroadcastChat()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5">
               <i class="fa-solid fa-bullhorn text-amber-400"></i> التنسيق مع التشوينة
             </button>
@@ -589,7 +659,7 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW E: لوحة الإدارة العامة (التحكم بالأسعار والكمبوندات) -->
+      <!-- VIEW E: لوحة الإدارة العامة -->
       <!-- ========================================== -->
       <section id="view-admin" class="role-view hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
@@ -601,19 +671,22 @@
             </div>
           </div>
           <div class="flex flex-wrap gap-2">
-            <button onclick="openModal('addCompoundModal')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+            <button onclick="switchView('weekly-archive-section')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+              <i class="fa-solid fa-book-bookmark"></i> سجل الأسابيع
+            </button>
+            <button onclick="openModal('addCompoundModal')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
               <i class="fa-solid fa-plus"></i> + كمبوند جديد
             </button>
-            <button onclick="openModal('addMaterialModal')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+            <button onclick="openModal('addMaterialModal')" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
               <i class="fa-solid fa-plus"></i> + صنف مون جديد
             </button>
-            <button onclick="openModal('userManageModal')" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+            <button onclick="openModal('userManageModal')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
               <i class="fa-solid fa-user-plus"></i> + مستخدم جديد
             </button>
           </div>
         </div>
 
-        <!-- 1. جدول إدارة وتسعير المون وتعديل الأسعار وحذفها -->
+        <!-- جدول تسعير المون وتعديل الأسعار -->
         <div class="bg-[#131d31] border border-blue-500/30 rounded-2xl p-4">
           <div class="flex justify-between items-center mb-3">
             <h4 class="font-bold text-sm text-white flex items-center gap-2">
@@ -639,7 +712,7 @@
           </div>
         </div>
 
-        <!-- 2. جدول إدارة الكمبوندات والمشروعات (إضافة وإزالة) -->
+        <!-- جدول الكمبوندات -->
         <div class="bg-[#131d31] border border-emerald-500/30 rounded-2xl p-4">
           <div class="flex justify-between items-center mb-3">
             <h4 class="font-bold text-sm text-white flex items-center gap-2">
@@ -651,7 +724,7 @@
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" id="adminCompoundsListContainer"></div>
         </div>
 
-        <!-- 3. جدول إسناد المواقع والتشوينات للموظفين -->
+        <!-- جدول إسناد المواقع للموظفين -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
             <i class="fa-solid fa-user-check text-blue-400"></i>
@@ -673,7 +746,7 @@
           </div>
         </div>
 
-        <!-- 4. قائمة المستخدمين والصلاحيات -->
+        <!-- قائمة المستخدمين والصلاحيات -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
             <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-purple-400"></i> قائمة مستخدمي النظام والصلاحيات</span>
@@ -767,7 +840,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODALS المنظومة الجديدة -->
+  <!-- MODALS المنظومة -->
   <!-- ========================================== -->
 
   <!-- MODAL: إضافة كمبوند جديد (للمدير) -->
@@ -913,7 +986,7 @@
     </div>
   </div>
 
-  <!-- MODAL: تسجيل فاتورة شراء من مورد جديد -->
+  <!-- MODAL: تسجيل فاتورة شراء من مورد -->
   <div id="addSupplierPurchaseModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -1355,17 +1428,15 @@
     </div>
   </div>
   <!-- ========================================== -->
-  <!-- 3. المنطق البرمجي (JAVASCRIPT) - إدارة المخازن، الموردين، والتسعير -->
+  <!-- 3. المنطق البرمجي (JAVASCRIPT) - أرشيف الأسابيع والأقفال التاريخية -->
   <!-- ========================================== -->
   <script>
-    // قائمة الكمبوندات الافتراضية
     const defaultCompounds = [
       'باتيو كازا', 'المعادي 1', 'المعادي 2', 'فيلات كازا',
       'فيلات الباتيو', 'المقاولون العرب', 'ليك فيو', 'جراند',
       'كليوباترا', 'الحلواني', 'عملاء التشوينة'
     ];
 
-    // قائمة المون الرسمية الافتراضية
     const defaultMaterials = [
       { key: 'sand_regular', name: 'رمل عادي', unit: 'متر³', defaultPrice: 170, category: 'رمل' },
       { key: 'sand_capital', name: 'رمل العاصمة', unit: 'متر³', defaultPrice: 190, category: 'رمل' },
@@ -1382,7 +1453,6 @@
       { key: 'gypsum_qawmeya', name: 'جبس قومية', unit: 'شكارة', defaultPrice: 85, category: 'جبس' }
     ];
 
-    // رصيد المخزن الأولي (الوارد والهوالك)
     const defaultWarehouseStock = {
       'cement_tora': { incoming: 1200, waste: 20 },
       'sand_regular': { incoming: 500, waste: 10 },
@@ -1391,7 +1461,6 @@
       'gravel_regular': { incoming: 300, waste: 5 }
     };
 
-    // فواتير مشتريات الموردين الأولية (مثال الشيخ فوزي)
     const defaultSupplierPurchases = [
       {
         id: 'SUP-101',
@@ -1422,17 +1491,17 @@
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // مفاتيح التخزين
-    const STORAGE_KEY_USERS = 'alraed_erp_v12_users';
-    const STORAGE_KEY_ORDERS = 'alraed_erp_v12_orders';
-    const STORAGE_KEY_SESSION = 'alraed_erp_v12_session';
-    const STORAGE_KEY_CARRIED = 'alraed_erp_v12_carried';
-    const STORAGE_KEY_COMPOUNDS = 'alraed_erp_v12_compounds';
-    const STORAGE_KEY_MATERIALS = 'alraed_erp_v12_materials';
-    const STORAGE_KEY_WAREHOUSE = 'alraed_erp_v12_warehouse';
-    const STORAGE_KEY_SUPPLIERS = 'alraed_erp_v12_suppliers';
+    // مفاتيح التخزين المحدثة لدعم الأرشيف التاريخي
+    const STORAGE_KEY_USERS = 'alraed_erp_v14_users';
+    const STORAGE_KEY_ORDERS = 'alraed_erp_v14_orders';
+    const STORAGE_KEY_SESSION = 'alraed_erp_v14_session';
+    const STORAGE_KEY_CARRIED = 'alraed_erp_v14_carried';
+    const STORAGE_KEY_COMPOUNDS = 'alraed_erp_v14_compounds';
+    const STORAGE_KEY_MATERIALS = 'alraed_erp_v14_materials';
+    const STORAGE_KEY_WAREHOUSE = 'alraed_erp_v14_warehouse';
+    const STORAGE_KEY_SUPPLIERS = 'alraed_erp_v14_suppliers';
+    const STORAGE_KEY_ARCHIVE = 'alraed_erp_v14_weekly_archive'; // أرشيف الأسابيع المغلقة
 
-    // الحسابات الأساسية
     const defaultUsers = {
       'admin': {
         role: 'admin',
@@ -1627,11 +1696,19 @@
       localStorage.setItem(STORAGE_KEY_CARRIED, val.toString());
     }
 
+    // إدارة أرشيف الأسابيع التاريخية
+    function getWeeklyArchive() {
+      const d = localStorage.getItem(STORAGE_KEY_ARCHIVE);
+      return d ? JSON.parse(d) : [];
+    }
+    function setWeeklyArchive(d) {
+      localStorage.setItem(STORAGE_KEY_ARCHIVE, JSON.stringify(d));
+    }
+
     function saveSession(key) { localStorage.setItem(STORAGE_KEY_SESSION, key); }
     function getSession() { return localStorage.getItem(STORAGE_KEY_SESSION); }
     function clearSession() { localStorage.removeItem(STORAGE_KEY_SESSION); }
 
-    // بدء التشغيل
     window.addEventListener('DOMContentLoaded', () => {
       refreshAllSelectDropdowns();
       const savedKey = getSession();
@@ -1647,12 +1724,10 @@
       }
     });
 
-    // تحديث كافة القوائم المنسدلة في السيستم ديناميكياً
     function refreshAllSelectDropdowns() {
       const materials = getStoredMaterials();
       const compounds = getStoredCompounds();
 
-      // قوائم الكمبوندات
       const compSelects = ['regCompound', 'newUserCompound', 'profEditCompound'];
       compSelects.forEach(id => {
         const el = document.getElementById(id);
@@ -1664,7 +1739,6 @@
         }
       });
 
-      // قوائم المون في السلة والمخازن والموردين
       const matSelects = ['cartItemSelect', 'stockMatSelect', 'wasteMatSelect', 'supInvoiceMatSelect'];
       matSelects.forEach(id => {
         const el = document.getElementById(id);
@@ -1839,9 +1913,9 @@
         attBox.classList.add('hidden');
       }
 
-      // إظهار الأقسام حسب الدور
       const isStaffOrAdmin = (currentUser.role === 'accountant' || currentUser.role === 'store' || currentUser.role === 'admin');
       document.getElementById('navDailyInventoryBtn').classList.toggle('hidden', !isStaffOrAdmin);
+      document.getElementById('navWeeklyArchiveBtn').classList.toggle('hidden', !isStaffOrAdmin);
       document.getElementById('navWarehouseBtn').classList.toggle('hidden', !isStaffOrAdmin);
       document.getElementById('navSuppliersBtn').classList.toggle('hidden', !isStaffOrAdmin);
       document.getElementById('navClientsBtn').classList.toggle('hidden', currentUser.role === 'engineer');
@@ -1898,6 +1972,9 @@
       } else if (viewName === 'daily-inventory-section') {
         document.getElementById('view-daily-inventory-section').classList.remove('hidden');
         renderDailyInventorySection();
+      } else if (viewName === 'weekly-archive-section') {
+        document.getElementById('view-weekly-archive-section').classList.remove('hidden');
+        renderWeeklyArchiveSection();
       } else if (viewName === 'warehouse-section') {
         document.getElementById('view-warehouse-section').classList.remove('hidden');
         renderWarehouseInventorySection();
@@ -1917,7 +1994,136 @@
     }
 
     // ==========================================
-    // 1. قسم إدارة حركة المخازن والأرصدة والهوالك
+    // منطق التقفيل الأسبوعي وحفظ الأرشيف التاريخي
+    // ==========================================
+    function confirmWeeklyCloseout() {
+      const orders = getStoredOrders();
+      let thisWeekSales = 0;
+      let thisWeekCollected = 0;
+      let thisWeekRemaining = 0;
+      const closedOrdersList = [];
+
+      orders.forEach(o => {
+        if (!o.weekClosed) {
+          const tot = o.total || 0;
+          const col = o.collected || 0;
+          const rem = o.remaining !== undefined ? o.remaining : (tot - col);
+
+          thisWeekSales += tot;
+          thisWeekCollected += col;
+          thisWeekRemaining += rem;
+
+          o.weekClosed = true; // إغلاق الطلب للأسبوع الحالي
+          closedOrdersList.push({ ...o });
+        }
+      });
+
+      if (closedOrdersList.length === 0 && getCarriedOverDebt() === 0) {
+        alert('لا توجد معاملات جارية لتقفيلها في هذا الأسبوع.');
+        return;
+      }
+
+      if (!confirm(`هل أنت متأكد من تقفيل حسابات الأسبوع؟\n- مبيعات الأسبوع: ${thisWeekSales.toLocaleString()} ج.م\n- المحصل: ${thisWeekCollected.toLocaleString()} ج.م\n- المتبقي للترحيل: ${thisWeekRemaining.toLocaleString()} ج.م\nسيتم حفظ نسخة تاريخية كاملة بأرشيف الأسابيع.`)) {
+        return;
+      }
+
+      const archive = getWeeklyArchive();
+      const weekNumber = archive.length + 1;
+      const closeDateStr = new Date().toLocaleString('ar-EG', { dateStyle: 'full', timeStyle: 'short' });
+
+      // ترحيل المتبقي
+      const oldCarried = getCarriedOverDebt();
+      const newCarried = oldCarried + thisWeekRemaining;
+      setCarriedOverDebt(newCarried);
+      setStoredOrders(orders);
+
+      // إنشاء سجل الأسبوع المغلق في الأرشيف
+      const archiveRecord = {
+        weekNumber: weekNumber,
+        title: `الأسبوع رقم (${weekNumber})`,
+        closeDate: closeDateStr,
+        totalSales: thisWeekSales,
+        totalCollected: thisWeekCollected,
+        totalRemaining: thisWeekRemaining,
+        carriedOverTotal: newCarried,
+        orders: closedOrdersList
+      };
+
+      archive.unshift(archiveRecord);
+      setWeeklyArchive(archive);
+
+      renderDailyInventorySection();
+      renderAccountantView();
+      alert(`تم بنجاح تقفيل الأسبوع رقم (${weekNumber}) وحفظه في الأرشيف! 🔒\nتم ترحيل مبلغ (${thisWeekRemaining.toLocaleString()} ج.م) كديون سابقة مستحقة للأسبوع الجديد.`);
+    }
+
+    // عرض قسم أرشيف الأسابيع السابقة واختيار أي أسبوع للمراجعة
+    function renderWeeklyArchiveSection() {
+      const archive = getWeeklyArchive();
+      const selector = document.getElementById('weeklyArchiveSelector');
+      selector.innerHTML = '';
+
+      if (archive.length === 0) {
+        selector.innerHTML = `<option value="">لا توجد أسابيع مغلقة ومؤرشفة بعد</option>`;
+        document.getElementById('archTotalSalesSum').innerText = '0 ج.م';
+        document.getElementById('archTotalCollectedSum').innerText = '0 ج.م';
+        document.getElementById('archTotalRemainingSum').innerText = '0 ج.م';
+        document.getElementById('archCloseDateDisplay').innerText = 'لا يوجد تقفيل سابق';
+        document.getElementById('archivedOrdersTableBody').innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">الأرشيف فارغ حالياً. بمجرد الضغط على زر تقفيل الأسبوع في الحصر اليومي، سيتم حفظ نسخة تاريخية هنا تلقائياً.</td></tr>`;
+        return;
+      }
+
+      archive.forEach((rec, idx) => {
+        selector.innerHTML += `<option value="${idx}">${rec.title} - (تقفيل: ${rec.closeDate.split(',')[0] || rec.closeDate})</option>`;
+      });
+
+      renderSelectedArchiveWeekDetails();
+    }
+
+    // عرض تفاصيل الأسبوع المختار من القائمة بالملي
+    function renderSelectedArchiveWeekDetails() {
+      const archive = getWeeklyArchive();
+      const selector = document.getElementById('weeklyArchiveSelector');
+      const selectedIndex = parseInt(selector.value);
+
+      if (isNaN(selectedIndex) || !archive[selectedIndex]) return;
+
+      const rec = archive[selectedIndex];
+      document.getElementById('archTotalSalesSum').innerText = `${(rec.totalSales || 0).toLocaleString()} ج.م`;
+      document.getElementById('archTotalCollectedSum').innerText = `${(rec.totalCollected || 0).toLocaleString()} ج.م`;
+      document.getElementById('archTotalRemainingSum').innerText = `${(rec.totalRemaining || 0).toLocaleString()} ج.م`;
+      document.getElementById('archCloseDateDisplay').innerText = rec.closeDate || '--';
+
+      const tbody = document.getElementById('archivedOrdersTableBody');
+      tbody.innerHTML = '';
+
+      if (!rec.orders || rec.orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">لا توجد طلبات منفذة في هذا الأسبوع.</td></tr>`;
+        return;
+      }
+
+      rec.orders.forEach(o => {
+        const itemsHtml = formatOrderItemsHtml(o.items);
+        const col = o.collected || 0;
+        const rem = o.remaining !== undefined ? o.remaining : ((o.total || 0) - col);
+
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-2.5 font-bold text-white">#${o.id}</td>
+            <td class="p-2.5 text-slate-400">${o.date}</td>
+            <td class="p-2.5">${o.engineer}<br><span class="text-[10px] text-blue-400 font-semibold">${o.compound} (${o.unit})</span></td>
+            <td class="p-2.5 max-w-xs">${itemsHtml}</td>
+            <td class="p-2.5 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
+            <td class="p-2.5 font-bold text-emerald-400">${col.toLocaleString()} ج.م</td>
+            <td class="p-2.5 font-bold text-rose-400">${rem.toLocaleString()} ج.م</td>
+            <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 font-bold">${o.status}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    // ==========================================
+    // بقية دوال الحصر والمخازن والموردين والإدارة
     // ==========================================
     function renderWarehouseInventorySection() {
       const materials = getStoredMaterials();
@@ -1926,7 +2132,6 @@
       const tbody = document.getElementById('warehouseInventoryTableBody');
       tbody.innerHTML = '';
 
-      // حساب المنصرف لكل صنف من واقع الطلبات الفعلية
       const dispatchedMap = {};
       orders.forEach(o => {
         if (o.status === 'جاري الشحن' || o.status === 'تم التسليم للعميل') {
@@ -2018,9 +2223,6 @@
       alert('تم خصم وتوثيق الهالك من الرصيد.');
     }
 
-    // ==========================================
-    // 2. قسم الموردين وحسابات المشتريات
-    // ==========================================
     function renderSuppliersPurchasesSection() {
       const purchases = getStoredSupplierPurchases();
       const tbody = document.getElementById('suppliersPurchasesTableBody');
@@ -2102,7 +2304,6 @@
       purchases.unshift(newPurchase);
       setStoredSupplierPurchases(purchases);
 
-      // زيادة الوارد في المخزن تلقائياً عند شراء بضاعة من المورد
       const stock = getStoredWarehouseStock();
       if (!stock[matKey]) stock[matKey] = { incoming: 0, waste: 0 };
       stock[matKey].incoming += qty;
@@ -2147,15 +2348,11 @@
       }
     }
 
-    // ==========================================
-    // 3. لوحة تحكم المدير: التسعير والكمبوندات
-    // ==========================================
     function renderAdminDashboard() {
       const materials = getStoredMaterials();
       const compounds = getStoredCompounds();
       const allUsers = getStoredUsers();
 
-      // 1. جدول تسعير المون وتعديل الأسعار
       const pricingTbody = document.getElementById('adminMaterialsPricingTableBody');
       pricingTbody.innerHTML = '';
       materials.forEach(m => {
@@ -2181,7 +2378,6 @@
         `;
       });
 
-      // 2. كروت الكمبوندات وإزالتها
       const compContainer = document.getElementById('adminCompoundsListContainer');
       compContainer.innerHTML = '';
       compounds.forEach(c => {
@@ -2195,7 +2391,6 @@
         `;
       });
 
-      // 3. جدول إسناد المواقع للموظفين
       const staffTbody = document.getElementById('adminStaffAssignTable');
       staffTbody.innerHTML = '';
       const staffKeys = Object.keys(allUsers).filter(k => allUsers[k].role !== 'engineer' && allUsers[k].role !== 'admin');
@@ -2225,7 +2420,6 @@
         `;
       });
 
-      // 4. جدول كافة المستخدمين
       const usersTbody = document.getElementById('adminUsersTable');
       usersTbody.innerHTML = '';
       Object.keys(allUsers).forEach(k => {
@@ -2251,7 +2445,6 @@
       });
     }
 
-    // تحديث سعر الصنف
     function updateMaterialPrice(matKey) {
       const input = document.getElementById(`price_input_${matKey}`);
       const newPrice = parseFloat(input.value);
@@ -2270,7 +2463,6 @@
       }
     }
 
-    // حذف صنف مون
     function deleteMaterial(matKey) {
       if (confirm('هل أنت متأكد من حذف هذا الصنف نهائياً من السيستم؟')) {
         let materials = getStoredMaterials();
@@ -2281,7 +2473,6 @@
       }
     }
 
-    // إضافة صنف مون جديد
     function handleAddNewMaterial() {
       const name = document.getElementById('newMatNameInput').value.trim();
       const cat = document.getElementById('newMatCategoryInput').value;
@@ -2304,7 +2495,6 @@
       alert(`تم إضافة وتفعيل الصنف الجديد (${name}) بنجاح.`);
     }
 
-    // إضافة كمبوند جديد
     function handleAddNewCompound() {
       const name = document.getElementById('newCompoundNameInput').value.trim();
       if (!name) {
@@ -2325,7 +2515,6 @@
       alert(`تمت إضافة الكمبوند الجديد (${name}) إلى قائمة المشروعات الرسمية.`);
     }
 
-    // إزالة كمبوند
     function deleteCompound(compName) {
       if (confirm(`هل أنت متأكد من حذف كمبوند (${compName}) من القائمة؟`)) {
         let compounds = getStoredCompounds();
@@ -2336,9 +2525,6 @@
       }
     }
 
-    // ==========================================
-    // بقية دوال الحصر، الفيلات، وسلة المهندس
-    // ==========================================
     function renderDailyInventorySection() {
       const orders = getStoredOrders();
       let targetOrders = orders;
@@ -2412,70 +2598,11 @@
       });
     }
 
-    function confirmWeeklyCloseout() {
-      if (!confirm('هل أنت متأكد من تقفيل حسابات الأسبوع الحالي؟\nسيتم بدء عداد المبيعات والمحصل من الصفر للأسبوع القادم، مع ترحيل أي مبالغ متبقية كديون سابقة مستحقة.')) {
-        return;
-      }
-      const orders = getStoredOrders();
-      let uncollectedThisWeek = 0;
-      orders.forEach(o => {
-        if (!o.weekClosed) {
-          const rem = o.remaining !== undefined ? o.remaining : ((o.total || 0) - (o.collected || 0));
-          uncollectedThisWeek += rem;
-          o.weekClosed = true;
-        }
-      });
-      const oldCarried = getCarriedOverDebt();
-      const newCarried = oldCarried + uncollectedThisWeek;
-      setCarriedOverDebt(newCarried);
-      setStoredOrders(orders);
-      renderDailyInventorySection();
-      renderAccountantView();
-      alert(`تم تقفيل الأسبوع بنجاح! 🔒\nتم ترحيل مبلغ (${uncollectedThisWeek.toLocaleString()} ج.م) كديون سابقة.`);
-    }
-
-    function renderAppByRole() {
-      document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
-
-      if (currentUser.role === 'engineer') {
-        document.getElementById('view-engineer').classList.remove('hidden');
-        document.getElementById('eng-name').innerText = currentUser.name;
-        document.getElementById('eng-compound').innerText = currentUser.compound;
-        document.getElementById('eng-unit').innerText = currentUser.unit;
-        document.getElementById('eng-avatar').src = currentUser.avatar || DEFAULT_AVATAR;
-        renderEngineerTable();
-      }
-      else if (currentUser.role === 'accountant') {
-        document.getElementById('view-accountant').classList.remove('hidden');
-        document.getElementById('acc-avatar').src = currentUser.avatar || DEFAULT_AVATAR;
-        const assigned = currentUser.assignedCompounds || [];
-        document.getElementById('accAssignedSitesBadge').innerText = assigned.length > 0 ? assigned.join(' • ') : 'لا توجد مواقع مسندة';
-        renderAccountantView();
-      }
-      else if (currentUser.role === 'store') {
-        document.getElementById('view-store').classList.remove('hidden');
-        document.getElementById('store-avatar').src = currentUser.avatar || DEFAULT_AVATAR;
-        renderStoreTable();
-      }
-      else if (currentUser.role === 'driver') {
-        document.getElementById('view-driver').classList.remove('hidden');
-        document.getElementById('driver-avatar').src = currentUser.avatar || DEFAULT_AVATAR;
-        renderDriverCards();
-      }
-      else if (currentUser.role === 'admin') {
-        document.getElementById('view-admin').classList.remove('hidden');
-        document.getElementById('admin-avatar').src = currentUser.avatar || DEFAULT_AVATAR;
-        renderAdminDashboard();
-        renderAttendanceTables();
-      }
-    }
-
     function renderAccountantView() {
       const allOrders = getStoredOrders();
       const assigned = currentUser.assignedCompounds || [];
       const mySitesOrders = allOrders.filter(o => assigned.includes(o.compound));
 
-      // جدول إجماليات الفيلات
       const villasMap = {};
       mySitesOrders.forEach(o => {
         const key = `${o.compound} - ${o.unit}`;
@@ -2538,7 +2665,6 @@
         `;
       }
 
-      // جدول أوامر التوريد للمحاسب
       const tbody = document.getElementById('accOrdersTable');
       tbody.innerHTML = '';
 
@@ -2641,59 +2767,6 @@
       }
     }
 
-    function openCollectModal(orderId) {
-      selectedOrderIdForCollect = orderId;
-      const orders = getStoredOrders();
-      const o = orders.find(x => x.id === orderId);
-      if (!o) return;
-
-      const col = o.collected || 0;
-      const rem = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - col);
-
-      document.getElementById('collectOrderId').innerText = '#' + o.id;
-      document.getElementById('collectTotalBill').innerText = (o.total || 0).toLocaleString() + ' ج.م';
-      document.getElementById('collectAlreadyPaid').innerText = col.toLocaleString() + ' ج.م';
-      document.getElementById('collectRemainingBill').innerText = rem.toLocaleString() + ' ج.م';
-      document.getElementById('collectAmountInput').value = rem;
-
-      openModal('collectMoneyModal');
-    }
-
-    function confirmCollectPayment() {
-      if (!selectedOrderIdForCollect) return;
-      const amount = parseFloat(document.getElementById('collectAmountInput').value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('يرجى كتابة مبلغ تحصيل صحيح.');
-        return;
-      }
-
-      const orders = getStoredOrders();
-      const o = orders.find(x => x.id === selectedOrderIdForCollect);
-      if (o) {
-        const curCollected = o.collected || 0;
-        const curRemaining = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - curCollected);
-
-        if (amount > curRemaining) {
-          alert(`المبلغ المدخل (${amount.toLocaleString()} ج) أكبر من المتبقي على الفاتورة (${curRemaining.toLocaleString()} ج).`);
-          return;
-        }
-
-        o.collected = curCollected + amount;
-        o.remaining = Math.max(0, o.total - o.collected);
-
-        setStoredOrders(orders);
-        closeModal('collectMoneyModal');
-
-        renderAccountantView();
-        if (!document.getElementById('view-daily-inventory-section').classList.contains('hidden')) {
-          renderDailyInventorySection();
-        }
-
-        alert(`تم بنجاح تسجيل دفعة بقيمة ${amount.toLocaleString()} ج.م للطلب #${o.id}.\nالمتبقي الآن: ${o.remaining.toLocaleString()} ج.م`);
-      }
-    }
-
-    // واجهة التشوينة مع الأزرار التفاعلية
     function renderStoreTable() {
       const orders = getStoredOrders();
       const assigned = currentUser.assignedCompounds || [];
@@ -2770,6 +2843,58 @@
 
       setStoredOrders(orders);
       renderStoreTable();
+    }
+
+    function openCollectModal(orderId) {
+      selectedOrderIdForCollect = orderId;
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === orderId);
+      if (!o) return;
+
+      const col = o.collected || 0;
+      const rem = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - col);
+
+      document.getElementById('collectOrderId').innerText = '#' + o.id;
+      document.getElementById('collectTotalBill').innerText = (o.total || 0).toLocaleString() + ' ج.م';
+      document.getElementById('collectAlreadyPaid').innerText = col.toLocaleString() + ' ج.م';
+      document.getElementById('collectRemainingBill').innerText = rem.toLocaleString() + ' ج.م';
+      document.getElementById('collectAmountInput').value = rem;
+
+      openModal('collectMoneyModal');
+    }
+
+    function confirmCollectPayment() {
+      if (!selectedOrderIdForCollect) return;
+      const amount = parseFloat(document.getElementById('collectAmountInput').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('يرجى كتابة مبلغ تحصيل صحيح.');
+        return;
+      }
+
+      const orders = getStoredOrders();
+      const o = orders.find(x => x.id === selectedOrderIdForCollect);
+      if (o) {
+        const curCollected = o.collected || 0;
+        const curRemaining = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - curCollected);
+
+        if (amount > curRemaining) {
+          alert(`المبلغ المدخل (${amount.toLocaleString()} ج) أكبر من المتبقي على الفاتورة (${curRemaining.toLocaleString()} ج).`);
+          return;
+        }
+
+        o.collected = curCollected + amount;
+        o.remaining = Math.max(0, o.total - o.collected);
+
+        setStoredOrders(orders);
+        closeModal('collectMoneyModal');
+
+        renderAccountantView();
+        if (!document.getElementById('view-daily-inventory-section').classList.contains('hidden')) {
+          renderDailyInventorySection();
+        }
+
+        alert(`تم بنجاح تسجيل دفعة بقيمة ${amount.toLocaleString()} ج.م للطلب #${o.id}.\nالمتبقي الآن: ${o.remaining.toLocaleString()} ج.م`);
+      }
     }
 
     function renderDriverCards() {
@@ -2906,6 +3031,7 @@
         remaining: grandTotal,
         status: 'طلب جديد (قيد المراجعة)',
         driver: 'لم يحدد بعد',
+        weekClosed: false,
         proofImg: null,
         date: dateStr
       };
