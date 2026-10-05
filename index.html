@@ -24,8 +24,10 @@
   </script>
   <style>
     body { font-family: 'Cairo', sans-serif; }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-[#0b1120] text-slate-100 min-h-screen">
@@ -129,7 +131,7 @@
 
       <!-- دخول تجريبي سريع -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-        <p class="font-bold text-slate-300 mb-2">تسجيل دخول مباشر (الباسورد: 123):</p>
+        <p class="font-bold text-slate-300 mb-2">تسجيل دخول سريع (الباسورد: 123):</p>
         <div class="grid grid-cols-3 gap-1.5 text-center">
           <span onclick="setQuickLogin('admin')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 text-blue-400 font-bold">المدير العام</span>
           <span onclick="setQuickLogin('acc1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">أحمد زهران (محاسب)</span>
@@ -147,7 +149,7 @@
   <!-- ========================================== -->
   <div id="appContainer" class="hidden min-h-screen flex flex-col md:flex-row">
 
-    <!-- شريط الهاتف المحمول الأعلى (تم حذف زر تسجيل الخروج المكرر) -->
+    <!-- شريط الهاتف المحمول الأعلى -->
     <div class="md:hidden bg-[#111827] border-b border-slate-800 p-4 flex items-center justify-between sticky top-0 z-40">
       <div class="flex items-center gap-3">
         <button onclick="toggleSidebar()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-200 flex items-center justify-center border border-slate-700">
@@ -157,7 +159,7 @@
       </div>
       <div class="flex items-center gap-2">
         <span id="mobileUserTopName" class="text-xs font-bold text-slate-300"></span>
-        <img id="mobileUserAvatar" class="w-8 h-8 rounded-full border border-blue-500 object-cover" src="" alt="Avatar">
+        <img id="mobileUserAvatar" class="w-8 h-8 rounded-full border border-blue-500 object-cover bg-slate-800" src="" alt="Avatar">
       </div>
     </div>
 
@@ -194,7 +196,7 @@
         </div>
       </div>
 
-      <!-- الحضور والانصراف السريع للموظفين -->
+      <!-- الحضور والانصراف السريع -->
       <div id="attendanceSidebarBox" class="px-3 mb-2 hidden">
         <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -210,8 +212,14 @@
       <!-- روابط القائمة -->
       <nav class="p-3 space-y-1 text-xs flex-1 overflow-y-auto custom-scrollbar">
         <button onclick="switchView('main')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold transition">
-          <i class="fa-solid fa-chart-pie w-4 text-center"></i>
-          <span>لوحة العمليات والإحصائيات</span>
+          <i class="fa-solid fa-house w-4 text-center"></i>
+          <span>لوحة العمليات</span>
+        </button>
+
+        <!-- التبويب المطلوب: الحصر اليومي (للمحاسب والتشوينة والمدير فقط) -->
+        <button id="navDailyInventoryBtn" onclick="switchView('daily-inventory-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition hidden">
+          <i class="fa-solid fa-calculator w-4 text-center text-cyan-400"></i>
+          <span>الحصر اليومي والمبيعات</span>
         </button>
 
         <button id="navClientsBtn" onclick="switchView('clients-section')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 transition">
@@ -237,7 +245,7 @@
         </div>
       </nav>
 
-      <!-- زر تسجيل الخروج الوحيد في المنظومة -->
+      <!-- زر تسجيل الخروج الوحيد -->
       <div class="p-3 border-t border-slate-800">
         <button onclick="logout()" class="w-full py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -250,82 +258,71 @@
     <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto overflow-y-auto">
 
       <!-- ========================================== -->
-      <!-- الإحصائيات اليومية والأسبوعية العامة (تظهر لجميع الحسابات حسب اختصاصها) -->
+      <!-- SECTION: قسم الحصر اليومي والمبيعات المستقل -->
       <!-- ========================================== -->
-      <section class="mb-6 space-y-4">
+      <section id="view-daily-inventory-section" class="role-view hidden space-y-5">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-gradient-to-r from-slate-900 to-[#131d31] p-4 rounded-2xl border border-slate-800">
           <div>
             <h3 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-calendar-check text-blue-400"></i>
-              الإحصائيات اليومية وحركة التوريدات للموقع: <span id="dashSiteTitle" class="text-emerald-400"></span>
+              <i class="fa-solid fa-calculator text-cyan-400"></i>
+              الحصر اليومي ومبيعات المون: <span id="dashSiteTitle" class="text-emerald-400"></span>
             </h3>
             <p class="text-xs text-slate-400 mt-0.5">تقفيل وتصفية الحسابات أسبوعياً (موعد التقفيل الدوري: كل يوم خميس)</p>
           </div>
           <div class="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] text-amber-300 font-bold flex items-center gap-1.5">
-            <i class="fa-solid fa-clock"></i> التقفيل القادم: الخميس 08:00 م
+            <i class="fa-solid fa-clock"></i> موعد التقفيل: الخميس 08:00 م
           </div>
         </div>
 
-        <!-- كروت الإحصائيات الدقيقة للمواد والمبالغ -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-          <div class="p-3.5 bg-[#131d31] border border-slate-800 rounded-2xl">
-            <span class="text-slate-400 text-[11px]">شكاير أسمنت مباعة</span>
-            <p class="text-xl font-bold text-white mt-1" id="statCementBags">0 شكارة</p>
-            <span class="text-[10px] text-blue-400" id="statCementTons">0 طن</span>
-          </div>
-
-          <div class="p-3.5 bg-[#131d31] border border-slate-800 rounded-2xl">
-            <span class="text-slate-400 text-[11px]">نقلات رمل وسن</span>
-            <p class="text-xl font-bold text-white mt-1" id="statSandGravelTrips">0 نقلة</p>
-            <span class="text-[10px] text-amber-400" id="statSandGravelMeters">0 متر³</span>
-          </div>
-
-          <div class="p-3.5 bg-[#131d31] border border-slate-800 rounded-2xl">
-            <span class="text-slate-400 text-[11px]">طوب مباع (نقلات)</span>
-            <p class="text-xl font-bold text-white mt-1" id="statBrickCount">0 طوبة</p>
-            <span class="text-[10px] text-emerald-400" id="statBrickTrips">0 نقلة</span>
-          </div>
-
-          <div class="p-3.5 bg-[#131d31] border border-slate-800 rounded-2xl">
-            <span class="text-slate-400 text-[11px]">سعر نقلات التوريد</span>
-            <p class="text-xl font-bold text-cyan-400 mt-1" id="statTripsCost">0 ج.م</p>
-            <span class="text-[10px] text-slate-400">تكلفة وتعتيق</span>
-          </div>
-        </div>
-
-        <!-- كروت الحسابات المالية (البضاعة، المحصل، والمتبقي) -->
+        <!-- ملخص المبالغ المالية (إجمالي البضاعة، المحصل، والمتبقي) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div class="p-4 bg-blue-950/20 border border-blue-500/30 rounded-2xl">
+          <div class="p-3.5 bg-blue-950/20 border border-blue-500/30 rounded-2xl">
             <div class="flex justify-between items-center">
-              <span class="text-blue-300 font-bold">إجمالي قيمة البضاعة المباعة</span>
+              <span class="text-blue-300 font-bold">إجمالي البضاعة المباعة</span>
               <i class="fa-solid fa-boxes-stacked text-blue-400"></i>
             </div>
-            <p class="text-2xl font-black text-white mt-2" id="statTotalSalesSum">0 ج.م</p>
+            <p class="text-xl font-black text-white mt-1.5" id="statTotalSalesSum">0 ج.م</p>
             <span class="text-[10px] text-slate-400">مجموع الشغل الكامل</span>
           </div>
 
-          <div class="p-4 bg-emerald-950/20 border border-emerald-500/30 rounded-2xl">
+          <div class="p-3.5 bg-emerald-950/20 border border-emerald-500/30 rounded-2xl">
             <div class="flex justify-between items-center">
               <span class="text-emerald-300 font-bold">المبالغ المحصلة فعلياً</span>
               <i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i>
             </div>
-            <p class="text-2xl font-black text-emerald-400 mt-2" id="statTotalCollectedSum">0 ج.م</p>
-            <span class="text-[10px] text-emerald-500/80">تم التوريد والتحصيل</span>
+            <p class="text-xl font-black text-emerald-400 mt-1.5" id="statTotalCollectedSum">0 ج.م</p>
+            <span class="text-[10px] text-emerald-400/80">المسدد نقداً / تحويل</span>
           </div>
 
-          <div class="p-4 bg-rose-950/20 border border-rose-500/30 rounded-2xl">
+          <div class="p-3.5 bg-rose-950/20 border border-rose-500/30 rounded-2xl">
             <div class="flex justify-between items-center">
               <span class="text-rose-300 font-bold">المتبقي المطلوب تحصيله</span>
               <i class="fa-solid fa-scale-unbalanced text-rose-400"></i>
             </div>
-            <p class="text-2xl font-black text-rose-400 mt-2" id="statTotalRemainingSum">0 ج.م</p>
+            <p class="text-xl font-black text-rose-400 mt-1.5" id="statTotalRemainingSum">0 ج.م</p>
             <span class="text-[10px] text-rose-400/80 font-bold">مستحق لتقفيل الخميس</span>
+          </div>
+        </div>
+
+        <!-- حصر كافة المون والمواد (أيقونات مصغرة قابلة للتمرير / شبكة مرنة) -->
+        <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-bold text-xs text-white flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-blue-400"></i>
+              حصر كميات وقيم المون المباعة بالتفصيل
+            </h4>
+            <span class="text-[10px] text-slate-400">اسحب يميناً ويساراً ↔</span>
+          </div>
+
+          <!-- شريط الكروت المصغرة للمون -->
+          <div id="materialsCardsContainer" class="flex md:grid md:grid-cols-4 lg:grid-cols-6 gap-2.5 overflow-x-auto pb-2 custom-scrollbar">
+            <!-- كروت الأصناف تُنشأ تلقائياً بواسطة الـ JavaScript -->
           </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW A: واجهة المهندس -->
+      <!-- VIEW A: واجهة المهندس (نظيفة وخالية من إحصائيات التشوينة) -->
       <!-- ========================================== -->
       <section id="view-engineer" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl">
@@ -393,9 +390,14 @@
               <p class="text-xs text-slate-300 mt-0.5">المواقع والتشوينات المسندة إليك: <span id="accAssignedSitesBadge" class="text-emerald-400 font-bold"></span></p>
             </div>
           </div>
-          <button onclick="openBroadcastChat()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-2">
-            <i class="fa-solid fa-bullhorn text-amber-400"></i> التنسيق المالي مع التشوينات
-          </button>
+          <div class="flex gap-2">
+            <button onclick="switchView('daily-inventory-section')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+              <i class="fa-solid fa-calculator"></i> عرض الحصر اليومي
+            </button>
+            <button onclick="openBroadcastChat()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-bullhorn text-amber-400"></i> التنسيق مع التشوينة
+            </button>
+          </div>
         </div>
 
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
@@ -434,9 +436,14 @@
               <p class="text-xs text-slate-300 mt-0.5">تجهيز الخامات، صرف النقلات، ومتابعة حركة التوريد الميداني.</p>
             </div>
           </div>
-          <button onclick="openBroadcastChat()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-2">
-            <i class="fa-solid fa-bullhorn"></i> المحادثة مع المحاسبين
-          </button>
+          <div class="flex gap-2">
+            <button onclick="switchView('daily-inventory-section')" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-calculator"></i> حصر المون
+            </button>
+            <button onclick="openBroadcastChat()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-bullhorn text-amber-400"></i> المحادثات
+            </button>
+          </div>
         </div>
 
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
@@ -483,7 +490,7 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW E: لوحة الإدارة العامة وإسناد الأعمال -->
+      <!-- VIEW E: لوحة الإدارة العامة -->
       <!-- ========================================== -->
       <section id="view-admin" class="role-view hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
@@ -494,9 +501,14 @@
               <p class="text-xs text-slate-400 mt-1">تحديد وإسناد مواقع وتشوينات العمل لكافة الموظفين والمحاسبين</p>
             </div>
           </div>
-          <button onclick="openModal('userManageModal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20">
-            <i class="fa-solid fa-user-plus"></i> إضافة مستخدم جديد
-          </button>
+          <div class="flex gap-2">
+            <button onclick="switchView('daily-inventory-section')" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg">
+              <i class="fa-solid fa-calculator"></i> تقرير الحصر اليومي
+            </button>
+            <button onclick="openModal('userManageModal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20">
+              <i class="fa-solid fa-user-plus"></i> إضافة مستخدم جديد
+            </button>
+          </div>
         </div>
 
         <!-- جدول إسناد المواقع والتشوينات لجميع الموظفين -->
@@ -627,7 +639,7 @@
   <!-- MODALS المنظومة -->
   <!-- ========================================== -->
 
-  <!-- MODAL: تقرير وكشف حساب المشتريات التراكمي الشامل للمهندس -->
+  <!-- MODAL: تقرير وكشف حساب المشتريات التراكمي للمهندس -->
   <div id="clientReportModal" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-3xl rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col max-h-[90vh]">
       <div class="flex justify-between items-start border-b border-slate-800 pb-3">
@@ -679,7 +691,7 @@
     </div>
   </div>
 
-  <!-- MODAL: إسناد المواقع والتشوينات للموظفين من المدير -->
+  <!-- MODAL: إسناد المواقع والتشوينات للموظفين -->
   <div id="assignSitesModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -706,7 +718,7 @@
     </div>
   </div>
 
-  <!-- MODAL: الملف الشخصي ورفع الصورة بنفسه -->
+  <!-- MODAL: الملف الشخصي ورفع الصورة -->
   <div id="profileModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -775,13 +787,13 @@
     </div>
   </div>
 
-  <!-- MODAL: طلب توريد جديد -->
+  <!-- MODAL: طلب توريد جديد يضم كافة أصناف المون -->
   <div id="orderModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
           <i class="fa-solid fa-cart-plus text-blue-400"></i>
-          إنشاء أمر توريد خامات
+          إنشاء أمر توريد خامات ومون
         </h3>
         <button onclick="closeModal('orderModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
@@ -790,21 +802,34 @@
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الصنف المطلوب</label>
           <select id="modalItem" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
-            <option value="طوب أحمر عادي" data-price="2.1" data-type="brick">طوب أحمر عادي (2.1 ج/طوبة)</option>
-            <option value="أسمنت مسلح ممتاز" data-price="2250" data-type="cement">أسمنت مسلح ممتاز (2,250 ج/طن - 20 شكارة)</option>
-            <option value="رمل مباني ناعم" data-price="170" data-type="sand">رمل مباني ناعم (170 ج/متر³)</option>
-            <option value="سن 1 للخرسانة" data-price="290" data-type="gravel">سن 1 مخصوص (290 ج/متر³)</option>
+            <optgroup label="الأسمنت والجبس">
+              <option value="أسمنت مسلح ممتاز" data-price="2250" data-mat="cement_armed" data-unit="طن">أسمنت مسلح ممتاز (2,250 ج/طن - 20 شكارة)</option>
+              <option value="أسمنت مقاوم للملوحة" data-price="2350" data-mat="cement_resist" data-unit="طن">أسمنت مقاوم سي ووتر (2,350 ج/طن)</option>
+              <option value="أسمنت تشطيبات وبياض" data-price="2100" data-mat="cement_finish" data-unit="طن">أسمنت تشطيبات وبياض (2,100 ج/طن)</option>
+              <option value="جبس بياض ممتاز" data-price="1600" data-mat="gypsum" data-unit="طن">جبس بياض ممتاز (1,600 ج/طن)</option>
+            </optgroup>
+            <optgroup label="الرمل والسن">
+              <option value="رمل مباني ناعم" data-price="170" data-mat="sand_building" data-unit="متر³">رمل مباني ناعم (170 ج/متر³)</option>
+              <option value="رمل محارة خشن" data-price="180" data-mat="sand_plaster" data-unit="متر³">رمل محارة خشن (180 ج/متر³)</option>
+              <option value="سن 1 مخصوص" data-price="290" data-mat="gravel_1" data-unit="متر³">سن 1 مخصوص (290 ج/متر³)</option>
+              <option value="سن 2 خرسانات" data-price="280" data-mat="gravel_2" data-unit="متر³">سن 2 خرسانات (280 ج/متر³)</option>
+            </optgroup>
+            <optgroup label="الطوب">
+              <option value="طوب أحمر مفرغ عادي" data-price="2.1" data-mat="brick_red" data-unit="ألف طوبة">طوب أحمر مفرغ عادي (2.1 ج/طوبة)</option>
+              <option value="طوب إسمنتي مصمت" data-price="2.6" data-mat="brick_cement" data-unit="ألف طوبة">طوب إسمنتي مصمت (2.6 ج/طوبة)</option>
+              <option value="طوب وردي للواجهات" data-price="4.5" data-mat="brick_pink" data-unit="طوبة">طوب وردي للواجهات (4.5 ج/طوبة)</option>
+            </optgroup>
           </select>
         </div>
 
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الكمية المطلوبة</label>
-          <input type="number" id="modalQty" value="1000" min="1" required class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
+          <input type="number" id="modalQty" value="10" min="1" required class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
         </div>
 
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">مكان التشوين / ملاحظات التعتيق</label>
-          <input type="text" id="modalNotes" placeholder="أمام بوابة الفيلا - دور أرضي" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
+          <input type="text" id="modalNotes" placeholder="أمام بوابة الفيلا - تفريغ أرضي" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
         </div>
 
         <div class="flex gap-2 pt-2">
@@ -951,7 +976,7 @@
     </div>
   </div>
   <!-- ========================================== -->
-  <!-- 3. المنطق البرمجي (JAVASCRIPT) وتثبيت الجلسة والحسابات -->
+  <!-- 3. المنطق البرمجي (JAVASCRIPT) وتثبيت الجلسة وحصر المون -->
   <!-- ========================================== -->
   <script>
     const COMPOUNDS_LIST = [
@@ -960,7 +985,23 @@
       'كليوباترا', 'الحلواني', 'عملاء التشوينة'
     ];
 
-    // صورة رمزية محايدة موحدة (أيقونة مستخدم افتراضية بدلاً من الصور الشخصية الثابتة)
+    // قائمة المون الرسمية المحددة بالكامل
+    const OFFICIAL_MATERIALS = [
+      { key: 'sand_regular', name: 'رمل عادي', unit: 'متر³', defaultPrice: 170, category: 'رمل' },
+      { key: 'sand_capital', name: 'رمل العاصمة', unit: 'متر³', defaultPrice: 190, category: 'رمل' },
+      { key: 'gravel_regular', name: 'سن عادي', unit: 'متر³', defaultPrice: 280, category: 'سن' },
+      { key: 'gravel_zero', name: 'سن زيرو', unit: 'متر³', defaultPrice: 300, category: 'سن' },
+      { key: 'brick_red_reg', name: 'طوب أحمر عادي', unit: 'ألف طوبة', defaultPrice: 2100, category: 'طوب' },
+      { key: 'brick_red_24', name: 'طوب أحمر 24', unit: 'ألف طوبة', defaultPrice: 2350, category: 'طوب' },
+      { key: 'brick_red_double', name: 'طوب أحمر دوبل', unit: 'ألف طوبة', defaultPrice: 3400, category: 'طوب' },
+      { key: 'brick_solid', name: 'طوب مصمت', unit: 'ألف طوبة', defaultPrice: 2600, category: 'طوب' },
+      { key: 'cement_tora', name: 'أسمنت طرة', unit: 'طن', defaultPrice: 2250, category: 'أسمنت' },
+      { key: 'cement_sinai', name: 'أسمنت سيناء', unit: 'طن', defaultPrice: 2200, category: 'أسمنت' },
+      { key: 'cement_white', name: 'أسمنت أبيض', unit: 'شكارة', defaultPrice: 260, category: 'أسمنت' },
+      { key: 'gypsum_sinai', name: 'جبس سيناء', unit: 'شكارة', defaultPrice: 90, category: 'جبس' },
+      { key: 'gypsum_qawmeya', name: 'جبس قومية', unit: 'شكارة', defaultPrice: 85, category: 'جبس' }
+    ];
+
     const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>';
 
     let currentUser = null;
@@ -972,7 +1013,6 @@
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // قاعدة بيانات المستخدمين مع إزالة الصور الثابتة وجعل المسمى "محاسب" فقط وإتاحة إسناد التشوينة لأي موظف
     const initialUsers = {
       'admin': {
         role: 'admin',
@@ -1038,93 +1078,84 @@
       }
     };
 
-    // الطلبات الافتراضية مع دعم تقفيل الحسابات (إجمالي المبيعات، المحصل، والمتبقي)
     const initialOrders = [
       {
-        id: 'ORD-101',
+        id: 'ORD-201',
         engineer: 'م. إبراهيم خليل',
         compound: 'المعادي 1',
         unit: 'فيلا 18',
         phone: '01012345678',
+        matKey: 'brick_red_reg',
         item: 'طوب أحمر عادي',
-        itemType: 'brick',
-        qtyNumber: 4000,
-        qty: '4,000 طوبة (نقلة واحدة)',
-        tripsCount: 1,
-        tripCost: 400,
-        pricePerUnit: 2.1,
-        total: 8400,
-        collected: 6000,
-        remaining: 2400,
+        qty: 3,
+        unit: 'ألف طوبة',
+        pricePerUnit: 2100,
+        total: 6300,
+        collected: 4500,
+        remaining: 1800,
         status: 'تم التسليم للعميل',
         driver: 'الكابتن سيد عبد العال',
         proofImg: null,
-        date: '2026-09-15 10:30 ص'
+        date: '2026-10-02 09:30 ص'
       },
       {
-        id: 'ORD-102',
+        id: 'ORD-202',
         engineer: 'م. إبراهيم خليل',
         compound: 'المعادي 1',
         unit: 'فيلا 18',
         phone: '01012345678',
-        item: 'أسمنت مسلح ممتاز',
-        itemType: 'cement',
-        qtyNumber: 10, // 10 طن = 200 شكارة
-        qty: '10 طن (200 شكارة)',
-        tripsCount: 2,
-        tripCost: 800,
+        matKey: 'cement_tora',
+        item: 'أسمنت طرة',
+        qty: 5,
+        unit: 'طن',
         pricePerUnit: 2250,
-        total: 22500,
-        collected: 22500,
+        total: 11250,
+        collected: 11250,
         remaining: 0,
         status: 'تم التسليم للعميل',
         driver: 'الكابتن سيد عبد العال',
         proofImg: null,
-        date: '2026-09-28 01:15 م'
+        date: '2026-10-03 11:15 ص'
       },
       {
-        id: 'ORD-103',
+        id: 'ORD-203',
         engineer: 'م. تامر حسني',
         compound: 'جراند',
         unit: 'عمارة 10A',
         phone: '01234567890',
-        item: 'رمل مباني ناعم',
-        itemType: 'sand',
-        qtyNumber: 30, // 30 متر³ = 3 نقلات
-        qty: '30 متر³ (3 نقلات)',
-        tripsCount: 3,
-        tripCost: 1200,
-        pricePerUnit: 170,
-        total: 5100,
-        collected: 3000,
-        remaining: 2100,
+        matKey: 'sand_capital',
+        item: 'رمل العاصمة',
+        qty: 20,
+        unit: 'متر³',
+        pricePerUnit: 190,
+        total: 3800,
+        collected: 2000,
+        remaining: 1800,
         status: 'جاري الشحن',
         driver: 'الكابتن سيد عبد العال',
         proofImg: null,
-        date: '2026-10-04 03:00 م'
+        date: '2026-10-04 02:20 م'
       }
     ];
 
-    // دوال التخزين والمزامنة
     function getStoredUsers() {
-      const data = localStorage.getItem('alraed_erp_users_v4');
+      const data = localStorage.getItem('alraed_erp_users_v5');
       return data ? JSON.parse(data) : initialUsers;
     }
 
     function setStoredUsers(data) {
-      localStorage.setItem('alraed_erp_users_v4', JSON.stringify(data));
+      localStorage.setItem('alraed_erp_users_v5', JSON.stringify(data));
     }
 
     function getStoredOrders() {
-      const data = localStorage.getItem('alraed_erp_orders_v4');
+      const data = localStorage.getItem('alraed_erp_orders_v5');
       return data ? JSON.parse(data) : initialOrders;
     }
 
     function setStoredOrders(data) {
-      localStorage.setItem('alraed_erp_orders_v4', JSON.stringify(data));
+      localStorage.setItem('alraed_erp_orders_v5', JSON.stringify(data));
     }
 
-    // حفظ واستعادة الجلسة لمنع تسجيل الخروج عند الـ Refresh
     function saveSession(username) {
       localStorage.setItem('alraed_session_user', username);
     }
@@ -1137,8 +1168,9 @@
       localStorage.removeItem('alraed_session_user');
     }
 
-    // فحص الجلسة تلقائياً عند تحميل الصفحة
+    // استعادة الجلسة تلقائياً عند التحديث (Refresh)
     window.addEventListener('DOMContentLoaded', () => {
+      populateOrderModalSelect();
       const savedUsername = getSession();
       if (savedUsername) {
         const allUsers = getStoredUsers();
@@ -1151,6 +1183,16 @@
         }
       }
     });
+
+    // تعبئة قائمة الطلب في المودال بالمون الرسمية
+    function populateOrderModalSelect() {
+      const sel = document.getElementById('modalItem');
+      if (!sel) return;
+      sel.innerHTML = '';
+      OFFICIAL_MATERIALS.forEach(m => {
+        sel.innerHTML += `<option value="${m.name}" data-mat="${m.key}" data-price="${m.defaultPrice}" data-unit="${m.unit}">${m.name} (${m.defaultPrice} ج/${m.unit})</option>`;
+      });
+    }
 
     function switchAuthTab(tab) {
       const isLogin = tab === 'login';
@@ -1185,7 +1227,7 @@
 
       if (userKey) {
         currentUser = { ...allUsers[userKey], username: userKey };
-        saveSession(userKey); // تثبيت تسجيل الدخول
+        saveSession(userKey);
         document.getElementById('authScreen').classList.add('hidden');
         document.getElementById('appContainer').classList.remove('hidden');
         updateHeaderAndSidebar();
@@ -1221,7 +1263,7 @@
       setStoredUsers(allUsers);
 
       currentUser = { ...newEngineer, username: uKey };
-      saveSession(uKey); // تثبيت الجلسة للمهندس الجديد
+      saveSession(uKey);
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('appContainer').classList.remove('hidden');
       updateHeaderAndSidebar();
@@ -1230,7 +1272,6 @@
       alert(`تم تسجيل حسابك بنجاح في مشروع (${newEngineer.compound}).`);
     }
 
-    // تسجيل الخروج الموحد (الزر الوحيد في القائمة الجانبية)
     function logout() {
       clearSession();
       currentUser = null;
@@ -1272,7 +1313,7 @@
       } else if (currentUser.role === 'engineer') {
         sitesText.innerText = currentUser.compound + ' (' + currentUser.unit + ')';
       } else {
-        sitesText.innerText = 'الإدارة المركزية الكاملة';
+        sitesText.innerText = 'الإدارة العامة المركزية';
       }
 
       const isWorking = currentUser.attendance ? currentUser.attendance.isWorking : false;
@@ -1287,6 +1328,14 @@
         updateAttendanceButtonUI();
       } else {
         attBox.classList.add('hidden');
+      }
+
+      // إظهار زر "الحصر اليومي" للمحاسب والتشوينة والمدير فقط، وإخفاؤه تماماً عن المهندس
+      const navDaily = document.getElementById('navDailyInventoryBtn');
+      if (currentUser.role === 'accountant' || currentUser.role === 'store' || currentUser.role === 'admin') {
+        navDaily.classList.remove('hidden');
+      } else {
+        navDaily.classList.add('hidden');
       }
 
       const navClients = document.getElementById('navClientsBtn');
@@ -1346,6 +1395,9 @@
 
       if (viewName === 'main') {
         renderAppByRole();
+      } else if (viewName === 'daily-inventory-section') {
+        document.getElementById('view-daily-inventory-section').classList.remove('hidden');
+        renderDailyInventorySection();
       } else if (viewName === 'clients-section') {
         document.getElementById('view-clients-section').classList.remove('hidden');
         renderCurrentClientsSection();
@@ -1358,16 +1410,13 @@
       }
     }
 
-    // حساب الإحصائيات اليومية والأسبوعية للداشبورد الرئيسي
-    function calculateAndRenderStatistics() {
+    // حساب وعرض الحصر اليومي المفصل لكافة أصناف المون المحددة
+    function renderDailyInventorySection() {
       const orders = getStoredOrders();
       let targetOrders = orders;
       let targetSitesName = 'كافة المشروعات والتشوينات';
 
-      if (currentUser.role === 'engineer') {
-        targetOrders = orders.filter(o => o.engineer.includes(currentUser.name));
-        targetSitesName = `${currentUser.compound} (${currentUser.unit})`;
-      } else if (currentUser.role === 'accountant' || currentUser.role === 'store' || currentUser.role === 'driver') {
+      if (currentUser.role === 'accountant' || currentUser.role === 'store') {
         const assigned = currentUser.assignedCompounds || [];
         targetOrders = orders.filter(o => assigned.includes(o.compound));
         targetSitesName = assigned.length > 0 ? assigned.join(' • ') : 'لا توجد مواقع مسندة';
@@ -1375,55 +1424,57 @@
 
       document.getElementById('dashSiteTitle').innerText = targetSitesName;
 
-      let cementTons = 0;
-      let sandGravelMeters = 0;
-      let sandGravelTrips = 0;
-      let brickCount = 0;
-      let brickTrips = 0;
-      let tripsCost = 0;
       let totalSales = 0;
       let totalCollected = 0;
+
+      // تهيئة عدادات الأصناف
+      const matSummary = {};
+      OFFICIAL_MATERIALS.forEach(m => {
+        matSummary[m.key] = { name: m.name, unit: m.unit, qty: 0, totalVal: 0 };
+      });
 
       targetOrders.forEach(o => {
         const tot = o.total || 0;
         const col = o.collected !== undefined ? o.collected : (o.status === 'تم التسليم للعميل' ? tot : 0);
         totalSales += tot;
         totalCollected += col;
-        tripsCost += (o.tripCost || 0);
 
-        if (o.itemType === 'cement') {
-          cementTons += (o.qtyNumber || 0);
-        } else if (o.itemType === 'sand' || o.itemType === 'gravel') {
-          sandGravelMeters += (o.qtyNumber || 0);
-          sandGravelTrips += (o.tripsCount || 1);
-        } else if (o.itemType === 'brick') {
-          brickCount += (o.qtyNumber || 0);
-          brickTrips += (o.tripsCount || 1);
+        if (o.matKey && matSummary[o.matKey]) {
+          matSummary[o.matKey].qty += (parseFloat(o.qty) || 0);
+          matSummary[o.matKey].totalVal += tot;
         }
       });
 
-      const cementBags = cementTons * 20; // كل طن أسمنت = 20 شكارة
       const totalRemaining = totalSales - totalCollected;
-
-      document.getElementById('statCementBags').innerText = `${cementBags.toLocaleString()} شكارة`;
-      document.getElementById('statCementTons').innerText = `${cementTons.toLocaleString()} طن مباع`;
-
-      document.getElementById('statSandGravelTrips').innerText = `${sandGravelTrips} نقلة`;
-      document.getElementById('statSandGravelMeters').innerText = `${sandGravelMeters.toLocaleString()} متر³ إجمالي`;
-
-      document.getElementById('statBrickCount').innerText = `${brickCount.toLocaleString()} طوبة`;
-      document.getElementById('statBrickTrips').innerText = `${brickTrips} نقلة طوب`;
-
-      document.getElementById('statTripsCost').innerText = `${tripsCost.toLocaleString()} ج.م`;
 
       document.getElementById('statTotalSalesSum').innerText = `${totalSales.toLocaleString()} ج.م`;
       document.getElementById('statTotalCollectedSum').innerText = `${totalCollected.toLocaleString()} ج.م`;
       document.getElementById('statTotalRemainingSum').innerText = `${totalRemaining.toLocaleString()} ج.م`;
+
+      // بناء الكروت المصغرة للأصناف (تمرير أفقي / شبكة ملمومة)
+      const container = document.getElementById('materialsCardsContainer');
+      container.innerHTML = '';
+
+      OFFICIAL_MATERIALS.forEach(m => {
+        const itemData = matSummary[m.key];
+        const isSold = itemData.qty > 0;
+        container.innerHTML += `
+          <div class="min-w-[140px] md:min-w-0 bg-slate-900/90 border ${isSold ? 'border-blue-500/50 bg-blue-950/10' : 'border-slate-800'} p-2.5 rounded-xl flex flex-col justify-between shadow-sm">
+            <div>
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${isSold ? 'bg-blue-500/20 text-blue-300' : 'bg-slate-800 text-slate-400'}">${m.category}</span>
+              <p class="font-bold text-white text-xs mt-1 truncate" title="${m.name}">${m.name}</p>
+            </div>
+            <div class="mt-2 pt-2 border-t border-slate-800/80">
+              <p class="text-sm font-black ${isSold ? 'text-emerald-400' : 'text-slate-400'}">${itemData.qty.toLocaleString()} <span class="text-[10px] font-normal text-slate-400">${m.unit}</span></p>
+              <p class="text-[10px] font-semibold text-slate-300 mt-0.5">${itemData.totalVal.toLocaleString()} ج.م</p>
+            </div>
+          </div>
+        `;
+      });
     }
 
     function renderAppByRole() {
       document.querySelectorAll('.role-view').forEach(v => v.classList.add('hidden'));
-      calculateAndRenderStatistics();
 
       if (currentUser.role === 'engineer') {
         document.getElementById('view-engineer').classList.remove('hidden');
@@ -1574,7 +1625,7 @@
             <tr>
               <td class="p-2.5 font-bold text-white">#${o.id}</td>
               <td class="p-2.5 text-slate-400">${o.date}</td>
-              <td class="p-2.5 font-semibold text-slate-200">${o.item} (${o.qty})</td>
+              <td class="p-2.5 font-semibold text-slate-200">${o.item} (${o.qty} ${o.unit || ''})</td>
               <td class="p-2.5 font-bold text-emerald-400">${(o.total || 0).toLocaleString()} ج.م</td>
               <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400">${o.status}</span></td>
               <td class="p-2.5">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline">عرض التوثيق</a>` : '--'}</td>
@@ -1606,7 +1657,7 @@
               <td class="p-3 font-bold text-white">#${o.id}</td>
               <td class="p-3">${o.engineer}<br><span class="text-[10px] text-emerald-400 font-semibold">${o.compound}</span></td>
               <td class="p-3 font-semibold text-blue-400">${o.unit}<br><span class="text-[10px] text-slate-400">${o.phone}</span></td>
-              <td class="p-3">${o.item} (${o.qty})</td>
+              <td class="p-3">${o.item} (${o.qty} ${o.unit || ''})</td>
               <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
               <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
               <td class="p-3 text-center space-x-1 space-x-reverse">
@@ -1619,13 +1670,11 @@
       }
     }
 
-    // لوحة المدير العام وإسناد ونقل التشوينات والمواقع لجميع الموظفين
     function renderAdminDashboard() {
       const allUsers = getStoredUsers();
       const staffTbody = document.getElementById('adminStaffAssignTable');
       staffTbody.innerHTML = '';
 
-      // جلب جميع الموظفين (المحاسب، التشوينة، السائق) لإتاحة الإسناد والنقل للجميع
       const staffKeys = Object.keys(allUsers).filter(k => allUsers[k].role !== 'engineer' && allUsers[k].role !== 'admin');
 
       staffKeys.forEach(k => {
@@ -1714,7 +1763,6 @@
 
       closeModal('assignSitesModal');
       renderAdminDashboard();
-      calculateAndRenderStatistics();
       alert(`تم بنجاح نقل وتحديث اختصاصات الموظف (${allUsers[selectedStaffForAssign].name}).`);
     }
 
@@ -1745,7 +1793,7 @@
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
             <td class="p-3">${o.compound} - ${o.unit}</td>
-            <td class="p-3 font-bold text-amber-400">${o.item} (${o.qty})</td>
+            <td class="p-3 font-bold text-amber-400">${o.item} (${o.qty} ${o.unit || ''})</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
             <td class="p-3 text-center space-x-1 space-x-reverse">
               <button onclick="updateOrderStatus('${o.id}', 'جاري التجهيز بالتشوينة')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">تجهيز</button>
@@ -1772,7 +1820,7 @@
               </div>
               <p class="text-xs text-slate-300 mt-1">الموقع: <b class="text-white">${o.compound}</b> (الوحدة: ${o.unit})</p>
               <p class="text-xs text-slate-400">المهندس: ${o.engineer} - هاتف: <a href="tel:${o.phone}" class="text-blue-400 underline">${o.phone}</a></p>
-              <p class="text-xs text-amber-400 mt-1 font-semibold">الحمولة: ${o.item} (${o.qty})</p>
+              <p class="text-xs text-amber-400 mt-1 font-semibold">الحمولة: ${o.item} (${o.qty} ${o.unit || ''})</p>
             </div>
             <div>
               ${isDelivered ? `
@@ -1798,7 +1846,7 @@
         tbody.innerHTML += `
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
-            <td class="p-3">${o.item} (${o.qty})</td>
+            <td class="p-3">${o.item} (${o.qty} ${o.unit || ''})</td>
             <td class="p-3 text-slate-400">${o.date}</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px] bg-slate-800 border border-slate-700 text-blue-400 font-semibold">${o.status}</span></td>
             <td class="p-3">
@@ -1814,37 +1862,26 @@
       const orders = getStoredOrders();
       const sel = document.getElementById('modalItem');
       const item = sel.value;
-      const price = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-price'));
-      const itemType = sel.options[sel.selectedIndex].getAttribute('data-type');
+      const opt = sel.options[sel.selectedIndex];
+      const price = parseFloat(opt.getAttribute('data-price'));
+      const matKey = opt.getAttribute('data-mat');
+      const unit = opt.getAttribute('data-unit');
       const qty = parseFloat(document.getElementById('modalQty').value);
       const notes = document.getElementById('modalNotes').value;
 
       const dateStr = new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' });
-
-      let calculatedTrips = 1;
-      let tripCost = 400;
-      if (itemType === 'sand' || itemType === 'gravel') {
-        calculatedTrips = Math.ceil(qty / 10);
-        tripCost = calculatedTrips * 400;
-      } else if (itemType === 'cement') {
-        calculatedTrips = Math.ceil(qty / 5);
-        tripCost = calculatedTrips * 400;
-      }
-
       const totalAmount = price * qty;
 
       const newOrder = {
-        id: 'ORD-' + (orders.length + 104),
+        id: 'ORD-' + (orders.length + 204),
         engineer: currentUser.name,
         compound: currentUser.compound,
         unit: currentUser.unit,
         phone: currentUser.phone,
+        matKey: matKey,
         item: item,
-        itemType: itemType,
-        qtyNumber: qty,
-        qty: `${qty} (${notes || 'تفريغ عادي'})`,
-        tripsCount: calculatedTrips,
-        tripCost: tripCost,
+        unit: unit,
+        qty: qty,
         pricePerUnit: price,
         total: totalAmount,
         collected: 0,
@@ -1859,7 +1896,6 @@
       setStoredOrders(orders);
       closeModal('orderModal');
       renderEngineerTable();
-      calculateAndRenderStatistics();
       alert('تم إرسال أمر التوريد للمحاسب المسؤول عن موقعك.');
     }
 
@@ -1908,7 +1944,7 @@
             <td class="p-3 font-bold text-white">#${o.id}</td>
             <td class="p-3 text-slate-400">${o.date}</td>
             <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer} (${o.unit})</span></td>
-            <td class="p-3">${o.item} - ${o.qty}</td>
+            <td class="p-3">${o.item} - ${o.qty} ${o.unit || ''}</td>
             <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
             <td class="p-3">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline">عرض التوثيق</a>` : '--'}</td>
@@ -1940,7 +1976,6 @@
       openModal('profileModal');
     }
 
-    // رفع وتحديث الصورة الشخصية لكل موظف بنفسه
     function updateProfileAvatar(e) {
       const file = e.target.files[0];
       if (file) {
@@ -2039,7 +2074,6 @@
         }
         setStoredOrders(orders);
         renderAppByRole();
-        calculateAndRenderStatistics();
         alert(`تم تحديث حالة الطلب #${id} إلى: (${newStatus})`);
       }
     }
@@ -2097,7 +2131,6 @@
         setStoredOrders(orders);
         closeProofCamera();
         renderAppByRole();
-        calculateAndRenderStatistics();
         alert('تم تأكيد التعتيق وتوثيق تفريغ المون بالصورة الحية.');
       }
     }
