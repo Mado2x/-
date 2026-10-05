@@ -33,7 +33,7 @@
 <body class="bg-[#0b1120] text-slate-100 min-h-screen">
 
   <!-- ========================================== -->
-  <!-- 1. شاشة تسجيل الدخول وإنشاء حساب المهندس -->
+  <!-- 1. شاشة تسجيل الدخول وإنشاء الحساب (بدون اسم الدخول) -->
   <!-- ========================================== -->
   <div id="authScreen" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#131d31] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative">
@@ -50,13 +50,13 @@
         <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 pb-2.5 text-xs font-bold text-slate-400 border-b-2 border-transparent transition">تسجيل مهندس موقع</button>
       </div>
 
-      <!-- نموذج تسجيل الدخول -->
+      <!-- نموذج الدخول -->
       <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1.5">اسم المستخدم أو البريد الإلكتروني</label>
+          <label class="block text-slate-300 font-semibold mb-1.5">البريد الإلكتروني</label>
           <div class="relative">
-            <i class="fa-solid fa-user absolute right-3.5 top-3.5 text-slate-500"></i>
-            <input type="text" id="loginUser" required placeholder="اسم المستخدم" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
+            <i class="fa-solid fa-envelope absolute right-3.5 top-3.5 text-slate-500"></i>
+            <input type="text" id="loginUser" required placeholder="eng@example.com" class="w-full bg-[#0b1120] border border-slate-700/80 rounded-xl pr-10 pl-3 py-3 text-white focus:outline-none focus:border-blue-500 text-sm">
           </div>
         </div>
 
@@ -73,32 +73,26 @@
         </button>
       </form>
 
-      <!-- نموذج تسجيل مهندس جديد -->
+      <!-- نموذج تسجيل مهندس جديد (تم إزالة اسم الدخول) -->
       <form id="formRegister" onsubmit="handleEngineerRegister(event)" class="space-y-3 text-xs hidden">
         <div>
           <label class="block text-slate-300 mb-1 font-semibold">الاسم بالكامل</label>
           <input type="text" id="regName" required placeholder="م. أحمد ناصر" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-slate-300 mb-1 font-semibold">اسم الدخول</label>
-            <input type="text" id="regUser" required placeholder="eng_ahmed" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
-          </div>
-          <div>
-            <label class="block text-slate-300 mb-1 font-semibold">كلمة المرور</label>
-            <input type="password" id="regPass" required placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
-          </div>
+        <div>
+          <label class="block text-slate-300 mb-1 font-semibold">البريد الإلكتروني (لتسجيل الدخول)</label>
+          <input type="email" id="regEmail" required placeholder="eng@example.com" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-slate-300 mb-1 font-semibold">رقم التليفون</label>
-            <input type="tel" id="regPhone" required placeholder="010xxxxxxxx" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+            <label class="block text-slate-300 mb-1 font-semibold">كلمة المرور</label>
+            <input type="password" id="regPass" required placeholder="••••••••" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
           </div>
           <div>
-            <label class="block text-slate-300 mb-1 font-semibold">البريد الإلكتروني</label>
-            <input type="email" id="regEmail" required placeholder="eng@domain.com" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+            <label class="block text-slate-300 mb-1 font-semibold">رقم التليفون</label>
+            <input type="tel" id="regPhone" required placeholder="010xxxxxxxx" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
           </div>
         </div>
 
@@ -129,16 +123,16 @@
         </button>
       </form>
 
-      <!-- دخول تجريبي سريع -->
+      <!-- دخول سريع -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-        <p class="font-bold text-slate-300 mb-2">تسجيل دخول سريع (الباسورد: 123):</p>
+        <p class="font-bold text-slate-300 mb-2">تسجيل دخول تجريبي سريع (الباسورد: 123):</p>
         <div class="grid grid-cols-3 gap-1.5 text-center">
           <span onclick="setQuickLogin('admin')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 text-blue-400 font-bold">المدير العام</span>
           <span onclick="setQuickLogin('acc1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">أحمد زهران (محاسب)</span>
           <span onclick="setQuickLogin('store1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">عم ربيع (التشوينة)</span>
           <span onclick="setQuickLogin('driver1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">سائق</span>
-          <span onclick="setQuickLogin('eng1')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس المعادي</span>
-          <span onclick="setQuickLogin('eng2')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس جراند</span>
+          <span onclick="setQuickLogin('ibrahim@maadi.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس المعادي</span>
+          <span onclick="setQuickLogin('tamer@grand.com')" class="cursor-pointer bg-slate-800/80 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500">مهندس جراند</span>
         </div>
       </div>
     </div>
@@ -183,7 +177,7 @@
         </button>
       </div>
 
-      <!-- ملف المستخدم الحالي بالقائمة -->
+      <!-- ملف المستخدم الحالي -->
       <div onclick="openProfileModal()" class="p-3 mx-3 my-3 rounded-2xl bg-[#131d31] border border-slate-700/60 flex items-center gap-3 cursor-pointer hover:border-blue-500 transition">
         <div class="relative">
           <img id="sidebarUserAvatar" class="w-11 h-11 rounded-xl border border-blue-500/50 object-cover shadow-sm bg-slate-800" src="" alt="User">
@@ -209,7 +203,7 @@
         </div>
       </div>
 
-      <!-- روابط القائمة -->
+      <!-- الروابط -->
       <nav class="p-3 space-y-1 text-xs flex-1 overflow-y-auto custom-scrollbar">
         <button onclick="switchView('main')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold transition">
           <i class="fa-solid fa-house w-4 text-center"></i>
@@ -244,7 +238,6 @@
         </div>
       </nav>
 
-      <!-- زر تسجيل الخروج -->
       <div class="p-3 border-t border-slate-800">
         <button onclick="logout()" class="w-full py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -256,9 +249,7 @@
     <!-- المحتوى الرئيسي -->
     <main class="flex-1 p-4 md:p-6 max-w-6xl w-full mx-auto overflow-y-auto">
 
-      <!-- ========================================== -->
-      <!-- SECTION: قسم الحصر اليومي والمبيعات المستقل -->
-      <!-- ========================================== -->
+      <!-- SECTION: قسم الحصر اليومي المستقل -->
       <section id="view-daily-inventory-section" class="role-view hidden space-y-5">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-gradient-to-r from-slate-900 to-[#131d31] p-4 rounded-2xl border border-slate-800">
           <div>
@@ -273,7 +264,6 @@
           </div>
         </div>
 
-        <!-- ملخص المبالغ المالية -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
           <div class="p-3.5 bg-blue-950/20 border border-blue-500/30 rounded-2xl">
             <div class="flex justify-between items-center">
@@ -303,23 +293,19 @@
           </div>
         </div>
 
-        <!-- حصر المون الـ 13 المحددة -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <div class="flex justify-between items-center mb-3">
             <h4 class="font-bold text-xs text-white flex items-center gap-2">
               <i class="fa-solid fa-layer-group text-blue-400"></i>
-              حصر كميات وقيم المون المباعة بالتفصيل
+              حصر كميات وقيم المون الـ 13 المباعة
             </h4>
             <span class="text-[10px] text-slate-400">اسحب يميناً ويساراً ↔</span>
           </div>
-
           <div id="materialsCardsContainer" class="flex md:grid md:grid-cols-4 lg:grid-cols-6 gap-2.5 overflow-x-auto pb-2 custom-scrollbar"></div>
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW A: واجهة المهندس -->
-      <!-- ========================================== -->
       <section id="view-engineer" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-blue-900/40 to-[#131d31] border border-blue-500/30 rounded-3xl p-5 md:p-6 shadow-xl">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -340,9 +326,9 @@
               </div>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto">
-              <button onclick="openModal('orderModal')" class="flex-1 md:flex-none px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition">
-                <i class="fa-solid fa-cart-flatbed"></i>
-                <span>طلب توريد جديد</span>
+              <button onclick="openOrderCartModal()" class="flex-1 md:flex-none px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition">
+                <i class="fa-solid fa-cart-plus"></i>
+                <span>طلب توريد مجمع (سلة طلبات)</span>
               </button>
               <button onclick="openChatWithAssignedAccountant()" class="flex-1 md:flex-none px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
                 <i class="fa-solid fa-comments"></i>
@@ -362,7 +348,8 @@
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
                 <tr>
                   <th class="p-3">رقم الطلب</th>
-                  <th class="p-3">الأصناف والكميات</th>
+                  <th class="p-3">الأصناف المجمعة في الطلب</th>
+                  <th class="p-3">إجمالي الطلب</th>
                   <th class="p-3">تاريخ الطلب</th>
                   <th class="p-3">الحالة التنفيذية</th>
                   <th class="p-3">توثيق التسليم</th>
@@ -374,9 +361,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- VIEW B: واجهة المحاسب (مع الإجراء المالي الذكي) -->
-      <!-- ========================================== -->
+      <!-- VIEW B: واجهة المحاسب -->
       <section id="view-accountant" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-slate-900 to-[#131d31] border border-slate-700 rounded-3xl p-5 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div class="flex items-center gap-4">
@@ -408,7 +393,7 @@
                   <th class="p-3">رقم الطلب</th>
                   <th class="p-3">المهندس / الموقع</th>
                   <th class="p-3">الوحدة والهاتف</th>
-                  <th class="p-3">الأصناف</th>
+                  <th class="p-3">الأصناف المجمعة</th>
                   <th class="p-3">إجمالي الفاتورة</th>
                   <th class="p-3">الحالة الحالية</th>
                   <th class="p-3 text-center">الإجراء المالي والتوجيه</th>
@@ -420,9 +405,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW C: واجهة التشوينة -->
-      <!-- ========================================== -->
       <section id="view-store" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-amber-950/40 to-[#131d31] border border-amber-500/30 rounded-3xl p-5 shadow-xl flex justify-between items-center">
           <div class="flex items-center gap-4">
@@ -453,7 +436,7 @@
                 <tr>
                   <th class="p-3">رقم الطلب</th>
                   <th class="p-3">الموقع والوحدة</th>
-                  <th class="p-3">الأصناف المطلوب تحميلها</th>
+                  <th class="p-3">قائمة الأصناف للتحميل والتجهيز</th>
                   <th class="p-3">حالة التجهيز</th>
                   <th class="p-3 text-center">إجراء التشوينة</th>
                 </tr>
@@ -464,9 +447,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW D: واجهة السائق -->
-      <!-- ========================================== -->
       <section id="view-driver" class="role-view hidden space-y-5">
         <div class="bg-gradient-to-r from-cyan-950/40 to-[#131d31] border border-cyan-500/30 rounded-3xl p-5 shadow-xl flex items-center gap-4">
           <img id="driver-avatar" class="w-14 h-14 rounded-2xl border border-cyan-500 object-cover bg-slate-800" src="" alt="Driver">
@@ -485,9 +466,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW E: لوحة الإدارة العامة -->
-      <!-- ========================================== -->
       <section id="view-admin" class="role-view hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div class="flex items-center gap-4">
@@ -507,19 +486,17 @@
           </div>
         </div>
 
-        <!-- جدول إسناد المواقع والتشوينات لجميع الموظفين -->
         <div class="bg-[#131d31] border border-emerald-500/30 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
             <i class="fa-solid fa-user-check text-emerald-400"></i>
-            إسناد ونقل مواقع وتشوينات العمل (للمحاسبين وجميع الموظفين)
+            إسناد ونقل مواقع وتشوينات العمل
           </h4>
-          <p class="text-xs text-slate-400 mb-3">اختر أي موظف أو محاسب لإسناد كمبوند واحد أو عدة كمبوندات وتشوينات تحت مسؤوليته المباشرة:</p>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
                 <tr>
                   <th class="p-3">الموظف</th>
-                  <th class="p-3">اسم المستخدم</th>
+                  <th class="p-3">البريد الإلكتروني</th>
                   <th class="p-3">الوظيفة</th>
                   <th class="p-3">المواقع والتشوينات المسندة حالياً</th>
                   <th class="p-3 text-center">إجراء الإسناد والنقل</th>
@@ -530,7 +507,6 @@
           </div>
         </div>
 
-        <!-- جدول المستخدمين الكامل -->
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
             <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-blue-400"></i> قائمة مستخدمي النظام والصلاحيات</span>
@@ -540,7 +516,7 @@
               <thead class="bg-slate-800/60 text-slate-400 border-b border-slate-700">
                 <tr>
                   <th class="p-3">الاسم والصورة</th>
-                  <th class="p-3">اسم الدخول</th>
+                  <th class="p-3">البريد الإلكتروني</th>
                   <th class="p-3">الوظيفة</th>
                   <th class="p-3">بيانات التخصيص</th>
                   <th class="p-3 text-center">إلغاء الصلاحية</th>
@@ -552,9 +528,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW F: قسم العملاء الحاليين -->
-      <!-- ========================================== -->
       <section id="view-clients-section" class="role-view hidden space-y-5">
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
@@ -563,20 +537,15 @@
                 <i class="fa-solid fa-users text-emerald-400"></i>
                 قائمة العملاء الحاليين
               </h3>
-              <p class="text-xs text-slate-400 mt-1" id="clientsSectionSubtitle">
-                عرض المهندسين بالمواقع والتواصل الفوري عبر الهاتف والواتساب، والاطلاع على التقرير التراكمي الشامل.
-              </p>
+              <p class="text-xs text-slate-400 mt-1" id="clientsSectionSubtitle"></p>
             </div>
             <div id="clientsFilterBox" class="flex gap-2 overflow-x-auto max-w-full pb-1 custom-scrollbar"></div>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="currentClientsCardsContainer"></div>
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW G: السجل العام للتوريدات -->
-      <!-- ========================================== -->
       <section id="view-orders-history" class="role-view hidden space-y-5">
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
           <h3 class="text-xl font-black text-white mb-3 flex items-center gap-2">
@@ -590,7 +559,7 @@
                   <th class="p-3">رقم الطلب</th>
                   <th class="p-3">التاريخ والوقت</th>
                   <th class="p-3">المشروع / المهندس</th>
-                  <th class="p-3">الأصناف والكمية</th>
+                  <th class="p-3">الأصناف المجمعة</th>
                   <th class="p-3">إجمالي الفاتورة</th>
                   <th class="p-3">الحالة التنفيذية</th>
                   <th class="p-3">التوثيق بالصورة</th>
@@ -602,9 +571,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- VIEW H: سجل الحضور والانصراف -->
-      <!-- ========================================== -->
       <section id="view-attendance-section" class="role-view hidden space-y-5">
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-5">
           <h3 class="text-xl font-black text-white mb-2 flex items-center gap-2">
@@ -635,7 +602,75 @@
   <!-- MODALS المنظومة -->
   <!-- ========================================== -->
 
-  <!-- MODAL: تحصيل مالي لتقفيل حساب الطلب -->
+  <!-- MODAL: سلة طلبات المهندس المجمعة مع زر (شراء الآن) -->
+  <div id="orderCartModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#131d31] border border-slate-700 w-full max-w-lg rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cart-shopping text-blue-400"></i>
+          إنشاء طلب توريد خامات مجمع (سلة الأصناف)
+        </h3>
+        <button onclick="closeModal('orderCartModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <!-- نموذج إضافة صنف للسلة -->
+      <div class="bg-[#0b1120] p-3 rounded-2xl border border-slate-800 space-y-2 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div class="md:col-span-2">
+            <label class="block text-slate-400 mb-1">اختر الصنف</label>
+            <select id="cartItemSelect" class="w-full bg-[#131d31] border border-slate-700 rounded-xl p-2 text-white"></select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">الكمية المطلوبة</label>
+            <input type="number" id="cartItemQty" value="10" min="1" class="w-full bg-[#131d31] border border-slate-700 rounded-xl p-2 text-white">
+          </div>
+        </div>
+        <button onclick="addItemToOrderCart()" class="w-full py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 border border-blue-500/40 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+          <i class="fa-solid fa-plus"></i> إضافة الصنف إلى الفاتورة
+        </button>
+      </div>
+
+      <!-- جدول سلة المشتريات -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar border border-slate-800 rounded-xl p-2 bg-[#0b1120]/60">
+        <table class="w-full text-right text-xs">
+          <thead class="text-slate-400 border-b border-slate-800">
+            <tr>
+              <th class="p-2">الصنف</th>
+              <th class="p-2">الكمية</th>
+              <th class="p-2">السعر</th>
+              <th class="p-2">الإجمالي</th>
+              <th class="p-2 text-center">حذف</th>
+            </tr>
+          </thead>
+          <tbody id="cartItemsTableBody" class="divide-y divide-slate-800/80 text-slate-300">
+            <tr><td colspan="5" class="p-4 text-center text-slate-500">السلة فارغة، اختر الأصناف وأضفها أعلاه.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- إجمالي السلة وملاحظات التعتيق وزر (شراء الآن) -->
+      <div class="pt-2 border-t border-slate-800 space-y-2.5 text-xs">
+        <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+          <span class="font-bold text-slate-300">إجمالي الفاتورة المجمعة:</span>
+          <span class="text-base font-black text-emerald-400" id="cartGrandTotalText">0 ج.م</span>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1">مكان التشوين / ملاحظات التعتيق والتفريغ</label>
+          <input type="text" id="cartOrderNotes" placeholder="مثال: تفريغ أمام الفيلا دور أرضي" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+        </div>
+
+        <div class="flex gap-2 pt-1">
+          <button onclick="submitMultiItemOrder()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/30 text-xs transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-bag-shopping"></i> شراء الآن
+          </button>
+          <button type="button" onclick="closeModal('orderCartModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: تحصيل مالي -->
   <div id="collectMoneyModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -670,14 +705,12 @@
         <button onclick="confirmCollectPayment()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-600/30">
           تأكيد التحصيل والتسميع
         </button>
-        <button onclick="closeModal('collectMoneyModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-700">
-          إلغاء
-        </button>
+        <button onclick="closeModal('collectMoneyModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-700">إلغاء</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: تقرير وكشف حساب المشتريات التراكمي للمهندس -->
+  <!-- MODAL: تقرير وكشف حساب المشتريات التراكمي -->
   <div id="clientReportModal" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-3xl rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col max-h-[90vh]">
       <div class="flex justify-between items-start border-b border-slate-800 pb-3">
@@ -711,7 +744,7 @@
             <tr>
               <th class="p-2.5">رقم الطلب</th>
               <th class="p-2.5">التاريخ والوقت</th>
-              <th class="p-2.5">الصنف والكمية</th>
+              <th class="p-2.5">الأصناف المجمعة</th>
               <th class="p-2.5">إجمالي الفاتورة</th>
               <th class="p-2.5">الحالة</th>
               <th class="p-2.5">توثيق التوصيل</th>
@@ -722,14 +755,12 @@
       </div>
 
       <div class="border-t border-slate-800 pt-3 flex justify-end">
-        <button onclick="closeModal('clientReportModal')" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700">
-          إغلاق التقرير
-        </button>
+        <button onclick="closeModal('clientReportModal')" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700">إغلاق التقرير</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: إسناد المواقع والتشوينات للموظفين -->
+  <!-- MODAL: إسناد المواقع -->
   <div id="assignSitesModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -746,17 +777,13 @@
       </div>
 
       <div class="flex gap-2 pt-2 border-t border-slate-800">
-        <button onclick="saveAssignedSites()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-600/30">
-          حفظ وتفعيل الإسناد فوراً
-        </button>
-        <button onclick="closeModal('assignSitesModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-700">
-          إلغاء
-        </button>
+        <button onclick="saveAssignedSites()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-600/30">حفظ وتفعيل الإسناد فوراً</button>
+        <button onclick="closeModal('assignSitesModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-700">إلغاء</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: الملف الشخصي ورفع الصورة -->
+  <!-- MODAL: الملف الشخصي -->
   <div id="profileModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -776,7 +803,6 @@
           </label>
         </div>
         <p class="text-[11px] text-blue-400 font-semibold" id="profModalTitle"></p>
-        <p class="text-[10px] text-slate-400">اضغط على أيقونة الكاميرا لاختيار صورتك الشخصية من جهازك</p>
       </div>
 
       <form onsubmit="handleSaveProfile(event)" class="space-y-3 text-xs">
@@ -814,47 +840,8 @@
         </div>
 
         <div class="flex gap-2 pt-2">
-          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-blue-600/30">
-            حفظ التعديلات والصورة
-          </button>
-          <button type="button" onclick="closeModal('profileModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">
-            إلغاء
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: طلب توريد جديد يضم كافة أصناف المون الـ 13 -->
-  <div id="orderModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-[#131d31] border border-slate-700 w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-cart-plus text-blue-400"></i>
-          إنشاء أمر توريد خامات ومون
-        </h3>
-        <button onclick="closeModal('orderModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-
-      <form onsubmit="handleEngineerOrder(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block text-slate-300 mb-1 font-semibold">الصنف المطلوب</label>
-          <select id="modalItem" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500"></select>
-        </div>
-
-        <div>
-          <label class="block text-slate-300 mb-1 font-semibold">الكمية المطلوبة</label>
-          <input type="number" id="modalQty" value="10" min="1" required class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
-        </div>
-
-        <div>
-          <label class="block text-slate-300 mb-1 font-semibold">مكان التشوين / ملاحظات التعتيق</label>
-          <input type="text" id="modalNotes" placeholder="أمام بوابة الفيلا - تفريغ أرضي" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
-        </div>
-
-        <div class="flex gap-2 pt-2">
-          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-600/30 transition">إرسال للمحاسب المختص</button>
-          <button type="button" onclick="closeModal('orderModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">إلغاء</button>
+          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-blue-600/30">حفظ التعديلات والصورة</button>
+          <button type="button" onclick="closeModal('profileModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">إلغاء</button>
         </div>
       </form>
     </div>
@@ -946,8 +933,8 @@
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-slate-300 mb-1 font-semibold">اسم المستخدم (Login)</label>
-            <input type="text" id="newUserLogin" required placeholder="zahran_acc" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
+            <label class="block text-slate-300 mb-1 font-semibold">البريد الإلكتروني (لتسجيل الدخول)</label>
+            <input type="email" id="newUserLogin" required placeholder="zahran@company.com" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white">
           </div>
           <div>
             <label class="block text-slate-300 mb-1 font-semibold">كلمة المرور</label>
@@ -995,8 +982,8 @@
       </form>
     </div>
   </div>
-    <!-- ========================================== -->
-  <!-- 3. المنطق البرمجي (JAVASCRIPT) ودورة العمل الذكية -->
+  <!-- ========================================== -->
+  <!-- 3. المنطق البرمجي (JAVASCRIPT) وسلة الطلبات المجمعة -->
   <!-- ========================================== -->
   <script>
     const COMPOUNDS_LIST = [
@@ -1029,53 +1016,59 @@
     let selectedStaffForAssign = null;
     let selectedCompoundFilterClients = 'الكل';
     let selectedOrderIdForCollect = null;
+    let currentOrderCart = []; // مصفوفة سلة الطلبات المجمعة
     let mediaStream = null;
     let mediaRecorder = null;
     let audioChunks = [];
     let isRecordingVoice = false;
 
+    // قاعدة بيانات المستخدمين (الدخول بالبريد الإلكتروني)
     const initialUsers = {
-      'admin': {
+      'admin@company.com': {
         role: 'admin',
         name: 'محمد ناصر (المدير العام)',
         jobTitle: 'الرئيس التنفيذي - مالك الشركة',
         avatar: DEFAULT_AVATAR,
         phone: '01000000001',
+        email: 'admin@company.com',
         pass: '123',
         assignedCompounds: ['باتيو كازا', 'المعادي 1', 'جراند'],
         attendance: { isWorking: true, startTime: '08:00 ص', endTime: '--' }
       },
-      'acc1': {
+      'zahran@company.com': {
         role: 'accountant',
         name: 'أحمد زهران',
         jobTitle: 'محاسب',
         avatar: DEFAULT_AVATAR,
         phone: '01198765432',
+        email: 'zahran@company.com',
         pass: '123',
         assignedCompounds: ['المعادي 1', 'المعادي 2'],
         attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
-      'store1': {
+      'rabia@company.com': {
         role: 'store',
         name: 'عم ربيع',
         jobTitle: 'مسؤول تشوينة',
         avatar: DEFAULT_AVATAR,
         phone: '01222222222',
+        email: 'rabia@company.com',
         pass: '123',
         assignedCompounds: ['عملاء التشوينة', 'المعادي 1'],
         attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
-      'driver1': {
+      'driver@company.com': {
         role: 'driver',
         name: 'الكابتن سيد عبد العال',
         jobTitle: 'سائق نقل وتعتيق',
         avatar: DEFAULT_AVATAR,
         phone: '01555555555',
+        email: 'driver@company.com',
         pass: '123',
         assignedCompounds: ['المعادي 1', 'جراند'],
         attendance: { isWorking: false, startTime: '--', endTime: '--' }
       },
-      'eng1': {
+      'ibrahim@maadi.com': {
         role: 'engineer',
         name: 'م. إبراهيم خليل',
         jobTitle: 'مهندس موقع / مالك الوحدة',
@@ -1086,7 +1079,7 @@
         email: 'ibrahim@maadi.com',
         pass: '123'
       },
-      'eng2': {
+      'tamer@grand.com': {
         role: 'engineer',
         name: 'م. تامر حسني',
         jobTitle: 'مهندس موقع / تشطيبات',
@@ -1099,6 +1092,7 @@
       }
     };
 
+    // أوامر التوريد تدعم السلة المجمعة
     const initialOrders = [
       {
         id: 'ORD-201',
@@ -1106,11 +1100,10 @@
         compound: 'المعادي 1',
         unit: 'فيلا 18',
         phone: '01012345678',
-        matKey: 'brick_red_reg',
-        item: 'طوب أحمر عادي',
-        qty: 3,
-        unit: 'ألف طوبة',
-        pricePerUnit: 2100,
+        items: [
+          { matKey: 'brick_red_reg', name: 'طوب أحمر عادي', qty: 3, unit: 'ألف طوبة', pricePerUnit: 2100, itemTotal: 6300 }
+        ],
+        notes: 'تفريغ أرضي أمام الفيلا',
         total: 6300,
         collected: 4500,
         remaining: 1800,
@@ -1125,14 +1118,14 @@
         compound: 'المعادي 1',
         unit: 'فيلا 18',
         phone: '01012345678',
-        matKey: 'cement_tora',
-        item: 'أسمنت طرة',
-        qty: 5,
-        unit: 'طن',
-        pricePerUnit: 2250,
-        total: 11250,
-        collected: 11250,
-        remaining: 0,
+        items: [
+          { matKey: 'cement_tora', name: 'أسمنت طرة', qty: 5, unit: 'طن', pricePerUnit: 2250, itemTotal: 11250 },
+          { matKey: 'sand_capital', name: 'رمل العاصمة', qty: 10, unit: 'متر³', pricePerUnit: 190, itemTotal: 1900 }
+        ],
+        notes: 'تنزيل بالونش - دور أول',
+        total: 13150,
+        collected: 0,
+        remaining: 13150,
         status: 'طلب جديد (قيد المراجعة)',
         driver: 'لم يحدد بعد',
         proofImg: null,
@@ -1141,42 +1134,42 @@
     ];
 
     function getStoredUsers() {
-      const data = localStorage.getItem('alraed_erp_users_v6');
+      const data = localStorage.getItem('alraed_erp_users_v7');
       return data ? JSON.parse(data) : initialUsers;
     }
 
     function setStoredUsers(data) {
-      localStorage.setItem('alraed_erp_users_v6', JSON.stringify(data));
+      localStorage.setItem('alraed_erp_users_v7', JSON.stringify(data));
     }
 
     function getStoredOrders() {
-      const data = localStorage.getItem('alraed_erp_orders_v6');
+      const data = localStorage.getItem('alraed_erp_orders_v7');
       return data ? JSON.parse(data) : initialOrders;
     }
 
     function setStoredOrders(data) {
-      localStorage.setItem('alraed_erp_orders_v6', JSON.stringify(data));
+      localStorage.setItem('alraed_erp_orders_v7', JSON.stringify(data));
     }
 
-    function saveSession(username) {
-      localStorage.setItem('alraed_session_user', username);
+    function saveSession(emailKey) {
+      localStorage.setItem('alraed_session_user_email', emailKey);
     }
 
     function getSession() {
-      return localStorage.getItem('alraed_session_user');
+      return localStorage.getItem('alraed_session_user_email');
     }
 
     function clearSession() {
-      localStorage.removeItem('alraed_session_user');
+      localStorage.removeItem('alraed_session_user_email');
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      populateOrderModalSelect();
-      const savedUsername = getSession();
-      if (savedUsername) {
+      populateCartMaterialSelect();
+      const savedEmail = getSession();
+      if (savedEmail) {
         const allUsers = getStoredUsers();
-        if (allUsers[savedUsername]) {
-          currentUser = { ...allUsers[savedUsername], username: savedUsername };
+        if (allUsers[savedEmail]) {
+          currentUser = { ...allUsers[savedEmail], emailKey: savedEmail };
           document.getElementById('authScreen').classList.add('hidden');
           document.getElementById('appContainer').classList.remove('hidden');
           updateHeaderAndSidebar();
@@ -1185,12 +1178,12 @@
       }
     });
 
-    function populateOrderModalSelect() {
-      const sel = document.getElementById('modalItem');
+    function populateCartMaterialSelect() {
+      const sel = document.getElementById('cartItemSelect');
       if (!sel) return;
       sel.innerHTML = '';
       OFFICIAL_MATERIALS.forEach(m => {
-        sel.innerHTML += `<option value="${m.name}" data-mat="${m.key}" data-price="${m.defaultPrice}" data-unit="${m.unit}">${m.name} (${m.defaultPrice} ج/${m.unit})</option>`;
+        sel.innerHTML += `<option value="${m.key}">${m.name} (${m.defaultPrice} ج/${m.unit})</option>`;
       });
     }
 
@@ -1209,41 +1202,43 @@
       }
     }
 
-    function setQuickLogin(u) {
+    function setQuickLogin(email) {
       switchAuthTab('login');
-      document.getElementById('loginUser').value = u;
+      document.getElementById('loginUser').value = email;
       document.getElementById('loginPass').value = '123';
     }
 
     function handleLogin(e) {
       e.preventDefault();
       const allUsers = getStoredUsers();
-      const loginInput = document.getElementById('loginUser').value.trim();
+      const emailInput = document.getElementById('loginUser').value.trim().toLowerCase();
       const pass = document.getElementById('loginPass').value.trim();
 
+      // البحث بالبريد الإلكتروني مباشرة
       const userKey = Object.keys(allUsers).find(k => 
-        (k === loginInput || (allUsers[k].email && allUsers[k].email.toLowerCase() === loginInput.toLowerCase())) && allUsers[k].pass === pass
+        (k.toLowerCase() === emailInput || (allUsers[k].email && allUsers[k].email.toLowerCase() === emailInput)) && allUsers[k].pass === pass
       );
 
       if (userKey) {
-        currentUser = { ...allUsers[userKey], username: userKey };
+        currentUser = { ...allUsers[userKey], emailKey: userKey };
         saveSession(userKey);
         document.getElementById('authScreen').classList.add('hidden');
         document.getElementById('appContainer').classList.remove('hidden');
         updateHeaderAndSidebar();
         renderAppByRole();
       } else {
-        alert('بيانات الدخول غير صحيحة، يرجى مراجعة اسم المستخدم أو البريد وكلمة المرور.');
+        alert('بيانات الدخول غير صحيحة، يرجى مراجعة البريد الإلكتروني وكلمة المرور.');
       }
     }
 
+    // تسجيل المهندس بدون اسم دخول (بالإيميل فقط)
     function handleEngineerRegister(e) {
       e.preventDefault();
       const allUsers = getStoredUsers();
-      const uKey = document.getElementById('regUser').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
 
-      if (allUsers[uKey]) {
-        alert('اسم المستخدم مسجل مسبقاً، اختر اسماً آخر.');
+      if (allUsers[email]) {
+        alert('هذا البريد الإلكتروني مسجل مسبقاً، يمكنك تسجيل الدخول مباشرة به.');
         return;
       }
 
@@ -1253,23 +1248,23 @@
         jobTitle: 'مهندس موقع / مالك الوحدة',
         avatar: DEFAULT_AVATAR,
         phone: document.getElementById('regPhone').value.trim(),
-        email: document.getElementById('regEmail').value.trim(),
+        email: email,
         compound: document.getElementById('regCompound').value,
         unit: document.getElementById('regUnit').value.trim(),
         pass: document.getElementById('regPass').value.trim()
       };
 
-      allUsers[uKey] = newEngineer;
+      allUsers[email] = newEngineer;
       setStoredUsers(allUsers);
 
-      currentUser = { ...newEngineer, username: uKey };
-      saveSession(uKey);
+      currentUser = { ...newEngineer, emailKey: email };
+      saveSession(email);
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('appContainer').classList.remove('hidden');
       updateHeaderAndSidebar();
       renderAppByRole();
 
-      alert(`تم تسجيل حسابك بنجاح في مشروع (${newEngineer.compound}).`);
+      alert(`أهلاً بك م. ${newEngineer.name}! تم تسجيل حسابك بالبريد (${email}) لمشروع (${newEngineer.compound}).`);
     }
 
     function logout() {
@@ -1293,8 +1288,8 @@
 
     function updateHeaderAndSidebar() {
       const allUsers = getStoredUsers();
-      if (currentUser && allUsers[currentUser.username]) {
-        currentUser = { ...allUsers[currentUser.username], username: currentUser.username };
+      if (currentUser && allUsers[currentUser.emailKey]) {
+        currentUser = { ...allUsers[currentUser.emailKey], emailKey: currentUser.emailKey };
       }
 
       const userAvatar = currentUser.avatar || DEFAULT_AVATAR;
@@ -1382,7 +1377,7 @@
         alert(`تم تسجيل انتهاء العمل: ${now}`);
       }
 
-      allUsers[currentUser.username].attendance = currentUser.attendance;
+      allUsers[currentUser.emailKey].attendance = currentUser.attendance;
       setStoredUsers(allUsers);
       updateHeaderAndSidebar();
       renderAttendanceTables();
@@ -1409,7 +1404,7 @@
       }
     }
 
-    // الحصر اليومي والمبيعات
+    // الحصر اليومي والمبيعات لكافة المون الـ 13
     function renderDailyInventorySection() {
       const orders = getStoredOrders();
       let targetOrders = orders;
@@ -1437,9 +1432,14 @@
         totalSales += tot;
         totalCollected += col;
 
-        if (o.matKey && matSummary[o.matKey]) {
-          matSummary[o.matKey].qty += (parseFloat(o.qty) || 0);
-          matSummary[o.matKey].totalVal += tot;
+        // تجميع الأصناف سواء كانت فردية أو داخل سلة مجمعة
+        if (o.items && Array.isArray(o.items)) {
+          o.items.forEach(it => {
+            if (matSummary[it.matKey]) {
+              matSummary[it.matKey].qty += (parseFloat(it.qty) || 0);
+              matSummary[it.matKey].totalVal += (parseFloat(it.itemTotal) || 0);
+            }
+          });
         }
       });
 
@@ -1506,7 +1506,158 @@
       }
     }
 
-    // --- واجهة المحاسب: دورة الأزرار الذكية لمنع التكرار ---
+    // ========================================================
+    // إدارة سلة طلبات المهندس المجمعة وزر "شراء الآن"
+    // ========================================================
+    function openOrderCartModal() {
+      currentOrderCart = [];
+      renderOrderCartUI();
+      document.getElementById('cartOrderNotes').value = '';
+      openModal('orderCartModal');
+    }
+
+    function addItemToOrderCart() {
+      const matKey = document.getElementById('cartItemSelect').value;
+      const qty = parseFloat(document.getElementById('cartItemQty').value);
+
+      if (isNaN(qty) || qty <= 0) {
+        alert('يرجى تحديد كمية صحيحة.');
+        return;
+      }
+
+      const matObj = OFFICIAL_MATERIALS.find(m => m.key === matKey);
+      if (!matObj) return;
+
+      // لو الصنف مضاف مسبقاً نزود الكمية
+      const existing = currentOrderCart.find(i => i.matKey === matKey);
+      if (existing) {
+        existing.qty += qty;
+        existing.itemTotal = existing.qty * existing.pricePerUnit;
+      } else {
+        currentOrderCart.push({
+          matKey: matObj.key,
+          name: matObj.name,
+          unit: matObj.unit,
+          qty: qty,
+          pricePerUnit: matObj.defaultPrice,
+          itemTotal: qty * matObj.defaultPrice
+        });
+      }
+
+      renderOrderCartUI();
+    }
+
+    function removeItemFromCart(index) {
+      currentOrderCart.splice(index, 1);
+      renderOrderCartUI();
+    }
+
+    function renderOrderCartUI() {
+      const tbody = document.getElementById('cartItemsTableBody');
+      const totalText = document.getElementById('cartGrandTotalText');
+      tbody.innerHTML = '';
+
+      if (currentOrderCart.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">السلة فارغة، اختر الأصناف وأضفها أعلاه.</td></tr>`;
+        totalText.innerText = '0 ج.م';
+        return;
+      }
+
+      let grandTotal = 0;
+      currentOrderCart.forEach((item, idx) => {
+        grandTotal += item.itemTotal;
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-2 font-bold text-white">${item.name}</td>
+            <td class="p-2">${item.qty} ${item.unit}</td>
+            <td class="p-2 text-slate-400">${item.pricePerUnit} ج</td>
+            <td class="p-2 font-bold text-emerald-400">${item.itemTotal.toLocaleString()} ج</td>
+            <td class="p-2 text-center">
+              <button onclick="removeItemFromCart(${idx})" class="text-rose-400 hover:text-rose-300 p-1">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      totalText.innerText = `${grandTotal.toLocaleString()} ج.م`;
+    }
+
+    // زر "شراء الآن" يرسل كافة الأصناف مجمعة بأوردر واحد للمحاسب
+    function submitMultiItemOrder() {
+      if (currentOrderCart.length === 0) {
+        alert('السلة فارغة! يرجى إضافة صنف واحد على الأقل قبل الضغط على شراء الآن.');
+        return;
+      }
+
+      const orders = getStoredOrders();
+      const notes = document.getElementById('cartOrderNotes').value.trim();
+      const dateStr = new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' });
+      
+      let grandTotal = 0;
+      currentOrderCart.forEach(i => grandTotal += i.itemTotal);
+
+      const newOrder = {
+        id: 'ORD-' + (orders.length + 204),
+        engineer: currentUser.name,
+        compound: currentUser.compound,
+        unit: currentUser.unit,
+        phone: currentUser.phone,
+        items: [...currentOrderCart], // حفظ كافة الأصناف مجمعة
+        notes: notes || 'تفريغ عادي بالموقع',
+        total: grandTotal,
+        collected: 0,
+        remaining: grandTotal,
+        status: 'طلب جديد (قيد المراجعة)',
+        driver: 'لم يحدد بعد',
+        proofImg: null,
+        date: dateStr
+      };
+
+      orders.unshift(newOrder);
+      setStoredOrders(orders);
+
+      closeModal('orderCartModal');
+      renderEngineerTable();
+      alert(`تم تنفيذ الشراء بنجاح! تم إرسال الأوردر المجمع (#${newOrder.id}) بقيمة ${grandTotal.toLocaleString()} ج.م إلى المحاسب المختص.`);
+    }
+
+    // دالة مساعدة لتوليد نص الأصناف المجمعة بشكل أنيق
+    function formatOrderItemsHtml(items) {
+      if (!items || !Array.isArray(items) || items.length === 0) return '--';
+      return items.map(i => `<span class="inline-block bg-slate-800/90 border border-slate-700/80 px-2 py-0.5 rounded text-[11px] m-0.5"><b class="text-white">${i.name}</b>: ${i.qty} ${i.unit}</span>`).join(' ');
+    }
+
+    function renderEngineerTable() {
+      const orders = getStoredOrders();
+      const tbody = document.getElementById('engOrdersTable');
+      tbody.innerHTML = '';
+      const myOrders = orders.filter(o => o.engineer.includes(currentUser.name));
+
+      if (myOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">لا توجد طلبات جارية مسجلة لموقعك.</td></tr>`;
+        return;
+      }
+
+      myOrders.forEach(o => {
+        const itemsHtml = formatOrderItemsHtml(o.items);
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-3 font-bold text-white">#${o.id}</td>
+            <td class="p-3">${itemsHtml}</td>
+            <td class="p-3 font-bold text-emerald-400">${(o.total || 0).toLocaleString()} ج.م</td>
+            <td class="p-3 text-slate-400">${o.date}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px] bg-slate-800 border border-slate-700 text-blue-400 font-semibold">${o.status}</span></td>
+            <td class="p-3">
+              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline font-semibold flex items-center gap-1"><i class="fa-solid fa-camera"></i> صورة التعتيق</a>` : '<span class="text-slate-500 text-[10px]">قيد التنفيذ</span>'}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // واجهة المحاسب: عرض الطلبات المجمعة وإجراء التوجيه للتشوينة
     function renderAccountantView() {
       const allOrders = getStoredOrders();
       const assigned = currentUser.assignedCompounds || [];
@@ -1521,8 +1672,8 @@
         mySitesOrders.forEach(o => {
           let actionButtonHtml = '';
           const status = o.status;
+          const itemsHtml = formatOrderItemsHtml(o.items);
 
-          // دورة عمل الأزرار الذكية
           if (status === 'طلب جديد (قيد المراجعة)' || !status) {
             actionButtonHtml = `
               <button onclick="sendOrderToStore('${o.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-bold shadow-md shadow-blue-600/20 transition flex items-center gap-1 mx-auto">
@@ -1570,7 +1721,7 @@
               <td class="p-3 font-bold text-white">#${o.id}</td>
               <td class="p-3">${o.engineer}<br><span class="text-[10px] text-emerald-400 font-semibold">${o.compound}</span></td>
               <td class="p-3 font-semibold text-blue-400">${o.unit}<br><span class="text-[10px] text-slate-400">${o.phone}</span></td>
-              <td class="p-3">${o.item} (${o.qty} ${o.unit || ''})</td>
+              <td class="p-3 max-w-xs">${itemsHtml}</td>
               <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
               <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
               <td class="p-3 text-center">${actionButtonHtml}</td>
@@ -1580,7 +1731,6 @@
       }
     }
 
-    // إرسال الطلب للتشوينة (يغير الحالة وتسمع عند عم ربيع وتختفي أزرار الإرسال)
     function sendOrderToStore(orderId) {
       const orders = getStoredOrders();
       const o = orders.find(x => x.id === orderId);
@@ -1588,11 +1738,10 @@
         o.status = 'تم التوجيه للتشوينة للتجهيز';
         setStoredOrders(orders);
         renderAccountantView();
-        alert(`تم إرسال الطلب #${orderId} مباشرة لمسؤول التشوينة للتجهيز والتحميل 🏗️`);
+        alert(`تم إرسال الطلب #${orderId} لمسؤول التشوينة للبدء في تجهيز وتحميل الأصناف 🏗️`);
       }
     }
 
-    // مودال تحصيل الأموال
     function openCollectModal(orderId) {
       selectedOrderIdForCollect = orderId;
       const orders = getStoredOrders();
@@ -1624,11 +1773,11 @@
         setStoredOrders(orders);
         closeModal('collectMoneyModal');
         renderAccountantView();
-        alert(`تم بنجاح تسجيل تحصيل مبلغ ${amount.toLocaleString()} ج.م للطلب #${o.id}، وسمّع في تقفيل الحسابات.`);
+        alert(`تم تسجيل تحصيل مبلغ ${amount.toLocaleString()} ج.م للطلب #${o.id}.`);
       }
     }
 
-    // --- واجهة التشوينة: استقبال الأوامر وتجهيزها وصرفها ---
+    // واجهة التشوينة
     function renderStoreTable() {
       const orders = getStoredOrders();
       const assigned = currentUser.assignedCompounds || [];
@@ -1644,11 +1793,12 @@
         tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">لا توجد أوامر تحميل واردة للتشوينة حالياً.</td></tr>`;
       } else {
         storeOrders.forEach(o => {
+          const itemsHtml = formatOrderItemsHtml(o.items);
           tbody.innerHTML += `
             <tr>
               <td class="p-3 font-bold text-white">#${o.id}</td>
               <td class="p-3">${o.compound} - ${o.unit}</td>
-              <td class="p-3 font-bold text-amber-400">${o.item} (${o.qty} ${o.unit || ''})</td>
+              <td class="p-3">${itemsHtml}</td>
               <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
               <td class="p-3 text-center space-x-1 space-x-reverse">
                 <button onclick="updateStoreOrderStatus('${o.id}', 'جاري التجهيز بالتشوينة')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">بدء التحميل</button>
@@ -1681,6 +1831,7 @@
 
       orders.filter(o => o.status === 'جاري الشحن' || o.status === 'تم التسليم للعميل').forEach(o => {
         const isDelivered = o.status === 'تم التسليم للعميل';
+        const itemsHtml = formatOrderItemsHtml(o.items);
         container.innerHTML += `
           <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -1690,7 +1841,7 @@
               </div>
               <p class="text-xs text-slate-300 mt-1">الموقع: <b class="text-white">${o.compound}</b> (الوحدة: ${o.unit})</p>
               <p class="text-xs text-slate-400">المهندس: ${o.engineer} - هاتف: <a href="tel:${o.phone}" class="text-blue-400 underline">${o.phone}</a></p>
-              <p class="text-xs text-amber-400 mt-1 font-semibold">الحمولة: ${o.item} (${o.qty} ${o.unit || ''})</p>
+              <div class="mt-1.5">${itemsHtml}</div>
             </div>
             <div>
               ${isDelivered ? `
@@ -1704,69 +1855,6 @@
           </div>
         `;
       });
-    }
-
-    function renderEngineerTable() {
-      const orders = getStoredOrders();
-      const tbody = document.getElementById('engOrdersTable');
-      tbody.innerHTML = '';
-      const myOrders = orders.filter(o => o.engineer.includes(currentUser.name));
-
-      myOrders.forEach(o => {
-        tbody.innerHTML += `
-          <tr>
-            <td class="p-3 font-bold text-white">#${o.id}</td>
-            <td class="p-3">${o.item} (${o.qty} ${o.unit || ''})</td>
-            <td class="p-3 text-slate-400">${o.date}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px] bg-slate-800 border border-slate-700 text-blue-400 font-semibold">${o.status}</span></td>
-            <td class="p-3">
-              ${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline font-semibold flex items-center gap-1"><i class="fa-solid fa-camera"></i> صورة التعتيق</a>` : '<span class="text-slate-500 text-[10px]">قيد التنفيذ</span>'}
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    function handleEngineerOrder(e) {
-      e.preventDefault();
-      const orders = getStoredOrders();
-      const sel = document.getElementById('modalItem');
-      const item = sel.value;
-      const opt = sel.options[sel.selectedIndex];
-      const price = parseFloat(opt.getAttribute('data-price'));
-      const matKey = opt.getAttribute('data-mat');
-      const unit = opt.getAttribute('data-unit');
-      const qty = parseFloat(document.getElementById('modalQty').value);
-      const notes = document.getElementById('modalNotes').value;
-
-      const dateStr = new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' });
-      const totalAmount = price * qty;
-
-      const newOrder = {
-        id: 'ORD-' + (orders.length + 204),
-        engineer: currentUser.name,
-        compound: currentUser.compound,
-        unit: currentUser.unit,
-        phone: currentUser.phone,
-        matKey: matKey,
-        item: item,
-        unit: unit,
-        qty: qty,
-        pricePerUnit: price,
-        total: totalAmount,
-        collected: 0,
-        remaining: totalAmount,
-        status: 'طلب جديد (قيد المراجعة)',
-        driver: 'لم يحدد بعد',
-        proofImg: null,
-        date: dateStr
-      };
-
-      orders.unshift(newOrder);
-      setStoredOrders(orders);
-      closeModal('orderModal');
-      renderEngineerTable();
-      alert('تم إرسال أمر التوريد للمحاسب المسؤول عن موقعك.');
     }
 
     function renderCurrentClientsSection() {
@@ -1880,11 +1968,12 @@
       } else {
         myOrders.forEach(o => {
           grandTotal += (o.total || 0);
+          const itemsHtml = formatOrderItemsHtml(o.items);
           tbody.innerHTML += `
             <tr>
               <td class="p-2.5 font-bold text-white">#${o.id}</td>
               <td class="p-2.5 text-slate-400">${o.date}</td>
-              <td class="p-2.5 font-semibold text-slate-200">${o.item} (${o.qty} ${o.unit || ''})</td>
+              <td class="p-2.5">${itemsHtml}</td>
               <td class="p-2.5 font-bold text-emerald-400">${(o.total || 0).toLocaleString()} ج.م</td>
               <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400">${o.status}</span></td>
               <td class="p-2.5">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline">عرض التوثيق</a>` : '--'}</td>
@@ -1920,7 +2009,7 @@
                 <span class="font-bold text-white">${u.name}</span>
               </div>
             </td>
-            <td class="p-3 text-slate-400 font-mono">${k}</td>
+            <td class="p-3 text-slate-400 font-mono">${u.email || k}</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-emerald-400 font-bold">${u.jobTitle}</span></td>
             <td class="p-3">${assigned}</td>
             <td class="p-3 text-center">
@@ -1944,7 +2033,7 @@
                 <span class="font-bold text-white">${u.name}</span>
               </div>
             </td>
-            <td class="p-3 text-slate-400 font-mono">${k}</td>
+            <td class="p-3 text-slate-400 font-mono">${u.email || k}</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400 font-bold">${u.jobTitle}</span></td>
             <td class="p-3 text-slate-300 text-[11px]">${u.compound ? `${u.compound} (${u.unit})` : u.phone}</td>
             <td class="p-3 text-center">
@@ -2049,12 +2138,13 @@
       const tbody = document.getElementById('allOrdersTableBody');
       tbody.innerHTML = '';
       orders.forEach(o => {
+        const itemsHtml = formatOrderItemsHtml(o.items);
         tbody.innerHTML += `
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
             <td class="p-3 text-slate-400">${o.date}</td>
             <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer} (${o.unit})</span></td>
-            <td class="p-3">${o.item} - ${o.qty} ${o.unit || ''}</td>
+            <td class="p-3">${itemsHtml}</td>
             <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
             <td class="p-3">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline">عرض التوثيق</a>` : '--'}</td>
@@ -2065,8 +2155,8 @@
 
     function openProfileModal() {
       const allUsers = getStoredUsers();
-      if (allUsers[currentUser.username]) {
-        currentUser = { ...allUsers[currentUser.username], username: currentUser.username };
+      if (allUsers[currentUser.emailKey]) {
+        currentUser = { ...allUsers[currentUser.emailKey], emailKey: currentUser.emailKey };
       }
 
       document.getElementById('profModalAvatar').src = currentUser.avatar || DEFAULT_AVATAR;
@@ -2093,7 +2183,7 @@
         reader.onload = function(evt) {
           const allUsers = getStoredUsers();
           currentUser.avatar = evt.target.result;
-          allUsers[currentUser.username].avatar = evt.target.result;
+          allUsers[currentUser.emailKey].avatar = evt.target.result;
           setStoredUsers(allUsers);
           document.getElementById('profModalAvatar').src = evt.target.result;
           updateHeaderAndSidebar();
@@ -2116,7 +2206,7 @@
         currentUser.unit = document.getElementById('profEditUnit').value.trim();
       }
 
-      allUsers[currentUser.username] = { ...allUsers[currentUser.username], ...currentUser };
+      allUsers[currentUser.emailKey] = { ...allUsers[currentUser.emailKey], ...currentUser };
       setStoredUsers(allUsers);
 
       updateHeaderAndSidebar();
@@ -2134,7 +2224,7 @@
       e.preventDefault();
       const allUsers = getStoredUsers();
       const name = document.getElementById('newUserName').value.trim();
-      const login = document.getElementById('newUserLogin').value.trim();
+      const loginEmail = document.getElementById('newUserLogin').value.trim().toLowerCase();
       const pass = document.getElementById('newUserPass').value.trim();
       const role = document.getElementById('newUserRole').value;
       const compound = document.getElementById('newUserCompound').value;
@@ -2145,12 +2235,13 @@
       if (role === 'driver') jTitle = 'سائق نقل وتعتيق';
       if (role === 'store') jTitle = 'مسؤول تشوينة';
 
-      allUsers[login] = {
+      allUsers[loginEmail] = {
         role,
         name,
         jobTitle: jTitle,
         avatar: DEFAULT_AVATAR,
         pass,
+        email: loginEmail,
         compound: role === 'engineer' ? compound : '',
         unit: role === 'engineer' ? unit : '',
         phone: '01000000000',
@@ -2161,7 +2252,7 @@
       setStoredUsers(allUsers);
       closeModal('userManageModal');
       renderAdminDashboard();
-      alert(`تم إضافة المستخدم بنجاح: ${login}`);
+      alert(`تم إضافة المستخدم بنجاح: ${loginEmail}`);
     }
 
     function revokeUser(k) {
