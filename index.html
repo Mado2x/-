@@ -33,7 +33,7 @@
 <body class="bg-[#0b1120] text-slate-100 min-h-screen">
 
   <!-- ========================================== -->
-  <!-- 1. شاشة تسجيل الدخول وإنشاء حساب المهندس -->
+  <!-- 1. شاشة تسجيل الدخول وإنشاء الحساب للمهندس -->
   <!-- ========================================== -->
   <div id="authScreen" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#131d31] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative">
@@ -123,7 +123,7 @@
         </button>
       </form>
 
-      <!-- دخول تجريبي مباشر بضغطة زرار واحدة -->
+      <!-- دخول تجريبي مباشر بضغطة زر واحدة -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
         <p class="font-bold text-slate-300 mb-2">اضغط على أي حساب للدخول المباشر فوراً:</p>
         <div class="grid grid-cols-3 gap-1.5 text-center">
@@ -275,7 +275,7 @@
 
           <div class="p-3.5 bg-emerald-950/20 border border-emerald-500/30 rounded-2xl">
             <div class="flex justify-between items-center">
-              <span class="text-emerald-300 font-bold">المبالغ المحصلة فعلياً</span>
+              <span class="text-emerald-300 font-bold">المبالغ المحصلة فعلياً (دفعات يدوية)</span>
               <i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i>
             </div>
             <p class="text-xl font-black text-emerald-400 mt-1.5" id="statTotalCollectedSum">0 ج.م</p>
@@ -349,8 +349,10 @@
                   <th class="p-3">رقم الطلب</th>
                   <th class="p-3">الأصناف المجمعة في الطلب</th>
                   <th class="p-3">إجمالي الطلب</th>
+                  <th class="p-3">المسدد فعلياً</th>
+                  <th class="p-3">المتبقي</th>
                   <th class="p-3">تاريخ الطلب</th>
-                  <th class="p-3">الحالة التنفيذية</th>
+                  <th class="p-3">الحالة</th>
                   <th class="p-3">توثيق التسليم</th>
                 </tr>
               </thead>
@@ -383,7 +385,7 @@
         <div class="bg-[#131d31] border border-slate-800 rounded-2xl p-4">
           <h4 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
             <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>
-            جدول مراجعة أوامر التوريد للمواقع والتشوينات المسندة
+            جدول مراجعة أوامر التوريد للمواقع والتشوينات المسندة (التحصيل اليدوي)
           </h4>
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs">
@@ -394,8 +396,9 @@
                   <th class="p-3">الوحدة والهاتف</th>
                   <th class="p-3">الأصناف المجمعة</th>
                   <th class="p-3">إجمالي الفاتورة</th>
+                  <th class="p-3">المحصل / المتبقي</th>
                   <th class="p-3">الحالة الحالية</th>
-                  <th class="p-3 text-center">الإجراء المالي والتوجيه</th>
+                  <th class="p-3 text-center">التوجيه وإجراء التحصيل</th>
                 </tr>
               </thead>
               <tbody id="accOrdersTable" class="divide-y divide-slate-800 text-slate-300"></tbody>
@@ -560,6 +563,7 @@
                   <th class="p-3">المشروع / المهندس</th>
                   <th class="p-3">الأصناف المجمعة</th>
                   <th class="p-3">إجمالي الفاتورة</th>
+                  <th class="p-3">المحصل / المتبقي</th>
                   <th class="p-3">الحالة التنفيذية</th>
                   <th class="p-3">التوثيق بالصورة</th>
                 </tr>
@@ -612,7 +616,6 @@
         <button onclick="closeModal('orderCartModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <!-- نموذج إضافة صنف للسلة -->
       <div class="bg-[#0b1120] p-3 rounded-2xl border border-slate-800 space-y-2 text-xs">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
           <div class="md:col-span-2">
@@ -629,7 +632,6 @@
         </button>
       </div>
 
-      <!-- جدول سلة المشتريات -->
       <div class="flex-1 overflow-y-auto custom-scrollbar border border-slate-800 rounded-xl p-2 bg-[#0b1120]/60">
         <table class="w-full text-right text-xs">
           <thead class="text-slate-400 border-b border-slate-800">
@@ -647,7 +649,6 @@
         </table>
       </div>
 
-      <!-- إجمالي السلة وملاحظات التعتيق وزر (شراء الآن) -->
       <div class="pt-2 border-t border-slate-800 space-y-2.5 text-xs">
         <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
           <span class="font-bold text-slate-300">إجمالي الفاتورة المجمعة:</span>
@@ -669,13 +670,13 @@
     </div>
   </div>
 
-  <!-- MODAL: تحصيل مالي -->
+  <!-- MODAL: تحصيل مالي يدوي وتسجيل الدفعات المجزأة -->
   <div id="collectMoneyModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[#131d31] border border-slate-700 w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <h3 class="text-sm font-bold text-white flex items-center gap-2">
           <i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i>
-          تسجيل تحصيل مالي للطلب: <span id="collectOrderId" class="text-blue-400"></span>
+          تسجيل دفعة نقدية يدوياً: <span id="collectOrderId" class="text-blue-400"></span>
         </h3>
         <button onclick="closeModal('collectMoneyModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -686,23 +687,24 @@
           <b id="collectTotalBill" class="text-white"></b>
         </div>
         <div class="flex justify-between text-slate-300">
-          <span>المحصل مسبقاً:</span>
-          <span id="collectAlreadyPaid" class="text-emerald-400"></span>
+          <span>المحصل حتى الآن:</span>
+          <span id="collectAlreadyPaid" class="text-emerald-400 font-bold"></span>
         </div>
         <div class="flex justify-between text-slate-300">
           <span>المتبقي حالياً:</span>
-          <b id="collectRemainingBill" class="text-rose-400"></b>
+          <b id="collectRemainingBill" class="text-rose-400 font-bold"></b>
         </div>
 
         <div class="pt-2 border-t border-slate-800">
-          <label class="block text-slate-300 mb-1 font-semibold">المبلغ المراد تحصيله الآن (ج.م):</label>
-          <input type="number" id="collectAmountInput" min="1" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white font-bold text-sm">
+          <label class="block text-slate-300 mb-1 font-semibold">المبلغ المسلم نقداً / تحويل الآن (ج.م):</label>
+          <input type="number" id="collectAmountInput" min="1" placeholder="اكتب المبلغ المدفوع بدقة" class="w-full bg-[#0b1120] border border-slate-700 rounded-xl p-2.5 text-white font-bold text-sm">
+          <p class="text-[10px] text-slate-400 mt-1">يمكنك إدخال جزء من المبلغ لتسديده على دفعات.</p>
         </div>
       </div>
 
       <div class="flex gap-2 pt-2">
         <button onclick="confirmCollectPayment()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-600/30">
-          تأكيد التحصيل والتسميع
+          تأكيد تسجيل الدفعة
         </button>
         <button onclick="closeModal('collectMoneyModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-700">إلغاء</button>
       </div>
@@ -726,14 +728,18 @@
         <button onclick="closeModal('clientReportModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <div class="grid grid-cols-2 gap-3 my-3">
+      <div class="grid grid-cols-3 gap-2.5 my-3">
         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
-          <span class="text-[11px] text-slate-400">إجمالي عدد الطلبات المسجلة</span>
-          <p class="text-lg font-bold text-white mt-0.5" id="repTotalOrdersCount">0 طلب</p>
+          <span class="text-[10px] text-slate-400">إجمالي الطلبات</span>
+          <p class="text-base font-bold text-white mt-0.5" id="repTotalOrdersCount">0 طلب</p>
         </div>
         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
-          <span class="text-[11px] text-slate-400">توتال الفواتير الكلي منذ البداية</span>
-          <p class="text-lg font-bold text-emerald-400 mt-0.5" id="repGrandTotalSum">0 ج.م</p>
+          <span class="text-[10px] text-slate-400">إجمالي الفواتير</span>
+          <p class="text-base font-bold text-white mt-0.5" id="repGrandTotalSum">0 ج.م</p>
+        </div>
+        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400">المحصل فعلياً</span>
+          <p class="text-base font-bold text-emerald-400 mt-0.5" id="repGrandCollectedSum">0 ج.م</p>
         </div>
       </div>
 
@@ -745,8 +751,9 @@
               <th class="p-2.5">التاريخ والوقت</th>
               <th class="p-2.5">الأصناف المجمعة</th>
               <th class="p-2.5">إجمالي الفاتورة</th>
+              <th class="p-2.5">المحصل / المتبقي</th>
               <th class="p-2.5">الحالة</th>
-              <th class="p-2.5">توثيق التوصيل</th>
+              <th class="p-2.5 text-center">إجراء التحصيل</th>
             </tr>
           </thead>
           <tbody id="clientReportTableBody" class="divide-y divide-slate-800 text-slate-300"></tbody>
@@ -754,7 +761,7 @@
       </div>
 
       <div class="border-t border-slate-800 pt-3 flex justify-end">
-        <button onclick="closeModal('clientReportModal')" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700">إلغاء</button>
+        <button onclick="closeModal('clientReportModal')" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700">إغلاق</button>
       </div>
     </div>
   </div>
@@ -777,7 +784,7 @@
 
       <div class="flex gap-2 pt-2 border-t border-slate-800">
         <button onclick="saveAssignedSites()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-600/30">حفظ وتفعيل الإسناد فوراً</button>
-        <button onclick="closeModal('assignSitesModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl border border-slate-700">إلغاء</button>
+        <button onclick="closeModal('assignSitesModal')" class="px-4 bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-700">إلغاء</button>
       </div>
     </div>
   </div>
@@ -982,7 +989,7 @@
     </div>
   </div>
   <!-- ========================================== -->
-  <!-- 3. المنطق البرمجي (JAVASCRIPT) وتصحيح التخزين والدخول المباشر -->
+  <!-- 3. المنطق البرمجي (JAVASCRIPT) والتحصيل اليدوي المالي -->
   <!-- ========================================== -->
   <script>
     const COMPOUNDS_LIST = [
@@ -1020,7 +1027,7 @@
     let audioChunks = [];
     let isRecordingVoice = false;
 
-    // الحسابات الأساسية الرسمية بمفاتيـح متعددة لضمان الدخول بدون أي تعليق
+    // الحسابات الافتراضية
     const defaultUsers = {
       'admin': {
         role: 'admin',
@@ -1096,6 +1103,7 @@
       }
     };
 
+    // أوامر التوريد الافتراضية مع تصفير التحصيل التلقائي
     const initialOrders = [
       {
         id: 'ORD-201',
@@ -1108,8 +1116,8 @@
         ],
         notes: 'تفريغ أرضي أمام الفيلا',
         total: 6300,
-        collected: 4500,
-        remaining: 1800,
+        collected: 0, // التحصيل صفر افتراضياً
+        remaining: 6300,
         status: 'تم التسليم للعميل',
         driver: 'الكابتن سيد عبد العال',
         proofImg: null,
@@ -1136,10 +1144,9 @@
       }
     ];
 
-    // تنظيف النسخ القديمة وتثبيت التخزين النظيف
-    const STORAGE_KEY_USERS = 'alraed_erp_v9_users';
-    const STORAGE_KEY_ORDERS = 'alraed_erp_v9_orders';
-    const STORAGE_KEY_SESSION = 'alraed_erp_v9_session';
+    const STORAGE_KEY_USERS = 'alraed_erp_v10_users';
+    const STORAGE_KEY_ORDERS = 'alraed_erp_v10_orders';
+    const STORAGE_KEY_SESSION = 'alraed_erp_v10_session';
 
     function getStoredUsers() {
       const data = localStorage.getItem(STORAGE_KEY_USERS);
@@ -1149,7 +1156,6 @@
       }
       try {
         const parsed = JSON.parse(data);
-        // التحقق من وجود الحسابات الأساسية لضمان عدم تلفها
         if (!parsed['admin'] || !parsed['acc1']) {
           const merged = { ...defaultUsers, ...parsed };
           localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(merged));
@@ -1195,7 +1201,6 @@
       localStorage.removeItem(STORAGE_KEY_SESSION);
     }
 
-    // تهيئة الصفحة
     window.addEventListener('DOMContentLoaded', () => {
       populateCartMaterialSelect();
       const savedKey = getSession();
@@ -1235,12 +1240,11 @@
       }
     }
 
-    // دالة الدخول الفوري بضغطة زر واحدة (تتجاوز أي خطأ كتابي وتدخل في ثانية)
+    // الدخول المباشر الفوري
     function directQuickLogin(roleKey) {
       const allUsers = getStoredUsers();
       let matchedKey = null;
 
-      // مطابقة المفتاح الأساسي أو أي اسم مشابه
       if (allUsers[roleKey]) {
         matchedKey = roleKey;
       } else {
@@ -1258,13 +1262,11 @@
         updateHeaderAndSidebar();
         renderAppByRole();
       } else {
-        // إعادة تعيين الحسابات في حال حدوث أي تلف
         setStoredUsers(defaultUsers);
         directQuickLogin(roleKey);
       }
     }
 
-    // تسجيل الدخول العادي عبر الفورم
     function handleLogin(e) {
       e.preventDefault();
       const allUsers = getStoredUsers();
@@ -1292,7 +1294,6 @@
       }
     }
 
-    // تسجيل مهندس جديد بالإيميل
     function handleEngineerRegister(e) {
       e.preventDefault();
       const allUsers = getStoredUsers();
@@ -1466,6 +1467,7 @@
       }
     }
 
+    // الحصر اليومي مع الحساب الدقيق للمبالغ المحصلة يدوياً
     function renderDailyInventorySection() {
       const orders = getStoredOrders();
       let targetOrders = orders;
@@ -1489,7 +1491,7 @@
 
       targetOrders.forEach(o => {
         const tot = o.total || 0;
-        const col = o.collected !== undefined ? o.collected : (o.status === 'تم التسليم للعميل' ? tot : 0);
+        const col = o.collected || 0; // المحصل المسجل يدوياً فقط
         totalSales += tot;
         totalCollected += col;
 
@@ -1503,7 +1505,7 @@
         }
       });
 
-      const totalRemaining = totalSales - totalCollected;
+      const totalRemaining = Math.max(0, totalSales - totalCollected);
 
       document.getElementById('statTotalSalesSum').innerText = `${totalSales.toLocaleString()} ج.م`;
       document.getElementById('statTotalCollectedSum').innerText = `${totalCollected.toLocaleString()} ج.م`;
@@ -1566,6 +1568,7 @@
       }
     }
 
+    // سلة طلبات المهندس
     function openOrderCartModal() {
       currentOrderCart = [];
       renderOrderCartUI();
@@ -1653,6 +1656,7 @@
       let grandTotal = 0;
       currentOrderCart.forEach(i => grandTotal += i.itemTotal);
 
+      // أي طلب جديد يبدأ دائماً بـ 0 تحصيل والمتبقي كامل المبلغ
       const newOrder = {
         id: 'ORD-' + (orders.length + 204),
         engineer: currentUser.name,
@@ -1675,7 +1679,7 @@
 
       closeModal('orderCartModal');
       renderEngineerTable();
-      alert(`تم تنفيذ الشراء بنجاح! تم إرسال الأوردر المجمع (#${newOrder.id}) بقيمة ${grandTotal.toLocaleString()} ج.م إلى المحاسب المختص.`);
+      alert(`تم تنفيذ الشراء بنجاح! تم إرسال الأوردر (#${newOrder.id}) بقيمة ${grandTotal.toLocaleString()} ج.م إلى المحاسب المختص.`);
     }
 
     function formatOrderItemsHtml(items) {
@@ -1690,17 +1694,21 @@
       const myOrders = orders.filter(o => o.engineer.includes(currentUser.name));
 
       if (myOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">لا توجد طلبات جارية مسجلة لموقعك.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">لا توجد طلبات جارية مسجلة لموقعك.</td></tr>`;
         return;
       }
 
       myOrders.forEach(o => {
         const itemsHtml = formatOrderItemsHtml(o.items);
+        const col = o.collected || 0;
+        const rem = o.remaining !== undefined ? o.remaining : (o.total - col);
         tbody.innerHTML += `
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
             <td class="p-3">${itemsHtml}</td>
-            <td class="p-3 font-bold text-emerald-400">${(o.total || 0).toLocaleString()} ج.م</td>
+            <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
+            <td class="p-3 text-emerald-400 font-bold">${col.toLocaleString()} ج.م</td>
+            <td class="p-3 text-rose-400 font-bold">${rem.toLocaleString()} ج.م</td>
             <td class="p-3 text-slate-400">${o.date}</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px] bg-slate-800 border border-slate-700 text-blue-400 font-semibold">${o.status}</span></td>
             <td class="p-3">
@@ -1711,6 +1719,7 @@
       });
     }
 
+    // واجهة المحاسب مع أزرار التحصيل اليدوي ودفع الدفعات
     function renderAccountantView() {
       const allOrders = getStoredOrders();
       const assigned = currentUser.assignedCompounds || [];
@@ -1720,51 +1729,70 @@
       const mySitesOrders = allOrders.filter(o => assigned.includes(o.compound));
 
       if (mySitesOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">لا توجد أوامر توريد في المواقع والتشوينات المسندة إليك حالياً.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">لا توجد أوامر توريد في المواقع والتشوينات المسندة إليك حالياً.</td></tr>`;
       } else {
         mySitesOrders.forEach(o => {
           let actionButtonHtml = '';
           const status = o.status;
           const itemsHtml = formatOrderItemsHtml(o.items);
+          const col = o.collected || 0;
+          const rem = o.remaining !== undefined ? o.remaining : (o.total - col);
+          const isFullyPaid = (rem <= 0);
+
+          let collectBtnHtml = '';
+          if (isFullyPaid) {
+            collectBtnHtml = `<span class="text-[9px] text-emerald-400 font-bold block mt-1">✔ تم سداد الفاتورة بالكامل</span>`;
+          } else {
+            collectBtnHtml = `
+              <button onclick="openCollectModal('${o.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[10px] font-bold shadow transition flex items-center gap-1 mx-auto mt-1">
+                <i class="fa-solid fa-hand-holding-dollar"></i> تسجيل دفعة (${rem.toLocaleString()} ج متبقي)
+              </button>
+            `;
+          }
 
           if (status === 'طلب جديد (قيد المراجعة)' || !status) {
             actionButtonHtml = `
-              <button onclick="sendOrderToStore('${o.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-bold shadow-md shadow-blue-600/20 transition flex items-center gap-1 mx-auto">
-                <i class="fa-solid fa-paper-plane"></i> إرسال للتشوينة للتجهيز
-              </button>
+              <div class="flex flex-col items-center gap-1">
+                <button onclick="sendOrderToStore('${o.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-bold shadow-md shadow-blue-600/20 transition flex items-center gap-1">
+                  <i class="fa-solid fa-paper-plane"></i> إرسال للتشوينة للتجهيز
+                </button>
+                ${collectBtnHtml}
+              </div>
             `;
           } else if (status === 'تم التوجيه للتشوينة للتجهيز') {
             actionButtonHtml = `
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded-lg text-[10px] font-bold">
-                <i class="fa-solid fa-hourglass-half fa-spin"></i> بانتظار تجهيز التشوينة
-              </span>
+              <div class="flex flex-col items-center gap-1">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded-lg text-[10px] font-bold">
+                  <i class="fa-solid fa-hourglass-half fa-spin"></i> بانتظار تجهيز التشوينة
+                </span>
+                ${collectBtnHtml}
+              </div>
             `;
           } else if (status === 'جاري التجهيز بالتشوينة') {
             actionButtonHtml = `
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-500/15 text-blue-300 border border-blue-500/30 rounded-lg text-[10px] font-bold">
-                <i class="fa-solid fa-boxes-packing"></i> جاري التحميل بالتشوينة
-              </span>
+              <div class="flex flex-col items-center gap-1">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-500/15 text-blue-300 border border-blue-500/30 rounded-lg text-[10px] font-bold">
+                  <i class="fa-solid fa-boxes-packing"></i> جاري التحميل بالتشوينة
+                </span>
+                ${collectBtnHtml}
+              </div>
             `;
           } else if (status === 'جاري الشحن') {
             actionButtonHtml = `
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 rounded-lg text-[10px] font-bold">
-                <i class="fa-solid fa-truck-fast"></i> مع السائق في الطريق
-              </span>
+              <div class="flex flex-col items-center gap-1">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 rounded-lg text-[10px] font-bold">
+                  <i class="fa-solid fa-truck-fast"></i> مع السائق في الطريق
+                </span>
+                ${collectBtnHtml}
+              </div>
             `;
           } else if (status === 'تم التسليم للعميل') {
-            const isFullyPaid = (o.remaining <= 0);
             actionButtonHtml = `
               <div class="flex flex-col items-center gap-1">
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded text-[10px] font-bold">
-                  <i class="fa-solid fa-check-double"></i> تم التسليم والتعتيق
+                  <i class="fa-solid fa-check-double"></i> تم التسليم والتعتيق بالموقع
                 </span>
-                ${isFullyPaid ? `
-                  <span class="text-[9px] text-emerald-400 font-bold">✔ خالص بالكامل</span>
-                ` : `
-                  <button onclick="openCollectModal('${o.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[10px] font-bold shadow transition flex items-center gap-1 mt-0.5">
-                    <i class="fa-solid fa-hand-holding-dollar"></i> تحصيل المتبقي (${o.remaining.toLocaleString()} ج)
-                  </button>
-                `}
+                ${collectBtnHtml}
               </div>
             `;
           }
@@ -1776,6 +1804,10 @@
               <td class="p-3 font-semibold text-blue-400">${o.unit}<br><span class="text-[10px] text-slate-400">${o.phone}</span></td>
               <td class="p-3 max-w-xs">${itemsHtml}</td>
               <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
+              <td class="p-3">
+                <span class="text-emerald-400 font-bold">${col.toLocaleString()} ج</span> / 
+                <span class="text-rose-400 font-bold">${rem.toLocaleString()} ج</span>
+              </td>
               <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${o.status}</span></td>
               <td class="p-3 text-center">${actionButtonHtml}</td>
             </tr>
@@ -1791,42 +1823,62 @@
         o.status = 'تم التوجيه للتشوينة للتجهيز';
         setStoredOrders(orders);
         renderAccountantView();
-        alert(`تم إرسال الطلب #${orderId} لمسؤول التشوينة للبدء في تجهيز وتحميل الأصناف 🏗️`);
+        alert(`تم إرسال الطلب #${orderId} لمسؤول التشوينة للبدء في تجهيز وتحميل الأصناف 🏗️️`);
       }
     }
 
+    // فتح مودال التحصيل اليدوي
     function openCollectModal(orderId) {
       selectedOrderIdForCollect = orderId;
       const orders = getStoredOrders();
       const o = orders.find(x => x.id === orderId);
       if (!o) return;
 
+      const col = o.collected || 0;
+      const rem = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - col);
+
       document.getElementById('collectOrderId').innerText = '#' + o.id;
       document.getElementById('collectTotalBill').innerText = (o.total || 0).toLocaleString() + ' ج.م';
-      document.getElementById('collectAlreadyPaid').innerText = (o.collected || 0).toLocaleString() + ' ج.م';
-      document.getElementById('collectRemainingBill').innerText = (o.remaining || 0).toLocaleString() + ' ج.م';
-      document.getElementById('collectAmountInput').value = o.remaining || 0;
+      document.getElementById('collectAlreadyPaid').innerText = col.toLocaleString() + ' ج.م';
+      document.getElementById('collectRemainingBill').innerText = rem.toLocaleString() + ' ج.م';
+      document.getElementById('collectAmountInput').value = rem; // يقترح المتبقي ويمكن تعديله لأي دفعة
 
       openModal('collectMoneyModal');
     }
 
+    // تأكيد تسجيل الدفعة يدوياً
     function confirmCollectPayment() {
       if (!selectedOrderIdForCollect) return;
       const amount = parseFloat(document.getElementById('collectAmountInput').value);
       if (isNaN(amount) || amount <= 0) {
-        alert('يرجى إدخال مبلغ تحصيل صحيح.');
+        alert('يرجى كتابة مبلغ تحصيل صحيح.');
         return;
       }
 
       const orders = getStoredOrders();
       const o = orders.find(x => x.id === selectedOrderIdForCollect);
       if (o) {
-        o.collected = (o.collected || 0) + amount;
-        o.remaining = Math.max(0, (o.total || 0) - o.collected);
+        const curCollected = o.collected || 0;
+        const curRemaining = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - curCollected);
+
+        if (amount > curRemaining) {
+          alert(`المبلغ المدخل (${amount.toLocaleString()} ج) أكبر من المتبقي على الفاتورة (${curRemaining.toLocaleString()} ج).`);
+          return;
+        }
+
+        o.collected = curCollected + amount;
+        o.remaining = Math.max(0, o.total - o.collected);
+
         setStoredOrders(orders);
         closeModal('collectMoneyModal');
+
+        // تحديث كافة الجداول والحصر فوراً
         renderAccountantView();
-        alert(`تم تسجيل تحصيل مبلغ ${amount.toLocaleString()} ج.م للطلب #${o.id}.`);
+        if (!document.getElementById('view-daily-inventory-section').classList.contains('hidden')) {
+          renderDailyInventorySection();
+        }
+
+        alert(`تم بنجاح تسجيل دفعة بقيمة ${amount.toLocaleString()} ج.م للطلب #${o.id}.\nالمتبقي الآن: ${o.remaining.toLocaleString()} ج.م`);
       }
     }
 
@@ -1923,7 +1975,7 @@
           `قائمة المهندسين والعملاء بالمواقع المسندة إليك: (${allowedCompounds.join(' - ') || 'لا توجد'})`;
       } else {
         document.getElementById('clientsSectionSubtitle').innerText = 
-          'عرض المهندسين والعملاء في كافة المشروعات مع إمكانية الاتصال المباشر والاطلاع على التقرير المالي التراكمي.';
+          'عرض المهندسين والعملاء في كافة المشروعات مع إمكانية الاتصال المباشر والاطلاع على التقرير المالي التراكمي وتنزيل الدفعات.';
       }
 
       filterBox.innerHTML += `
@@ -1984,7 +2036,7 @@
                 </a>
               </div>
               <button onclick="openClientCumulativeReport('${k}')" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-600/20 transition">
-                <i class="fa-solid fa-file-invoice-dollar"></i> كشف حساب وتقرير الطلبات التراكمي
+                <i class="fa-solid fa-file-invoice-dollar"></i> كشف حساب وتقرير الطلبات والتحصيل
               </button>
             </div>
           </div>
@@ -1997,6 +2049,7 @@
       renderCurrentClientsSection();
     }
 
+    // كشف الحساب التراكمي الشامل للمهندس مع إمكانية تحصيل أي دفعة
     function openClientCumulativeReport(engKey) {
       const allUsers = getStoredUsers();
       const allOrders = getStoredOrders();
@@ -2014,21 +2067,36 @@
       tbody.innerHTML = '';
 
       let grandTotal = 0;
+      let grandCollected = 0;
 
       if (myOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">لا توجد طلبات أو مسحوبات مسجلة لهذا العميل حتى الآن.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">لا توجد طلبات أو مسحوبات مسجلة لهذا العميل حتى الآن.</td></tr>`;
       } else {
         myOrders.forEach(o => {
           grandTotal += (o.total || 0);
+          const col = o.collected || 0;
+          const rem = o.remaining !== undefined ? o.remaining : Math.max(0, o.total - col);
+          grandCollected += col;
           const itemsHtml = formatOrderItemsHtml(o.items);
+
           tbody.innerHTML += `
             <tr>
               <td class="p-2.5 font-bold text-white">#${o.id}</td>
               <td class="p-2.5 text-slate-400">${o.date}</td>
               <td class="p-2.5">${itemsHtml}</td>
-              <td class="p-2.5 font-bold text-emerald-400">${(o.total || 0).toLocaleString()} ج.م</td>
+              <td class="p-2.5 font-bold text-white">${(o.total || 0).toLocaleString()} ج</td>
+              <td class="p-2.5">
+                <span class="text-emerald-400 font-bold">${col.toLocaleString()} ج</span> / 
+                <span class="text-rose-400 font-bold">${rem.toLocaleString()} ج</span>
+              </td>
               <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400">${o.status}</span></td>
-              <td class="p-2.5">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-cyan-400 underline">عرض التوثيق</a>` : '--'}</td>
+              <td class="p-2.5 text-center">
+                ${rem > 0 ? `
+                  <button onclick="openCollectModal('${o.id}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">
+                    تحصيل دفعة
+                  </button>
+                ` : '<span class="text-emerald-400 text-[10px]">خالص ✔</span>'}
+              </td>
             </tr>
           `;
         });
@@ -2036,6 +2104,7 @@
 
       document.getElementById('repTotalOrdersCount').innerText = `${myOrders.length} طلب`;
       document.getElementById('repGrandTotalSum').innerText = `${grandTotal.toLocaleString()} ج.م`;
+      document.getElementById('repGrandCollectedSum').innerText = `${grandCollected.toLocaleString()} ج.م`;
 
       openModal('clientReportModal');
     }
@@ -2191,6 +2260,8 @@
       tbody.innerHTML = '';
       orders.forEach(o => {
         const itemsHtml = formatOrderItemsHtml(o.items);
+        const col = o.collected || 0;
+        const rem = o.remaining !== undefined ? o.remaining : (o.total - col);
         tbody.innerHTML += `
           <tr>
             <td class="p-3 font-bold text-white">#${o.id}</td>
@@ -2198,6 +2269,10 @@
             <td class="p-3">${o.compound}<br><span class="text-[10px] text-slate-400">${o.engineer} (${o.unit})</span></td>
             <td class="p-3">${itemsHtml}</td>
             <td class="p-3 font-bold text-white">${(o.total || 0).toLocaleString()} ج.م</td>
+            <td class="p-3">
+              <span class="text-emerald-400 font-bold">${col.toLocaleString()} ج</span> / 
+              <span class="text-rose-400 font-bold">${rem.toLocaleString()} ج</span>
+            </td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800">${o.status}</span></td>
             <td class="p-3">${o.proofImg ? `<a href="${o.proofImg}" target="_blank" class="text-emerald-400 underline">عرض التوثيق</a>` : '--'}</td>
           </tr>
